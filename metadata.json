@@ -1,0 +1,5 @@
+{
+  "name": "Opidas UI Suite",
+  "description": "A comprehensive React application suite featuring a login screen, a detailed chat interface, a course platform with a video player, and a multi-step onboarding process, all styled with Tailwind CSS.",
+  "requestFramePermissions": []
+}
