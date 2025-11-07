@@ -89,7 +89,7 @@ body {
 .dropdown-item:hover { background-color: var(--border-dark); }
 .checkbox-custom { width: 23px; height: 23px; border-radius: 5px; border: 1px solid var(--text-tertiary); display: flex; justify-content: center; align-items: center; }
 .checkbox-custom.selected .checkbox-inner { width: 15px; height: 15px; background-color: var(--accent-gold); border-radius: 3px; }
-.file-upload-area { width: 350px; text-align: center; min-height: 105px; }
+.file-upload-area { width: 350px; text-align: center; min-height: 105px; display: ruby;}
 .drop-zone { width: 140px; height: 74px; background: rgba(197, 164, 126, 0.05); border: 1.5px dashed var(--border-dark); border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; margin: 0 auto; gap: 4px; }
 .drop-zone img { width: 20px; height: 17px; }
 .drop-zone .drop-text { font-size: 10px; color: var(--text-tertiary); }
@@ -165,4 +165,5 @@ body {
     .input-group, .dropdown-container, .file-upload-area, .form-actions { width: 100%; max-width: 350px; }
     .identity-card-section { transform: scale(0.9); margin-bottom: -30px; }
     .investment-step .info-section, .investment-step .payment-section-wrapper { border-radius: 0; width: 100%; }
+
 }
