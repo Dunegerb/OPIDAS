@@ -30,7 +30,7 @@ html, body {
 
 img {
     max-width: 100%;
-    display: block;
+    /*display: block;*/
 }
 
 button {
@@ -72,4 +72,5 @@ input {
 }
 ::-webkit-scrollbar-thumb:hover {
     background: #3a3a3a;
+
 }
