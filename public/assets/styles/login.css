@@ -1,0 +1,99 @@
+body {
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    position: relative;
+}
+
+.sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
+}
+
+.page-header {
+    position: absolute; top: 21px; left: 50%; 
+    transform: translateX(-50%); z-index: 10;
+}
+.page-header img { width: 80px; height: auto; mix-blend-mode: exclusion; }
+
+.login-card {
+    display: flex; width: 100%; max-width: 1246px; max-height: 90vh;
+    border: 1.5px solid var(--border-dark); border-radius: 13px;
+    overflow: hidden; background-color: #11110f;
+}
+
+.hero-section { flex: 0 0 560px; position: relative; }
+.hero-section .background-image { width: 100%; height: 100%; object-fit: cover; }
+.hero-section .decorative-element {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 12px; height: 140px; mix-blend-mode: exclusion;
+}
+
+.main-content {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: space-between; padding: 2.5rem;
+}
+
+.opidas-header { display: flex; align-items: center; gap: 5px; mix-blend-mode: exclusion; }
+.opidas-header img { width: 9px; height: 9px; }
+.opidas-header div { font-size: 8px; color: white; white-space: nowrap; }
+
+.login-form-wrapper { width: 100%; max-width: 340px; text-align: center; }
+.login-form-wrapper h1 { font-size: 21px; font-weight: 700; margin-bottom: 1rem; }
+.login-form-wrapper .subtitle {
+    font-size: 10px; color: #b7b7b7; margin-bottom: 2rem; max-width: 241px;
+    margin-left: auto; margin-right: auto; line-height: 1.5;
+}
+
+.form-group { position: relative; margin-bottom: 13px; }
+.form-group input {
+    width: 100%; height: 43px; padding: 0 13px; border: 1.5px solid var(--border-dark);
+    border-radius: 8px; font-size: 13px; background: transparent;
+}
+.form-group input::placeholder { color: var(--text-muted); }
+
+.submit-button {
+    all: unset; box-sizing: border-box; width: 100%; max-width: 340px; height: 43px;
+    background-color: var(--border-dark); border-radius: 8px; display: flex; justify-content: center;
+    align-items: center; position: relative; font-size: 13px; cursor: pointer;
+    transition: background-color 0.2s ease; margin-top: 1rem;
+}
+.submit-button:hover { background-color: #3f3f46; }
+.submit-button img { position: absolute; right: 5px; top: 5px; width: 33px; height: 33px; }
+
+.separator {
+    display: flex; align-items: center; gap: 15px; width: 100%; max-width: 340px;
+    color: #b7b7b7; font-size: 8px; margin: 2rem auto;
+}
+.separator .line { flex-grow: 1; height: 1px; background-color: var(--border-dark); }
+
+.social-login { display: flex; justify-content: center; gap: 13px; margin-bottom: 2rem; }
+.social-login button { width: 53px; height: 35px; transition: opacity 0.2s ease; }
+.social-login button:hover { opacity: 0.8; }
+.social-login button img { width: 100%; height: 100%; }
+
+.toggle-form-section {
+    display: flex; align-items: center; justify-content: center; font-size: 10px;
+    color: var(--text-muted); gap: 5px;
+}
+.toggle-form-section a { color: var(--text-primary); display: flex; align-items: center; gap: 5px; }
+.toggle-form-section a:hover { text-decoration: underline; }
+.toggle-form-section a img { width: 6px; height: 6px; }
+
+.footer {
+    display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
+    gap: 20px; font-size: 10px; color: var(--text-secondary); width: 100%; padding-top: 1rem;
+}
+.footer a:hover { color: var(--text-primary); }
+
+@media (max-width: 1024px) {
+    .login-card { flex-direction: column; max-height: none; overflow-y: auto; }
+    .hero-section { flex-basis: 300px; flex-shrink: 0; }
+    .main-content { padding: 2rem; }
+}
+
+@media (max-width: 768px) {
+    .page-header, .hero-section { display: none; }
+    .login-card { border: none; background-color: transparent; }
+    .main-content { background-color: #11110f; border-radius: 13px; padding: 1.5rem; }
+}

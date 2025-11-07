@@ -1,0 +1,13 @@
+# Configurações de deploy para a Netlify
+
+[build]
+  # Diretório a ser publicado
+  publish = "public/"
+  # Comando de build (não necessário para um site estático vanilla)
+  command = ""
+
+# Redirecionamento para SPA (se necessário no futuro)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

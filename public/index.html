@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Campo Guerreiro</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/styles/base.css">
+    <link rel="stylesheet" href="assets/styles/login.css">
+</head>
+<body>
+
+    <header class="page-header">
+        <img alt="OPIDAS Brand Logos" src="https://c.animaapp.com/ShvBdWgZ/img/group-37@2x.png" />
+    </header>
+
+    <div class="login-card">
+        <!-- Coluna da Esquerda: Imagem Hero -->
+        <section class="hero-section" aria-label="Hero Image">
+            <img class="background-image" alt="Campo Guerreiro Background" src="https://c.animaapp.com/ShvBdWgZ/img/rectangle-30.png" />
+            <img class="decorative-element" alt="Decorative Element" src="https://c.animaapp.com/ShvBdWgZ/img/---------@4x.png" />
+        </section>
+
+        <!-- Coluna da Direita: Formulário de Login -->
+        <main class="main-content">
+            
+            <div class="opidas-header">
+                <img alt="OPIDAS Logo" src="https://c.animaapp.com/ShvBdWgZ/img/add-a-heading--4--2@2x.png" />
+                <div>OPIDAS</div>
+            </div>
+
+            <div class="login-form-wrapper">
+                <h1 id="form-title">Bem-vindo(a) ao Campo Guerreiro(a)</h1>
+                <p class="subtitle">
+                    Bem vindo(a) ao seu campo de batalha. Crie sua conta ou faça o login com sua conta opidas.
+                </p>
+
+                <form id="auth-form">
+                    <div class="form-group">
+                        <label for="email" class="sr-only">Email</label>
+                        <input id="email" type="email" placeholder="Email" required aria-required="true" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="sr-only">Senha</label>
+                        <input id="password" type="password" placeholder="Senha" required aria-required="true" />
+                    </div>
+                    <button type="submit" class="submit-button" aria-label="Fazer Alistamento">
+                        <span id="submit-button-text">Fazer Alistamento</span>
+                        <img alt="" src="https://c.animaapp.com/ShvBdWgZ/img/group-54@2x.png" />
+                    </button>
+                </form>
+
+                <div class="separator">
+                    <div class="line"></div>
+                    <span>OU</span>
+                    <div class="line"></div>
+                </div>
+
+                <div class="social-login" role="group" aria-label="Social Login Options">
+                    <button data-provider="google" aria-label="Login with Google">
+                        <img alt="Google Login" src="https://c.animaapp.com/ShvBdWgZ/img/group-41@2x.png" />
+                    </button>
+                    <button data-provider="apple" aria-label="Login with Apple">
+                        <img alt="Apple Login" src="https://c.animaapp.com/ShvBdWgZ/img/group-42@2x.png" />
+                    </button>
+                    <button data-provider="discord" aria-label="Login with Discord">
+                        <img alt="Discord Login" src="https://c.animaapp.com/ShvBdWgZ/img/group-43@2x.png" />
+                    </button>
+                    <button data-provider="proton" aria-label="Login with ProtonMail">
+                        <img alt="Proton Mail" src="https://c.animaapp.com/ShvBdWgZ/img/group-45@2x.png" />
+                    </button>
+                </div>
+
+                <div class="toggle-form-section">
+                    <span id="toggle-form-text">Já tem uma conta?</span>
+                    <a href="#" id="toggle-form-link">
+                        <span>Login</span>
+                        <img alt="arrow" src="https://c.animaapp.com/ShvBdWgZ/img/vector-76.svg" />
+                    </a>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <a href="#">Politica de privacidade</a>
+                <a href="#">Termos de Serviço</a>
+                <p><span>©</span> 2025 OPIDAS</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Scripts do Projeto -->
+    <script src="js/lib/supabase.js"></script>
+    <script src="js/services/auth.js"></script>
+    <script>
+        // Inicializador da página de login
+        document.addEventListener('DOMContentLoaded', () => {
+            initAuthPage();
+        });
+    </script>
+
+</body>
+</html>

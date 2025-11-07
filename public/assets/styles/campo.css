@@ -1,0 +1,98 @@
+/* Main App Container */
+.app-container {
+    width: 100%; height: 100vh; display: flex; flex-direction: column;
+    gap: 1rem; position: relative; padding: 2rem;
+}
+
+.opidas-logo-center {
+    position: absolute; top: 49px; left: 50%; transform: translateX(-50%);
+    width: 39px; height: 41px;
+}
+
+/* Top Bar */
+.top-bar { display: flex; justify-content: space-between; align-items: center; height: 90px; flex-shrink: 0; }
+.user-welcome { display: flex; align-items: center; gap: 1rem; }
+.user-welcome img { width: 34px; height: 34px; border-radius: 50%; }
+.user-welcome-text .greeting { font-size: 10px; }
+.user-welcome-text .username { font-size: 21px; font-weight: 500; }
+
+.status-bar { display: flex; align-items: center; gap: 0.5rem; background-color: var(--bg-panel); padding: 0.5rem; border-radius: 8px; }
+.status-bar .rank-icon { background-color: var(--bg-main); border-radius: 5px; width: 41px; height: 41px; display: flex; justify-content: center; align-items: center; }
+.status-bar .rank-icon img { width: 21px; }
+.progress-info { display: flex; flex-direction: column; gap: 0.5rem; width: 180px; }
+.progress-info .days { font-size: 13px; }
+.progress-info .days span { color: var(--text-secondary); }
+.progress-bar { width: 100%; height: 9px; background-color: var(--progress-bar-bg); border-radius: 10px; overflow: hidden; }
+.progress-bar-fill { width: 0%; height: 100%; background-color: rgba(238, 238, 238, 0.91); border-radius: 10px; transition: width 0.3s ease-in-out; }
+.status-bar .icon-button img { width: 41px; height: 41px; }
+
+/* Main Content Layout */
+.main-content { display: grid; grid-template-columns: 348px 1fr; gap: 2rem; flex-grow: 1; overflow: hidden; }
+.panel { border: 1.5px solid var(--border-color); border-radius: 13px; padding: 1.5rem; display: flex; flex-direction: column; overflow: hidden; }
+
+/* Sidebar (Left Panel) */
+.sidebar { gap: 1rem; }
+.sidebar-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.sidebar-header .title .subtitle { font-size: 10px; color: var(--text-secondary); }
+.sidebar-header .title .main-title { font-size: 21px; margin-top: 0.25rem; }
+.sidebar-tabs { display: flex; align-items: center; gap: 1.5rem; border-bottom: 1px solid transparent; position: relative; }
+.tab-button { color: var(--text-muted); font-size: 13px; padding-bottom: 0.5rem; }
+.tab-button.active { color: var(--text-primary); border-bottom: 2px solid var(--text-primary); }
+
+.ranks-list { list-style: none; flex-grow: 1; overflow-y: auto; margin-top: 1rem; padding-right: 0.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.rank-item { background-color: var(--bg-panel); border-radius: 8px; padding: 0.75rem; display: flex; align-items: center; gap: 0.75rem; position: relative; cursor: pointer; transition: background-color 0.2s; }
+.rank-item:hover:not(.locked) { background-color: #2a2a2a; }
+.rank-item .rank-icon img { width: 40px; height: 40px; }
+.rank-item .rank-details { flex-grow: 1; }
+.rank-details .rank-name { font-size: 13px; }
+.rank-details .rank-days { font-size: 10px; color: var(--text-secondary); }
+.status-dot { position: absolute; width: 3px; height: 3px; border-radius: 50%; background-color: var(--text-primary); top: 50%; right: 10px; transform: translateY(-50%); }
+.rank-item.active-server .status-dot { background-color: var(--accent-gold); }
+.rank-item.locked { cursor: not-allowed; }
+.rank-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #151515b2; border-radius: 8px; pointer-events: none; }
+
+.sidebar-footer { margin-top: auto; text-align: center; }
+.reset-info { font-size: 10px; margin-bottom: 0.5rem; color: var(--text-secondary); }
+.reset-info span { color: var(--text-primary); }
+.reset-button { background-color: var(--accent-red); font-size: 13px; width: 100%; padding: 0.8rem; border-radius: 8px; transition: background-color 0.2s; }
+.reset-button:hover:not(:disabled) { background-color: #a11b1b; }
+
+/* Chat Area (Right Panel) */
+.chat-area { position: relative; padding: 1.5rem 0.5rem 1.5rem 1.5rem; }
+.chat-header { display: flex; align-items: center; gap: 1rem; padding-right: 1rem; }
+.search-bar { flex-grow: 1; position: relative; }
+.search-bar input { width: 100%; background: transparent; border: 1px solid var(--border-color); border-radius: 34px; padding: 0.6rem 2.5rem 0.6rem 1.25rem; font-size: 13px; }
+.search-bar input::placeholder { color: var(--text-muted); }
+.search-bar .search-icon { position: absolute; right: 1.25rem; top: 50%; transform: translateY(-50%); width: 14px; }
+.chat-header .icon-button img { width: 34px; height: 34px; }
+
+.messages-container { height: 100%; overflow-y: auto; padding: 1.5rem 1rem 1rem 0; display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem; }
+.message { display: flex; gap: 0.75rem; max-width: 80%; align-self: flex-start; }
+.system-message { align-self: center; width: 100%; text-align: center; font-size: 12px; color: var(--text-secondary); opacity: 0.8; padding: 0.5rem 0; }
+.message .avatar { width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; }
+.message-content { display: flex; flex-direction: column; gap: 0.25rem; }
+.message-header { display: flex; align-items: center; gap: 0.5rem; }
+.message-header .username { font-size: 10px; font-weight: 500; }
+.message-header .timestamp { font-size: 10px; color: var(--text-secondary); }
+.message-bubble { background-color: var(--bg-panel); padding: 0.8rem 1rem; border-radius: 5px; font-size: 13px; line-height: 1.4; }
+
+.chat-input-wrapper { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; padding-top: 3rem; background: linear-gradient(180deg, rgba(11,11,10,0) 0%, var(--bg-main) 40%); box-sizing: content-box; }
+.chat-input { display: flex; align-items: center; gap: 1rem; }
+.input-field-container { display: flex; align-items: center; gap: 1rem; background-color: var(--bg-panel); border-radius: 8px; padding: 0 1rem; flex-grow: 1; height: 54px; }
+.chat-input input { background: transparent; border: none; outline: none; width: 100%; font-size: 13px; }
+.chat-input input::placeholder { color: var(--text-muted); }
+.chat-input .mic-button img { width: 53px; height: 54px; }
+
+@media (max-width: 1200px) {
+    .app-container { padding: 1rem; }
+    .main-content { grid-template-columns: 300px 1fr; }
+}
+@media (max-width: 992px) {
+    body { align-items: flex-start; overflow: auto; }
+    .app-container { height: auto; padding: 0; }
+    .top-bar { flex-direction: column; height: auto; gap: 1rem; align-items: stretch; padding: 1rem; }
+    .opidas-logo-center { display: none; }
+    .main-content { grid-template-columns: 1fr; gap: 0; }
+    .chat-area { height: 70vh; min-height: 600px; }
+    .panel { border-radius: 0; border-left: none; border-right: none; }
+}

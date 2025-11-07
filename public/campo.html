@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campo - OPIDAS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/styles/base.css">
+    <link rel="stylesheet" href="assets/styles/campo.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <img class="opidas-logo-center" alt="Opidas logo" src="https://c.animaapp.com/wYjpt5p0/img/opidas-logo@4x.png" />
+        
+        <header class="top-bar">
+            <div class="user-welcome">
+                <img id="user-avatar" alt="Profile photo" src="https://c.animaapp.com/wYjpt5p0/img/profile-photo-5@2x.png" />
+                <div class="user-welcome-text">
+                    <div class="greeting">Bem vindo(a) de volta</div>
+                    <div class="username" id="welcome-username">Carregando...</div>
+                </div>
+            </div>
+
+            <div class="status-bar">
+                <div class="rank-icon" id="status-rank-icon-container">
+                    <img id="status-rank-icon" alt="Patente" src="https://c.animaapp.com/wYjpt5p0/img/recruta-1@2x.png" />
+                </div>
+                <div class="progress-info">
+                    <p class="days" id="progress-days">
+                        00<span>/00 Dias</span>
+                    </p>
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                    </div>
+                </div>
+                <button class="icon-button">
+                    <img alt="Notificação button" src="https://c.animaapp.com/wYjpt5p0/img/notifica--obutton@2x.png" />
+                </button>
+                <button class="icon-button" id="logout-button">
+                    <img alt="Logout" src="https://c.animaapp.com/wYjpt5p0/img/light-darkmode@2x.png" />
+                </button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="panel sidebar">
+                <div class="sidebar-header">
+                    <div class="title">
+                        <div class="subtitle">Campo contra o(a)</div>
+                        <div class="main-title" id="habit-title">Carregando...</div>
+                    </div>
+                    <img class="settings-icon" alt="Configuração do campo" src="https://c.animaapp.com/wYjpt5p0/img/configcampo@2x.png" />
+                </div>
+
+                <nav class="sidebar-tabs">
+                    <button class="tab-button active">Patentes</button>
+                    <button class="tab-button">Admin</button>
+                </nav>
+                
+                <ul class="ranks-list" id="ranks-list">
+                    <!-- Lista de patentes será renderizada pelo JS -->
+                </ul>
+
+                <div class="sidebar-footer">
+                    <p class="reset-info" id="reset-info">Chances de reset <span>...</span></p>
+                    <button class="reset-button" id="reset-button">Resetar contagem</button>
+                </div>
+            </aside>
+            
+            <main class="panel chat-area">
+                <header class="chat-header">
+                    <img alt="Logo Chat Opidas" src="https://c.animaapp.com/wYjpt5p0/img/logochatopidas@4x.png" style="width: 34px; height: 34px;">
+                    <button class="icon-button">
+                        <img alt="Membros do grupo" src="https://c.animaapp.com/wYjpt5p0/img/pessoasdogrupobot-o@2x.png">
+                    </button>
+                    <div class="search-bar">
+                        <input type="search" placeholder="Pesquisar">
+                        <img class="search-icon" alt="Search" src="https://c.animaapp.com/wYjpt5p0/img/vector.svg">
+                    </div>
+                    <button class="icon-button">
+                        <img alt="Tela cheia" src="https://c.animaapp.com/wYjpt5p0/img/deixarocampoemtelacheia@2x.png">
+                    </button>
+                </header>
+
+                <div class="messages-container" id="messages-container">
+                    <!-- Mensagens serão carregadas dinamicamente -->
+                </div>
+
+                <div class="chat-input-wrapper">
+                    <form class="chat-input" id="chat-form">
+                        <div class="input-field-container">
+                            <button type="button"><img src="https://c.animaapp.com/wYjpt5p0/img/uploadbutton.svg" alt="Upload"></button>
+                            <input type="text" id="chat-input-field" placeholder="Conversar com o campo">
+                            <button type="button"><img src="https://c.animaapp.com/wYjpt5p0/img/sendemojibutton.svg" alt="Emoji"></button>
+                        </div>
+                        <button class="mic-button" type="button">
+                            <img alt="Gravar voz" src="https://c.animaapp.com/wYjpt5p0/img/voicebutton@2x.png">
+                        </button>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts do Projeto -->
+    <script src="js/lib/supabase.js"></script>
+    <script src="js/services/auth.js"></script>
+    <script src="js/services/user.js"></script>
+    <script src="js/services/chat.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- ESTADO DA APLICAÇÃO ---
+            const state = {
+                currentUser: null,
+                activeChannel: null,
+                allUsers: [], // Cache de usuários para evitar buscas repetidas
+                channels: [ // Isso virá do Supabase, mas por enquanto é mockado
+                    { id: 'recruta', level: 0, name: 'Recruta', minDays: 0, maxDays: 9, icon: 'https://c.animaapp.com/wYjpt5p0/img/recruta@2x.png' },
+                    { id: 'soldado', level: 1, name: 'Soldado', minDays: 10, maxDays: 29, icon: 'https://c.animaapp.com/wYjpt5p0/img/soldado@2x.png' },
+                    { id: 'cabo',    level: 2, name: 'Cabo',    minDays: 30, maxDays: 59, icon: 'https://c.animaapp.com/wYjpt5p0/img/cabo@2x.png' },
+                    { id: 'sargento',level: 3, name: 'Sargento',minDays: 60, maxDays: 89, icon: 'https://c.animaapp.com/wYjpt5p0/img/sargento@2x.png' },
+                    { id: 'marechal',level: 4, name: 'Marechal',minDays: 90, maxDays: 179, icon: 'https://c.animaapp.com/wYjpt5p0/img/marechal@2x.png' },
+                    { id: 'tenente', level: 5, name: 'Tenente', minDays: 180, maxDays: 364, icon: 'https://c.animaapp.com/wYjpt5p0/img/tenente@2x.png' },
+                    { id: 'capitao', level: 6, name: 'Capitão', minDays: 365, maxDays: Infinity, icon: 'https://c.animaapp.com/wYjpt5p0/img/capit-o@2x.png' }
+                ]
+            };
+
+            // --- ELEMENTOS DO DOM ---
+            const welcomeUsernameEl = document.getElementById('welcome-username');
+            const userAvatarEl = document.getElementById('user-avatar');
+            const statusRankIconEl = document.getElementById('status-rank-icon');
+            const progressDaysEl = document.getElementById('progress-days');
+            const progressBarFillEl = document.getElementById('progress-bar-fill');
+            const ranksListEl = document.getElementById('ranks-list');
+            const resetInfoEl = document.getElementById('reset-info');
+            const resetButtonEl = document.getElementById('reset-button');
+            const chatInputFieldEl = document.getElementById('chat-input-field');
+            const messagesContainerEl = document.getElementById('messages-container');
+            const chatFormEl = document.getElementById('chat-form');
+            const habitTitleEl = document.getElementById('habit-title');
+            const logoutButton = document.getElementById('logout-button');
+
+            // --- FUNÇÕES DE RENDERIZAÇÃO ---
+            function updateUI() {
+                if (!state.currentUser) return;
+
+                const { profile, rankData } = state.currentUser;
+                
+                // Header
+                welcomeUsernameEl.textContent = `${rankData.name} ${profile.last_name}`;
+                userAvatarEl.src = profile.avatar_url || 'https://c.animaapp.com/wYjpt5p0/img/profile-photo-5@2x.png';
+                statusRankIconEl.src = rankData.icon;
+                habitTitleEl.textContent = profile.habit || 'Indefinido';
+                
+                // Barra de Progresso
+                const rankGoalDays = isFinite(rankData.maxDays) ? rankData.maxDays + 1 : profile.retention_days;
+                const progressPercentage = (profile.retention_days / rankGoalDays) * 100;
+                progressBarFillEl.style.width = `${progressPercentage}%`;
+                progressDaysEl.innerHTML = `${String(profile.retention_days).padStart(2, '0')}<span>/${String(rankGoalDays).padStart(2, '0')} Dias</span>`;
+
+                // Sidebar (lista de patentes)
+                renderRanksList();
+
+                // Footer da Sidebar
+                resetInfoEl.innerHTML = `Chances de reset <span>${profile.remaining_resets} restantes</span>`;
+                resetButtonEl.disabled = profile.remaining_resets <= 0;
+            }
+
+            function renderRanksList() {
+                ranksListEl.innerHTML = '';
+                const userRankLevel = state.currentUser.rankData.level;
+
+                state.channels.slice().reverse().forEach(channel => {
+                    const li = document.createElement('li');
+                    li.className = 'rank-item';
+                    li.dataset.channelId = channel.id;
+
+                    const isLocked = channel.level > userRankLevel;
+                    const isActive = channel.id === state.activeChannel;
+
+                    if (isLocked) li.classList.add('locked');
+                    if (isActive) li.classList.add('active-server');
+
+                    li.innerHTML = `
+                        <div class="rank-icon"><img alt="${channel.name}" src="${channel.icon}"></div>
+                        <div class="rank-details">
+                            <div class="rank-name">${channel.name}</div>
+                            <div class="rank-days">Dias: ${channel.minDays}${channel.maxDays === Infinity ? '+' : '-' + channel.maxDays}</div>
+                        </div>
+                        <div class="status-dot"></div>
+                        ${isLocked ? '<div class="rank-overlay"></div>' : ''}
+                    `;
+                    ranksListEl.appendChild(li);
+                });
+            }
+            
+            function renderMessage(message, userProfile) {
+                const messageEl = document.createElement('div');
+                messageEl.className = 'message';
+                
+                const userRank = state.channels.find(c => c.id === userProfile.rank) || state.channels[0];
+                const displayName = `${userRank.name} ${userProfile.last_name}`;
+                const timestamp = new Date(message.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit'});
+
+                messageEl.innerHTML = `
+                    <img class="avatar" alt="Avatar" src="${userProfile.avatar_url}">
+                    <div class="message-content">
+                        <div class="message-header">
+                            <div class="username">${displayName}</div>
+                            <div class="timestamp">${timestamp}</div>
+                        </div>
+                        <div class="message-bubble">${message.content}</div>
+                    </div>
+                `;
+                messagesContainerEl.appendChild(messageEl);
+                messagesContainerEl.scrollTop = messagesContainerEl.scrollHeight;
+            }
+
+            // --- FUNÇÕES DE LÓGICA ---
+            async function switchChannel(channelId) {
+                if (!channelId || channelId === state.activeChannel) return;
+
+                state.activeChannel = channelId;
+                messagesContainerEl.innerHTML = '<h3>Carregando mensagens...</h3>';
+                updateUI(); // Atualiza a seleção visual
+
+                // TODO: Chamar `unsubscribeFromChannel` do chat.js se houver uma inscrição anterior
+                
+                // TODO: Chamar `getMessages(channelId)` do chat.js
+                // Por enquanto, mock:
+                const messages = []; // await getMessages(channelId);
+                messagesContainerEl.innerHTML = '';
+                if (messages.length === 0) {
+                    messagesContainerEl.innerHTML = '<div class="system-message">Seja o primeiro a conversar neste canal.</div>';
+                } else {
+                    for(const msg of messages) {
+                        // let user = await getUserProfile(msg.user_id);
+                        // renderMessage(msg, user);
+                    }
+                }
+                
+                // TODO: Chamar `subscribeToChannel(channelId, newMessageHandler)` do chat.js
+            }
+
+            async function handleSendMessage(event) {
+                event.preventDefault();
+                const content = chatInputFieldEl.value.trim();
+                if (content && state.activeChannel) {
+                    // TODO: Chamar `sendMessage(state.activeChannel, content)` do chat.js
+                    console.log(`Enviando "${content}" para o canal ${state.activeChannel}`);
+                    chatInputFieldEl.value = '';
+                }
+            }
+            
+            async function handleResetClick() {
+                const confirmed = confirm(`Você tem certeza que quer resetar sua contagem? Isso usará uma de suas chances.`);
+                if(confirmed) {
+                    // TODO: Chamar `handleReset()` do user.js
+                    console.log("Reset solicitado.");
+                    alert("Contagem resetada com sucesso!");
+                    // A UI será atualizada via Supabase Realtime ou recarregando os dados do usuário
+                }
+            }
+
+            // --- INICIALIZAÇÃO ---
+            async function init() {
+                // TODO: Chamar protectRoute() do auth.js
+                
+                // TODO: Chamar `getCurrentUserProfile()` do user.js para obter os dados do usuário logado
+                // Por enquanto, mock:
+                state.currentUser = {
+                    profile: {
+                        id: 'uuid-123-abc',
+                        last_name: 'Stravelli',
+                        habit: 'Masturbação',
+                        avatar_url: 'https://c.animaapp.com/wYjpt5p0/img/profile-photo-5@2x.png',
+                        retention_days: 7,
+                        remaining_resets: 5,
+                        rank: 'recruta',
+                    },
+                    rankData: state.channels.find(c => c.id === 'recruta')
+                };
+
+                if (!state.currentUser) {
+                    window.location.href = 'index.html'; // Redireciona se não houver dados
+                    return;
+                }
+                
+                // Define o canal inicial baseado na patente do usuário
+                const initialChannelId = state.currentUser.profile.rank;
+                await switchChannel(initialChannelId);
+
+                // Adiciona Event Listeners
+                ranksListEl.addEventListener('click', (e) => {
+                    const rankItem = e.target.closest('.rank-item');
+                    if (rankItem && !rankItem.classList.contains('locked')) {
+                        switchChannel(rankItem.dataset.channelId);
+                    }
+                });
+
+                chatFormEl.addEventListener('submit', handleSendMessage);
+                resetButtonEl.addEventListener('click', handleResetClick);
+                logoutButton.addEventListener('click', () => {
+                    // TODO: Chamar signOut() de auth.js
+                    console.log("Logout...");
+                    window.location.href = 'index.html';
+                });
+            }
+
+            init();
+        });
+    </script>
+</body>
+</html>
