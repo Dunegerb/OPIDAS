@@ -17,12 +17,12 @@
     </header>
 
     <div id="onboardingCard" class="onboarding-card">
-        <img class="background-image-left" alt="" src="https://c.animaapp.com/rDKbXW1a/img/rectangle-30.png" />
+        <img class="background-image-left" alt="" src="assets/styles/images/backgroundcardsecin.png" />
         
         <main class="main-content">
             <!-- Seção do Cartão de Identidade (Preview Fixo) -->
             <section class="identity-card-section" aria-label="Identity Card Preview">
-                <div class="card-base"></div><img class="card-texture" alt="" src="https://c.animaapp.com/rDKbXW1a/img/texturecard@2x.png" /><img class="card-logo-overlay" alt="Opidas logo" src="https://c.animaapp.com/rDKbXW1a/img/opidas-logo@4x.png" /><div class="card-background-mark"><img alt="" src="https://c.animaapp.com/rDKbXW1a/img/mark@2x.png" /></div><img class="card-vector-top1" alt="" src="https://c.animaapp.com/rDKbXW1a/img/vector-79.svg" /><img class="card-vector-top2" alt="" src="https://c.animaapp.com/rDKbXW1a/img/vector-80@2x.png" /><h1 class="card-title">IDENTIDADE DO CAMPO</h1><img class="card-logo-top-right" alt="" src="https://c.animaapp.com/rDKbXW1a/img/group-55@2x.png" /><img id="cardProfilePhoto" class="card-profile-photo" alt="Profile photo" src="https://c.animaapp.com/rDKbXW1a/img/rectangle-40@2x.png" /><div class="card-field contra"><span class="label">Contra:</span><span id="cardContra" class="value"></span></div><div class="card-field signature"><span class="label">Assinatura:</span><span id="cardSignature" class="value"></span></div><h2 class="card-data-heading">DADOS:</h2><div class="card-field registration"><span class="label">N.º de registro:</span><span id="cardRegistration" class="value"></span></div><div class="card-field warrior-name"><span class="label">Nome do Guerreiro(a):</span><span id="cardWarriorName" class="value"></span></div><div class="card-field rank"><span class="label">Patente:</span><span id="cardRank" class="value"></span></div><div class="card-field enlistment"><span class="label">Data de Alistamento:</span><span class="value"><span id="cardDay" class="date-part">--</span> /<span id="cardMonth" class="date-part">---</span> /<span id="cardYear" class="date-part">----</span></span></div>
+                <div class="card-base"></div><img class="card-texture" alt="" src="assets/styles/images/texturecard.png" /><img class="card-logo-overlay" alt="Opidas logo" src="assets/styles/images/logomarkcard.png" /><div class="card-background-mark"><img alt="" src="https://c.animaapp.com/rDKbXW1a/img/mark@2x.png" /></div><img class="card-vector-top1" alt="" src="https://c.animaapp.com/rDKbXW1a/img/vector-79.svg" /><img class="card-vector-top2" alt="" src="https://c.animaapp.com/rDKbXW1a/img/vector-80@2x.png" /><h1 class="card-title">IDENTIDADE DO CAMPO</h1><img class="card-logo-top-right" alt="" src="https://c.animaapp.com/rDKbXW1a/img/group-55@2x.png" /><img id="cardProfilePhoto" class="card-profile-photo" alt="Profile photo" src="https://c.animaapp.com/rDKbXW1a/img/rectangle-40@2x.png" /><div class="card-field contra"><span class="label">Contra:</span><span id="cardContra" class="value"></span></div><div class="card-field signature"><span class="label">Assinatura:</span><span id="cardSignature" class="value"></span></div><h2 class="card-data-heading">DADOS:</h2><div class="card-field registration"><span class="label">N.º de registro:</span><span id="cardRegistration" class="value"></span></div><div class="card-field warrior-name"><span class="label">Nome do Guerreiro(a):</span><span id="cardWarriorName" class="value"></span></div><div class="card-field rank"><span class="label">Patente:</span><span id="cardRank" class="value"></span></div><div class="card-field enlistment"><span class="label">Data de Alistamento:</span><span class="value"><span id="cardDay" class="date-part">--</span> /<span id="cardMonth" class="date-part">---</span> /<span id="cardYear" class="date-part">----</span></span></div>
             </section>
 
             <!-- Contêiner para as Etapas do Formulário -->
@@ -35,9 +35,9 @@
                         <h1 class="form-title">Sua identificação</h1>
                         <p class="form-subtitle">Coloque todos seus dados para criar sua identificação para o campo.</p>
                         <div class="form-row"><div class="input-group"><input id="firstNameInput" type="text" placeholder="Primeiro Nome" class="input-field" /></div><div class="input-group"><input id="lastNameInput" type="text" placeholder="Sobrenome" class="input-field" /></div></div>
-                        <div class="dropdown-container"><button type="button" id="dropdownButton" class="dropdown-button" aria-haspopup="listbox" aria-expanded="false"><span id="dropdownLabel" class="placeholder">Contra o hábito</span><img alt="Dropdown arrow" src="https://c.animaapp.com/rDKbXW1a/img/vector.svg" /></button><ul id="dropdownMenu" class="dropdown-menu" role="listbox"></ul></div>
-                        <div class="file-upload-area"><input type="file" id="file-upload" class="hidden-file-input" accept=".png,.jpg,.jpeg,.webp"><label for="file-upload" id="drop-zone" class="drop-zone"><img alt="Upload icon" src="https://c.animaapp.com/rDKbXW1a/img/union.svg" /><span class="drop-text">Arraste e solte</span><p class="drop-info" style="font-size: 8px;">(PNG, JPG, WEBP) Max 5MB</p></label><label for="file-upload" class="file-label" style="font-size: 10px; padding-left: 21px;">Escolha o arquivo</label><p id="file-name-display"></p></div>
-                        <div class="form-actions"><button id="btnGoToStep2" class="btn btn-primary"><span>Avançar</span><img alt="" src="https://c.animaapp.com/rDKbXW1a/img/group-54@2x.png" /></button></div>
+                        <div class="dropdown-container"><button type="button" id="dropdownButton" class="dropdown-button" aria-haspopup="listbox" aria-expanded="false"><span id="dropdownLabel" class="placeholder">Contra o hábito</span><img alt="Dropdown arrow" src="assets/styles/images/arrowdown.svg" /></button><ul id="dropdownMenu" class="dropdown-menu" role="listbox"></ul></div>
+                        <div class="file-upload-area"><input type="file" id="file-upload" class="hidden-file-input" accept=".png,.jpg,.jpeg,.webp"><label for="file-upload" id="drop-zone" class="drop-zone"><img alt="Upload icon" src="assets/styles/images/uploadicon.svg" /><span class="drop-text">Arraste e solte</span><p class="drop-info" style="font-size: 8px;">(PNG, JPG, WEBP) Max 5MB</p></label><label for="file-upload" class="file-label" style="font-size: 10px; padding-left: 21px;">Escolha o arquivo</label><p id="file-name-display"></p></div>
+                        <div class="form-actions"><button id="btnGoToStep2" class="btn btn-primary"><span>Avançar</span><img alt="" src="assets/styles/images/decorative-element-button.png" /></button></div>
                     </section>
 
                     <!-- ETAPA 2: Investimento OPIDAS -->
@@ -48,10 +48,10 @@
                         </section>
                         <section class="payment-section-wrapper">
                             <div class="payment-card">
-                                <div class="opidas-logo-top"><img alt="OPIDAS Icon" src="https://c.animaapp.com/8j0Bi7lE/img/add-a-heading--4--2@2x.png" /><span>OPIDAS</span></div>
+                                <div class="opidas-logo-top"><img alt="OPIDAS Icon" src="assets/styles/images/opidaslogomini.png" /><span>OPIDAS</span></div>
                                 <div class="price-box"><p class="price-text">R$3<span class="period">/semana</span></p></div>
                                 <button id="btnGoToStep3" class="btn-invest-primary">Começar Gratuitamente</button>
-                                <div class="secure-payment-info"><img alt="Security icon" src="https://c.animaapp.com/8j0Bi7lE/img/vector.svg" /><p>Pagamento 100% seguro</p></div>
+                                <div class="secure-payment-info"><img alt="Security icon" src="assets/styles/images/securepaymenticon.svg" /><p>Pagamento 100% seguro</p></div>
                                 <ul class="features-list">
                                     <svg width="0" height="0" style="display:none;"><symbol id="check-icon" viewBox="0 0 12 9"><path d="M1 4.5L4.33333 8L11 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
                                     <li><svg class="check-icon"><use xlink:href="#check-icon"></use></svg>Patentes Hierárquicas</li>
@@ -304,4 +304,5 @@
 </body>
 
 </html>
+
 
