@@ -142,7 +142,7 @@ body {
 
 /* --- Ações e Botões (Comum) --- */
 .form-actions { display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 350px; margin-top: auto; padding-top: 2rem; }
-.user-identification-section .form-actions { margin-top: 2rem; padding-top: 0; }
+.user-identification-section .form-actions { margin-top: 0rem; padding-top: 0; }
 .btn { height: 43px; border-radius: 8px; font-size: 13px; display: flex; justify-content: center; align-items: center; }
 .btn-primary { background-color: var(--border-dark); width: 100%; position: relative; }
 .btn-primary:hover { background-color: #3f3f46; }
@@ -167,4 +167,5 @@ body {
     .investment-step .info-section, .investment-step .payment-section-wrapper { border-radius: 0; width: 100%; }
 
 }
+
 
