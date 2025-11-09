@@ -39,7 +39,7 @@
 .tab-button { color: var(--text-muted); font-size: 13px; padding-bottom: 0.5rem; }
 .tab-button.active { color: var(--text-primary); border-bottom: 2px solid var(--text-primary); }
 
-.ranks-list { list-style: none; flex-grow: 1; overflow-y: auto; margin-top: 1rem; padding-right: 0.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.ranks-list { list-style: none; flex-grow: 1; overflow-y: auto; margin-top: 1rem; padding-right: 0.5rem; display: flex; flex-direction: column; gap: 0.75rem; /*coloquei flex-end para centralizar com a patente que o usuario está, mas precisa seguir dinamicamente a patente que o usuario está.*/justify-content: flex-end; margin-bottom: 1rem;}
 .rank-item { background-color: var(--bg-panel); border-radius: 8px; padding: 0.75rem; display: flex; align-items: center; gap: 0.75rem; position: relative; cursor: pointer; transition: background-color 0.2s; }
 .rank-item:hover:not(.locked) { background-color: #2a2a2a; }
 .rank-item .rank-icon img { width: 40px; height: 40px; }
@@ -97,3 +97,4 @@
     .panel { border-radius: 0; border-left: none; border-right: none; }
 
 }
+
