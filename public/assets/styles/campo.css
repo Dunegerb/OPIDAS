@@ -6,7 +6,7 @@
 
 .opidas-logo-center {
     position: absolute; top: 49px; left: 50%; transform: translateX(-50%);
-    width: 39px; height: 41px;
+    width: 91px; /*height: 41px;*/
 }
 
 /* Top Bar */
@@ -97,4 +97,5 @@
     .panel { border-radius: 0; border-left: none; border-right: none; }
 
 }
+
 
