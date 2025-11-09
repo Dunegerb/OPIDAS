@@ -114,7 +114,7 @@ body {
 .investment-step .features-list { list-style: none; width: 100%; max-width: 200px; align-self: flex-start; margin-left: 2.5rem; margin-bottom: 2rem; padding-left: 0; }
 .investment-step .features-list li { font-size: 10px; color: var(--text-secondary); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
 .investment-step .features-list .check-icon { width: 10px; height: 10px; fill: var(--accent-gold); }
-.investment-step .trial-text { font-size: 10px; color: var(--text-subtle); margin-top: auto; }
+.investment-step .trial-text { font-size: 10px; color: var(--text-subtle); margin-top: auto; margin-bottom: 34px; }
 
 /* --- ETAPA 3: Acompanhamento --- */
 .habit-tracking-section .form-title { margin-bottom: 0.75rem; }
@@ -167,3 +167,4 @@ body {
     .investment-step .info-section, .investment-step .payment-section-wrapper { border-radius: 0; width: 100%; }
 
 }
+
