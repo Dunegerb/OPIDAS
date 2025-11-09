@@ -18,7 +18,7 @@
 
 .status-bar { display: flex; align-items: center; gap: 0.5rem; background-color: var(--bg-panel); padding: 0.5rem; border-radius: 8px; }
 .status-bar .rank-icon { background-color: var(--bg-main); border-radius: 5px; width: 41px; height: 41px; display: flex; justify-content: center; align-items: center; }
-.status-bar .rank-icon img { width: 21px; }
+.status-bar .rank-icon img { width: 34px; }
 .progress-info { display: flex; flex-direction: column; gap: 0.5rem; width: 180px; }
 .progress-info .days { font-size: 13px; }
 .progress-info .days span { color: var(--text-secondary); }
@@ -95,4 +95,5 @@
     .main-content { grid-template-columns: 1fr; gap: 0; }
     .chat-area { height: 70vh; min-height: 600px; }
     .panel { border-radius: 0; border-left: none; border-right: none; }
+
 }
