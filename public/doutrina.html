@@ -131,10 +131,10 @@
                 currentPlayingEpisodeId: null,
                 progressSaveInterval: null,
             };
-
+        
             // --- ELEMENTOS DO DOM ---
             const episodesGrid = document.getElementById('episodes-grid');
-            // Header elements (IDs atualizados para corresponder ao novo header)
+            // Header elements
             const usernameEl = document.getElementById('welcome-username');
             const userAvatarEl = document.getElementById('user-avatar');
             const rankIconEl = document.getElementById('status-rank-icon');
@@ -156,25 +156,21 @@
             const fullscreenBtn = document.getElementById('fullscreen-btn');
             const skipBackwardBtn = document.getElementById('skip-backward-btn');
             const skipForwardBtn = document.getElementById('skip-forward-btn');
-
-            const playIconSrc = "https://c.animaapp.com/VdjJnM12/img/polygon-1.svg";
+        
+            // Mudei o ícone de play para um que achei no seu código para manter consistência
+            const playIconSrc = "assets/styles/images/player/playbottom.svg";
             const pauseIconSrc = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iMjkiIHZpZXdCb3g9IjAgMCAyNSAyOSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTggMEg0QzEuNzkgMCAwIDEuNzkgMCA0VjI1QzAgMjcuMjEgMS43OSAyOSA0IDI5SDhDMTAuMjEgMjkgMTIgMjcuMjEgMTIgMjVWNEMxMiAxLjc5IDEwLjIxIDAgOCAwWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTIxIDBIMTdDMTQuNzkgMCAxMyAxLjc5IDEzIDRWMjVDMTMgMjcuMjEgMTQuNzkgMjkgMTcgMjlIMjFDMjMuMjEgMjkgMjUgMjcuMjEgMjUgMjVWNEMyNSAxLjc5IDIzLjIxIDAgMjEgMFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=";
             
+            // Variável para controlar o timeout dos controles
+            let controlsTimeout;
+        
             // --- FUNÇÕES DE RENDERIZAÇÃO E UI ---
             function renderHeader() {
                 if (!state.currentUser) return;
-                
-                // Mock, pois não temos a estrutura de patentes aqui
-                // O ideal seria ter a mesma lógica do campo.js para buscar o nome da patente
                 usernameEl.textContent = `Soldado ${state.currentUser.profile.last_name}`;
                 userAvatarEl.src = state.currentUser.profile.avatar_url;
-                
-                // Exemplo de como preencher o resto, você precisaria dos dados
-                // rankIconEl.src = state.currentUser.rankData.icon;
-                // progressBarFillEl.style.width = `${progressPercentage}%`;
-                // progressDaysEl.innerHTML = `${days}<span>/${goal} Dias</span>`;
             }
-
+        
             function renderEpisodes() {
                 episodesGrid.innerHTML = '';
                 state.episodes.forEach(episode => {
@@ -182,7 +178,7 @@
                     const card = document.createElement('div');
                     card.className = `episode-card ${progress === 0 ? 'unwatched' : 'watched'}`;
                     card.dataset.episodeId = episode.id;
-
+        
                     card.innerHTML = `
                         <h3>${episode.title}</h3>
                         <p>${episode.description}</p>
@@ -203,12 +199,12 @@
                     episodesGrid.appendChild(card);
                 });
             }
-
+        
             // --- LÓGICA DO PLAYER ---
             function openPlayerForEpisode(episodeId) {
                 const episode = state.episodes.find(ep => ep.id === episodeId);
                 if (!episode) return;
-
+        
                 state.currentPlayingEpisodeId = episode.id;
                 playerTitle.textContent = episode.title;
                 
@@ -216,10 +212,10 @@
                 const track = video.querySelector('track');
                 track.src = episode.trackUrl || '';
                 video.load();
-
+        
                 playerOverlay.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
-
+        
                 video.onloadedmetadata = () => {
                     const progress = state.userProgress[episodeId] || 0;
                     const startTime = (progress / 100) * video.duration;
@@ -227,48 +223,42 @@
                     video.play();
                     
                     clearInterval(state.progressSaveInterval);
-                    state.progressSaveInterval = setInterval(saveCurrentProgress, 5000); // Salva a cada 5s
+                    state.progressSaveInterval = setInterval(saveCurrentProgress, 5000);
                 };
             }
-
+        
             function hidePlayer() {
                 video.pause();
                 playerOverlay.classList.add('hidden');
                 document.body.style.overflow = 'auto';
                 
                 clearInterval(state.progressSaveInterval);
-                saveCurrentProgress(); // Salva uma última vez ao fechar
+                saveCurrentProgress();
                 state.currentPlayingEpisodeId = null;
             }
-
+        
             function saveCurrentProgress() {
-                if (!state.currentPlayingEpisodeId || isNaN(video.duration)) return;
+                if (!state.currentPlayingEpisodeId || isNaN(video.duration) || video.duration === 0) return;
                 
                 const episodeId = state.currentPlayingEpisodeId;
                 const progressPercentage = (video.currentTime / video.duration) * 100;
                 
-                // Salva o progresso no estado local
                 state.userProgress[episodeId] = progressPercentage > 95 ? 100 : progressPercentage;
                 
                 // TODO: Chamar `saveVideoProgress(episodeId, state.userProgress[episodeId])` do user.js
-                console.log(`Salvando progresso do ep ${episodeId}: ${state.userProgress[episodeId]}%`);
+                console.log(`Salvando progresso do ep ${episodeId}: ${state.userProgress[episodeId].toFixed(2)}%`);
             }
             
             // --- INICIALIZAÇÃO ---
             async function init() {
-                // TODO: protectRoute();
-
-                // TODO: Chamar `getCurrentUserProfile()` do user.js
                 state.currentUser = { profile: { last_name: 'Stravelli', avatar_url: 'https://c.animaapp.com/dWBnxj7P/img/profile-photo@2x.png' } };
-                
-                // TODO: Chamar `getVideoProgress()` do user.js
-                state.userProgress = { 1: 75, 3: 100 }; // Mock
-
+                state.userProgress = { 1: 75, 3: 100 };
+        
                 renderHeader();
                 renderEpisodes();
                 setupPlayerControls();
             }
-
+        
             function setupPlayerControls() {
                 const formatTime = (s) => (isNaN(s) ? "00:00" : new Date(s * 1000).toISOString().substr(14, 5));
                 const togglePlay = () => video.paused ? video.play() : video.pause();
@@ -285,12 +275,32 @@
                     playerProgressBarFill.style.width = `${progress}%`;
                     currentTimeEl.textContent = formatTime(video.currentTime);
                     
-                    // Atualiza o card na página principal em tempo real
-                    const card = episodesGrid.querySelector(`.episode-card[data-episode-id="${state.currentPlayingEpisodeId}"] .episode-progress-fill`);
-                    if (card) card.style.width = `${progress}%`;
+                    const cardProgressFill = episodesGrid.querySelector(`.episode-card[data-episode-id="${state.currentPlayingEpisodeId}"] .episode-progress-fill`);
+                    if (cardProgressFill) cardProgressFill.style.width = `${progress}%`;
                 };
-
-                video.addEventListener('play', updatePlayPauseIcon);
+                
+                // NOVO: Lógica para mostrar/esconder controles
+                const showControls = () => {
+                    videoContainer.classList.add('user-active');
+                    clearTimeout(controlsTimeout); // Cancela o timer anterior
+                    // Se o vídeo estiver tocando, agenda um novo timer para esconder os controles
+                    if (!video.paused) {
+                        controlsTimeout = setTimeout(() => {
+                            videoContainer.classList.remove('user-active');
+                        }, 3000); // Esconde após 3 segundos
+                    }
+                };
+        
+                const hideControls = () => {
+                    if (!video.paused) { // Só esconde se o vídeo estiver tocando
+                        videoContainer.classList.remove('user-active');
+                    }
+                };
+        
+                video.addEventListener('play', () => {
+                    updatePlayPauseIcon();
+                    showControls(); // Inicia o timer para esconder os controles quando o vídeo começa
+                });
                 video.addEventListener('pause', updatePlayPauseIcon);
                 video.addEventListener('timeupdate', updateProgress);
                 video.addEventListener('loadedmetadata', () => durationEl.textContent = ` / ${formatTime(video.duration)}`);
@@ -305,15 +315,35 @@
                     const rect = progressBarContainer.getBoundingClientRect();
                     video.currentTime = ((e.clientX - rect.left) / rect.width) * video.duration;
                 });
-
-                fullscreenBtn.addEventListener('click', () => playerOverlay.requestFullscreen());
-                pipBtn.addEventListener('click', () => video.requestPictureInPicture());
+        
+                fullscreenBtn.addEventListener('click', () => {
+                    // Suporte para múltiplos navegadores
+                    if (document.fullscreenElement) {
+                        document.exitFullscreen();
+                    } else {
+                        playerOverlay.requestFullscreen().catch(err => {
+                            alert(`Erro ao tentar entrar em tela cheia: ${err.message} (${err.name})`);
+                        });
+                    }
+                });
+                pipBtn.addEventListener('click', () => {
+                    if (document.pictureInPictureElement) {
+                        document.exitPictureInPicture();
+                    } else if (document.pictureInPictureEnabled) {
+                        video.requestPictureInPicture();
+                    }
+                });
+        
+                // NOVO: Eventos de mouse para controlar a visibilidade dos controles
+                videoContainer.addEventListener('mousemove', showControls);
+                videoContainer.addEventListener('mouseleave', hideControls);
             }
-
+        
             init();
         });
     </script>
 
 </body>
 </html>
+
 
