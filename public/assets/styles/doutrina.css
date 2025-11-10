@@ -8,29 +8,33 @@
     --timeline-line-color: #444;
 }
 
-/*
-  REMOVIDO: Estilos antigos do header que conflitavam com o .top-bar
-  - header { ... }
-  - .user-profile { ... }
-  - .logo { ... }
-  - .status-widget { ... }
+/* Removido o estilo do body e main-container para usar o de app-container do campo.css */
+/* O body agora deve ser estilizado no base.css */
+body {
+    overflow-y: auto;
+}
+
+/* Nova classe para o conteúdo principal da doutrina */
+.main-content-doutrina {
+    padding-top: 2rem; /* Espaçamento para não ficar colado no header */
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+/* --- ESTILOS ANTIGOS DO HEADER REMOVIDOS --- */
+/* 
+header, .user-profile, .user-info, .logo, 
+.status-widget, .status-widget .icon-container, 
+.progress-info, .header-progress-bar, .header-buttons 
+foram removidos pois agora usamos a estrutura e o CSS de campo.css
 */
 
-/* Novo container para o conteúdo da doutrina, para se alinhar com a estrutura do app-container */
-.main-content-doutrina {
-    flex-grow: 1; /* Permite que o conteúdo principal ocupe o espaço restante */
-    overflow-y: auto; /* Adiciona scroll se necessário */
-    padding: 2rem; /* Adiciona espaçamento interno para não colar no header */
-    padding-top: 0;
-}
 
 .episodes-section { 
     position: relative; 
     padding-top: 50px; 
-    max-width: 1280px; /* Mantém o conteúdo centralizado */
-    margin: 0 auto; /* Centraliza o conteúdo */
 }
-
 .timeline { position: absolute; top: -22px; left: 5%; right: 5%; width: 90%; height: 13px; display: flex; align-items: center; }
 .timeline::before { content: ''; position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background-color: var(--timeline-line-color); transform: translateY(-50%); z-index: 1; }
 .timeline-dots { position: relative; z-index: 2; width: 100%; display: flex; justify-content: space-between; }
@@ -53,22 +57,44 @@
 .episode-progress-bar { width: 100%; height: 5px; background-color: #7a7a7a; border-radius: 2.5px; mix-blend-mode: difference; }
 .episode-progress-fill { height: 100%; background-color: var(--text-primary); border-radius: 2.5px; width: 0%; }
 
-/* --- Player Overlay (sem alterações) --- */
-#player-overlay { /* ... */ }
+/* --- Player Overlay --- */
+#player-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background-color: #000; display: flex; justify-content: center; align-items: center; }
+#player-overlay.hidden { display: none; }
+#player-overlay .video-container { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+#player-overlay #video-player { width: 100%; height: 100%; object-fit: contain; }
+#player-overlay .player-controls { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.3s; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%, rgba(0,0,0,0.5) 100%); }
+#player-overlay .video-container.user-active .player-controls, #player-overlay .video-container.paused .player-controls { opacity: 1; }
+#player-overlay .top-controls { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 2.5rem 3rem; }
+#player-overlay .episode-title { font-size: 1.25rem; }
+#player-overlay .top-right-nav { display: flex; align-items: center; gap: 25px; }
+#player-overlay .top-right-nav .separator { width: 1px; height: 17px; background-color: #7a7a7a; }
+#player-overlay .center-controls { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 100px; }
+#player-overlay .bottom-controls { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem 3rem 2.5rem 3rem; }
+#player-overlay .player-progress-bar-container { width: 100%; height: 5px; background-color: rgba(122, 122, 122, 0.5); border-radius: 10px; cursor: pointer; }
+#player-overlay .progress-bar-fill { height: 100%; background-color: #eeeeee; border-radius: 10px; width: 0%; }
+#player-overlay .time-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; }
+#player-overlay .time-display { font-size: 13px; }
+#player-overlay #duration { color: #7a7a7a; }
+#player-overlay .bottom-right-nav { display: flex; align-items: center; gap: 15px; font-size: 13px; }
 
-/* --- Media Queries (ajustes para o novo layout) --- */
 @media (max-width: 1200px) {
     .episodes-grid { grid-template-columns: repeat(2, 1fr); }
     .timeline { display: none; }
     .episodes-section { padding-top: 0; }
     .episode-card p { height: auto; }
 }
-
 @media (max-width: 992px) {
-    /* O layout mobile de campo.css já ajusta o top-bar, então só precisamos ajustar o conteúdo */
-    .main-content-doutrina { padding: 1rem; }
+    /* Ajustes para o layout do conteúdo principal em telas menores, herdando o comportamento do campo.css */
+    .main-content-doutrina {
+        padding-top: 1rem;
+    }
 }
-
+@media (max-width: 768px) {
+    /* O header já será ajustado pela media query do campo.css */
+    .episodes-section {
+        padding: 1rem; /* Adiciona um padding para não colar nas bordas */
+    }
+}
 @media (max-width: 600px) {
     .episodes-grid { grid-template-columns: 1fr; }
 }
