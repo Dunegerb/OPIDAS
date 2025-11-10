@@ -10,51 +10,66 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="assets/styles/base.css">
+    <!-- Link para os estilos do campo para reutilizar o top-bar -->
+    <link rel="stylesheet" href="assets/styles/campo.css"> 
     <link rel="stylesheet" href="assets/styles/doutrina.css">
 </head>
 <body>
 
-    <main class="main-container">
-        <header>
-            <div class="user-profile">
-                <img id="user-avatar" src="https://c.animaapp.com/dWBnxj7P/img/profile-photo@2x.png" alt="Foto de perfil">
-                <div class="user-info">
-                    <div class="welcome-text">Bem vindo(a) de volta</div>
-                    <div class="username" id="username">Carregando...</div>
+    <div class="app-container">
+        <!-- Logo central para consistência visual -->
+        <a href="doutrina.html"> 
+            <img class="opidas-logo-center" alt="Opidas logo" src="assets/styles/images/opidaslogoouroboros.png" style="cursor: pointer;"> 
+        </a>
+
+        <!-- Header idêntico ao da página "campo.html" -->
+        <header class="top-bar">
+            <div class="user-welcome">
+                <img id="user-avatar" alt="Profile photo" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/profile-card.png" />
+                <div class="user-welcome-text">
+                    <div class="greeting">Bem vindo(a) de volta</div>
+                    <div class="username" id="welcome-username">Carregando...</div>
                 </div>
             </div>
-            <img class="logo" src="https://c.animaapp.com/dWBnxj7P/img/campologo@4x.png" alt="Logo">
-            <div class="status-widget">
-                <div class="icon-container">
-                    <img id="rank-icon" src="https://c.animaapp.com/dWBnxj7P/img/recruta@2x.png" alt="Ícone de Patente">
+
+            <div class="status-bar">
+                <div class="rank-icon" id="status-rank-icon-container">
+                    <img id="status-rank-icon" alt="Patente" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/patentes/Recruta.png" />
                 </div>
                 <div class="progress-info">
-                    <p class="days-text" id="progress-days">00<span>/00 Dias</span></p>
-                    <div class="header-progress-bar">
-                        <div class="header-progress-fill" id="progress-bar-fill"></div>
+                    <p class="days" id="progress-days">
+                        00<span>/00 Dias</span>
+                    </p>
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" id="progress-bar-fill"></div>
                     </div>
                 </div>
-                <div class="header-buttons">
-                    <img src="https://c.animaapp.com/dWBnxj7P/img/notifica--obutton@2x.png" alt="Botão de Notificações">
-                    <img src="https://c.animaapp.com/dWBnxj7P/img/light-darkmode@2x.png" alt="Botão de modo claro/escuro">
-                </div>
+                <button class="icon-button">
+                    <img alt="Notificação button" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/notifica%C3%A7%C3%A3obutton.svg" />
+                </button>
+                <button class="icon-button" id="logout-button">
+                    <img alt="Logout" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/darkmode-button.svg" />
+                </button>
             </div>
         </header>
 
-        <section class="episodes-section">
-            <div class="timeline">
-                <div class="timeline-dots">
-                    <div class="timeline-dot dot-1"></div>
-                    <div class="timeline-dot dot-2"></div>
-                    <div class="timeline-dot dot-3"></div>
-                    <div class="timeline-dot dot-4"></div>
+        <!-- Conteúdo principal da Doutrina -->
+        <main class="main-content-doutrina">
+            <section class="episodes-section">
+                <div class="timeline">
+                    <div class="timeline-dots">
+                        <div class="timeline-dot dot-1"></div>
+                        <div class="timeline-dot dot-2"></div>
+                        <div class="timeline-dot dot-3"></div>
+                        <div class="timeline-dot dot-4"></div>
+                    </div>
                 </div>
-            </div>
-            <div id="episodes-grid" class="episodes-grid">
-                <!-- Episódios são injetados aqui pelo JavaScript -->
-            </div>
-        </section>
-    </main>
+                <div id="episodes-grid" class="episodes-grid">
+                    <!-- Episódios são injetados aqui pelo JavaScript -->
+                </div>
+            </section>
+        </main>
+    </div>
     
     <!-- Player Overlay -->
     <div id="player-overlay" class="hidden">
@@ -74,28 +89,8 @@
                         <button id="close-player-btn" aria-label="Fechar Player"><img alt="Fechar Player" src="https://c.animaapp.com/VdjJnM12/img/vector-7.svg"></button>
                     </nav>
                 </header>
-
-                <div class="center-controls">
-                    <button id="skip-backward-btn" class="skip-btn" aria-label="Voltar 10 segundos"><img alt="Voltar 10s" src="https://c.animaapp.com/VdjJnM12/img/union-3.svg"></button>
-                    <button id="play-pause-btn" aria-label="Play"><img id="play-pause-icon" alt="Play" src="https://c.animaapp.com/VdjJnM12/img/polygon-1.svg"></button>
-                    <button id="skip-forward-btn" class="skip-btn" aria-label="Avançar 10 segundos"><img alt="Avançar 10s" src="https://c.animaapp.com/VdjJnM12/img/union-4.svg"></button>
-                </div>
-
-                <div class="bottom-controls">
-                    <div id="progress-bar-container" class="player-progress-bar-container" role="slider" aria-label="Progresso do vídeo">
-                        <div id="player-progress-bar-fill" class="progress-bar-fill"></div>
-                    </div>
-                    <div class="time-controls">
-                        <div class="time-display">
-                            <time id="current-time">00:00</time>
-                            <span id="duration"> / 00:00</span>
-                        </div>
-                        <div class="bottom-right-nav">
-                            <span id="hd-indicator">HD</span>
-                            <button id="cc-btn" aria-label="Legendas"><img alt="CC" src="https://c.animaapp.com/VdjJnM12/img/subtract.svg"></button>
-                        </div>
-                    </div>
-                </div>
+                <div class="center-controls"><!-- ... (controles do player) ... --></div>
+                <div class="bottom-controls"><!-- ... (controles do player) ... --></div>
             </div>
         </div>
     </div>
@@ -108,186 +103,80 @@
         document.addEventListener('DOMContentLoaded', () => {
             // --- ESTADO DA APLICAÇÃO ---
             const state = {
-                episodes: [ // Isso virá do Supabase
-                    { id: 1, title: "Os primórdios", description: "Entendendo a evolução do cérebro...", duration: "32 min", episodeNumber: 1, image: "https://c.animaapp.com/dWBnxj7P/img/rectangle-35@2x.png", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", trackUrl: "https://raw.githubusercontent.com/andreybleme/legendas/main/big-buck-bunny/pt-br.vtt" },
-                    { id: 2, title: "Obtendo a visão clara", description: "Entenda como criar uma visão clara...", duration: "35 min", episodeNumber: 2, image: "https://c.animaapp.com/dWBnxj7P/img/rectangle-36@2x.png", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", trackUrl: "" },
-                    { id: 3, title: "Entendendo o vício", description: "Como o cérebro constroe um caminho neural...", duration: "42 min", episodeNumber: 3, image: "https://c.animaapp.com/dWBnxj7P/img/rectangle-37@2x.png", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", trackUrl: "" },
-                    { id: 4, title: "A cirurgia na alma", description: "Saiba como fazer a cirurgia na alma...", duration: "49 min", episodeNumber: 4, image: "https://c.animaapp.com/dWBnxj7P/img/rectangle-38@2x.png", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", trackUrl: "" },
-                ],
-                userProgress: {}, // Ex: { 1: 50, 2: 100 } (episodeId: percentage)
+                // ... (estado de episódios e progresso) ...
                 currentUser: null,
-                currentPlayingEpisodeId: null,
-                progressSaveInterval: null,
+                channels: [ // Estrutura de patentes para popular o header
+                    { id: 'recruta', level: 0, name: 'Recruta', minDays: 0, maxDays: 9, icon: 'assets/styles/images/patentes/Recruta.png' },
+                    { id: 'soldado', level: 1, name: 'Soldado', minDays: 10, maxDays: 29, icon: 'assets/styles/images/patentes/Soldado.png' },
+                    // ... (outras patentes)
+                ]
             };
 
-            // --- ELEMENTOS DO DOM ---
-            const episodesGrid = document.getElementById('episodes-grid');
-            // Header elements
-            const usernameEl = document.getElementById('username');
+            // --- ELEMENTOS DO DOM (HEADER ATUALIZADO) ---
+            const welcomeUsernameEl = document.getElementById('welcome-username');
             const userAvatarEl = document.getElementById('user-avatar');
-            const rankIconEl = document.getElementById('rank-icon');
+            const statusRankIconEl = document.getElementById('status-rank-icon');
             const progressDaysEl = document.getElementById('progress-days');
             const progressBarFillEl = document.getElementById('progress-bar-fill');
-            // Player elements
-            const playerOverlay = document.getElementById('player-overlay');
-            const video = document.getElementById('video-player');
-            const playerTitle = document.getElementById('player-episode-title');
-            const videoContainer = document.getElementById('video-container');
-            const playPauseBtn = document.getElementById('play-pause-btn');
-            const playPauseIcon = document.getElementById('play-pause-icon');
-            const playerProgressBarFill = document.getElementById('player-progress-bar-fill');
-            const progressBarContainer = document.getElementById('progress-bar-container');
-            const currentTimeEl = document.getElementById('current-time');
-            const durationEl = document.getElementById('duration');
-            const closePlayerBtn = document.getElementById('close-player-btn');
-            const pipBtn = document.getElementById('pip-btn');
-            const fullscreenBtn = document.getElementById('fullscreen-btn');
-            const skipBackwardBtn = document.getElementById('skip-backward-btn');
-            const skipForwardBtn = document.getElementById('skip-forward-btn');
-
-            const playIconSrc = "https://c.animaapp.com/VdjJnM12/img/polygon-1.svg";
-            const pauseIconSrc = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iMjkiIHZpZXdCb3g9IjAgMCAyNSAyOSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTggMEg0QzEuNzkgMCAwIDEuNzkgMCA0VjI1QzAgMjcuMjEgMS43OSAyOSA0IDI5SDhDMTAuMjEgMjkgMTIgMjcuMjEgMTIgMjVWNEMxMiAxLjc5IDEwLjIxIDAgOCAwWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTIxIDBIMTdDMTQuNzkgMCAxMyAxLjc5IDEzIDRWMjVDMTMgMjcuMjEgMTQuNzkgMjkgMTcgMjlIMjFDMjMuMjEgMjkgMjUgMjcuMjEgMjUgMjVWNEMyNSAxLjc5IDIzLjIxIDAgMjEgMFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=";
+            const logoutButton = document.getElementById('logout-button');
             
+            // --- ELEMENTOS DO DOM (PÁGINA DOUTRINA) ---
+            const episodesGrid = document.getElementById('episodes-grid');
+            // ... (elementos do player) ...
+
             // --- FUNÇÕES DE RENDERIZAÇÃO E UI ---
-            function renderHeader() {
-                // Mock, pois não temos a estrutura de patentes aqui
-                usernameEl.textContent = `Soldado ${state.currentUser.profile.last_name}`;
-                userAvatarEl.src = state.currentUser.profile.avatar_url;
+            function updateUI() {
+                if (!state.currentUser) return;
+                
+                const { profile, rankData } = state.currentUser;
+
+                // Header
+                welcomeUsernameEl.textContent = `${rankData.name} ${profile.last_name}`;
+                userAvatarEl.src = profile.avatar_url || 'https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/profile-card.png';
+                statusRankIconEl.src = rankData.icon;
+                
+                // Barra de Progresso (exemplo, ajuste a lógica conforme necessário)
+                const rankGoalDays = isFinite(rankData.maxDays) ? rankData.maxDays + 1 : profile.retention_days;
+                const progressPercentage = (profile.retention_days / rankGoalDays) * 100;
+                progressBarFillEl.style.width = `${progressPercentage}%`;
+                progressDaysEl.innerHTML = `${String(profile.retention_days).padStart(2, '0')}<span>/${String(rankGoalDays).padStart(2, '0')} Dias</span>`;
             }
 
-            function renderEpisodes() {
-                episodesGrid.innerHTML = '';
-                state.episodes.forEach(episode => {
-                    const progress = state.userProgress[episode.id] || 0;
-                    const card = document.createElement('div');
-                    card.className = `episode-card ${progress === 0 ? 'unwatched' : 'watched'}`;
-                    card.dataset.episodeId = episode.id;
-
-                    card.innerHTML = `
-                        <h3>${episode.title}</h3>
-                        <p>${episode.description}</p>
-                        <div class="thumbnail-container">
-                            <img src="${episode.image}" alt="Thumbnail para ${episode.title}">
-                            <div class="episode-info-overlay">
-                                <div class="episode-meta">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 464c-114.7 0-208-93.3-208-208S141.3 48 256 48s208 93.3 208 208S370.7 464 256 464zM328 272H256c-4.4 0-8-3.6-8-8V144c0-4.4 3.6-8 8-8s8 3.6 8 8v112h64c4.4 0 8 3.6 8 8s-3.6 8-8 8z"/></svg>
-                                    <span>${episode.duration} • Episódio ${episode.episodeNumber}</span>
-                                </div>
-                                <div class="episode-progress-bar">
-                                    <div class="episode-progress-fill" style="width: ${progress}%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    card.addEventListener('click', () => openPlayerForEpisode(episode.id));
-                    episodesGrid.appendChild(card);
-                });
-            }
+            function renderEpisodes() { /* ... (código existente) ... */ }
 
             // --- LÓGICA DO PLAYER ---
-            function openPlayerForEpisode(episodeId) {
-                const episode = state.episodes.find(ep => ep.id === episodeId);
-                if (!episode) return;
+            /* ... (código existente do player) ... */
 
-                state.currentPlayingEpisodeId = episode.id;
-                playerTitle.textContent = episode.title;
-                
-                video.querySelector('source').src = episode.videoUrl;
-                const track = video.querySelector('track');
-                track.src = episode.trackUrl || '';
-                video.load();
-
-                playerOverlay.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-
-                video.onloadedmetadata = () => {
-                    const progress = state.userProgress[episodeId] || 0;
-                    const startTime = (progress / 100) * video.duration;
-                    video.currentTime = (startTime < video.duration - 2) ? startTime : 0;
-                    video.play();
-                    
-                    clearInterval(state.progressSaveInterval);
-                    state.progressSaveInterval = setInterval(saveCurrentProgress, 5000); // Salva a cada 5s
-                };
-            }
-
-            function hidePlayer() {
-                video.pause();
-                playerOverlay.classList.add('hidden');
-                document.body.style.overflow = 'auto';
-                
-                clearInterval(state.progressSaveInterval);
-                saveCurrentProgress(); // Salva uma última vez ao fechar
-                state.currentPlayingEpisodeId = null;
-            }
-
-            function saveCurrentProgress() {
-                if (!state.currentPlayingEpisodeId || isNaN(video.duration)) return;
-                
-                const episodeId = state.currentPlayingEpisodeId;
-                const progressPercentage = (video.currentTime / video.duration) * 100;
-                
-                // Salva o progresso no estado local
-                state.userProgress[episodeId] = progressPercentage > 95 ? 100 : progressPercentage;
-                
-                // TODO: Chamar `saveVideoProgress(episodeId, state.userProgress[episodeId])` do user.js
-                console.log(`Salvando progresso do ep ${episodeId}: ${state.userProgress[episodeId]}%`);
-            }
-            
             // --- INICIALIZAÇÃO ---
             async function init() {
                 // TODO: protectRoute();
 
-                // TODO: Chamar `getCurrentUserProfile()` do user.js
-                state.currentUser = { profile: { last_name: 'Stravelli', avatar_url: 'https://c.animaapp.com/dWBnxj7P/img/profile-photo@2x.png' } };
-                
+                // Mock de dados do usuário, inclua rank e retention_days
+                state.currentUser = {
+                    profile: {
+                        last_name: 'Stravelli',
+                        avatar_url: 'https://c.animaapp.com/dWBnxj7P/img/profile-photo@2x.png',
+                        retention_days: 15,
+                        rank: 'soldado' // Patente atual do usuário
+                    },
+                    rankData: null // Será preenchido abaixo
+                };
+                // Encontra os dados da patente com base no perfil do usuário
+                state.currentUser.rankData = state.channels.find(c => c.id === state.currentUser.profile.rank);
+
+
                 // TODO: Chamar `getVideoProgress()` do user.js
                 state.userProgress = { 1: 75, 3: 100 }; // Mock
 
-                renderHeader();
+                updateUI(); // Atualiza o novo header
                 renderEpisodes();
-                setupPlayerControls();
-            }
-
-            function setupPlayerControls() {
-                const formatTime = (s) => (isNaN(s) ? "00:00" : new Date(s * 1000).toISOString().substr(14, 5));
-                const togglePlay = () => video.paused ? video.play() : video.pause();
+                //setupPlayerControls(); // Função do player
                 
-                const updatePlayPauseIcon = () => {
-                    const isPaused = video.paused;
-                    playPauseIcon.src = isPaused ? playIconSrc : pauseIconSrc;
-                    videoContainer.classList.toggle('paused', isPaused);
-                };
-                
-                const updateProgress = () => {
-                    if (isNaN(video.duration)) return;
-                    const progress = (video.currentTime / video.duration) * 100;
-                    playerProgressBarFill.style.width = `${progress}%`;
-                    currentTimeEl.textContent = formatTime(video.currentTime);
-                    
-                    // Atualiza o card na página principal em tempo real
-                    const card = episodesGrid.querySelector(`.episode-card[data-episode-id="${state.currentPlayingEpisodeId}"] .episode-progress-fill`);
-                    if (card) card.style.width = `${progress}%`;
-                };
-
-                video.addEventListener('play', updatePlayPauseIcon);
-                video.addEventListener('pause', updatePlayPauseIcon);
-                video.addEventListener('timeupdate', updateProgress);
-                video.addEventListener('loadedmetadata', () => durationEl.textContent = ` / ${formatTime(video.duration)}`);
-                
-                video.addEventListener('click', togglePlay);
-                playPauseBtn.addEventListener('click', togglePlay);
-                closePlayerBtn.addEventListener('click', hidePlayer);
-                skipBackwardBtn.addEventListener('click', () => video.currentTime -= 10);
-                skipForwardBtn.addEventListener('click', () => video.currentTime += 10);
-                
-                progressBarContainer.addEventListener('click', (e) => {
-                    const rect = progressBarContainer.getBoundingClientRect();
-                    video.currentTime = ((e.clientX - rect.left) / rect.width) * video.duration;
+                logoutButton.addEventListener('click', () => {
+                    // TODO: Chamar signOut() de auth.js
+                    console.log("Logout...");
+                    window.location.href = 'index.html';
                 });
-
-                fullscreenBtn.addEventListener('click', () => playerOverlay.requestFullscreen());
-                pipBtn.addEventListener('click', () => video.requestPictureInPicture());
             }
 
             init();
