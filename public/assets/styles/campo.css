@@ -10,7 +10,7 @@
 }
 
 /* Top Bar */
-.top-bar { display: flex; justify-content: space-between; align-items: center; height: 90px; flex-shrink: 0; }
+.top-bar { display: flex; justify-content: space-between; align-items: center; /*height: 90px;*/ flex-shrink: 0; }
 .user-welcome { display: flex; align-items: center; gap: 1rem; }
 .user-welcome img { width: 34px; height: 34px; border-radius: 50%; }
 .user-welcome-text .greeting { font-size: 10px; }
@@ -97,6 +97,7 @@
     .panel { border-radius: 0; border-left: none; border-right: none; }
 
 }
+
 
 
 
