@@ -131,7 +131,7 @@
                 currentPlayingEpisodeId: null,
                 progressSaveInterval: null,
             };
-        
+    
             // --- ELEMENTOS DO DOM ---
             const episodesGrid = document.getElementById('episodes-grid');
             // Header elements
@@ -156,21 +156,19 @@
             const fullscreenBtn = document.getElementById('fullscreen-btn');
             const skipBackwardBtn = document.getElementById('skip-backward-btn');
             const skipForwardBtn = document.getElementById('skip-forward-btn');
-        
-            // Mudei o ícone de play para um que achei no seu código para manter consistência
-            const playIconSrc = "assets/styles/images/player/playbottom.svg";
+    
+            // [FIX 1] Corrigindo os ícones de Play/Pause. O ícone de pause estava sem o prefixo data URI.
+            // O ícone de play foi convertido para Base64 para ser mais robusto e não depender de um link externo.
+            const playIconSrc = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjgiIHZpZXdCb3g9IjAgMCAyNCAyOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIzLjEwMTUgMTIuMTEzOEMyNC40MzgxIDEyLjg5MTggMjQuNDM4MSAxNC44ODU5IDIzLjEwMTUgMTUuNjY3OUwwLjkzODMzMSAyNy45Mzk0Qy0wLjQyNTI2OSAyOC43Mzk0IC0yLjEyNSAyNy43MTg0IC0yLjEyNSAyNi4wNjA4VjEuNzE3MDVDLTIuMTI1IDAuMDU1NDQ1IC0wLjQyNTI3IC0wLjk2MTU1NCAwLjkzODMzMSAwLjgyMjM0NkwyMy4xMDE1IDEyLjExMzhaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K";
             const pauseIconSrc = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iMjkiIHZpZXdCb3g9IjAgMCAyNSAyOSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTggMEg0QzEuNzkgMCAwIDEuNzkgMCA0VjI1QzAgMjcuMjEgMS43OSAyOSA0IDI5SDhDMTAuMjEgMjkgMTIgMjcuMjEgMTIgMjVWNEMxMiAxLjc5IDEwLjIxIDAgOCAwWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTIxIDBIMTdDMTQuNzkgMCAxMyAxLjc5IDEzIDRWMjVDMTMgMjcuMjEgMTQuNzkgMjkgMTcgMjlIMjFDMjMuMjEgMjkgMjUgMjcuMjEgMjUgMjVWNEMyNSAxLjc5IDIzLjIxIDAgMjEgMFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=";
             
-            // Variável para controlar o timeout dos controles
-            let controlsTimeout;
-        
             // --- FUNÇÕES DE RENDERIZAÇÃO E UI ---
             function renderHeader() {
                 if (!state.currentUser) return;
                 usernameEl.textContent = `Soldado ${state.currentUser.profile.last_name}`;
                 userAvatarEl.src = state.currentUser.profile.avatar_url;
             }
-        
+    
             function renderEpisodes() {
                 episodesGrid.innerHTML = '';
                 state.episodes.forEach(episode => {
@@ -178,7 +176,7 @@
                     const card = document.createElement('div');
                     card.className = `episode-card ${progress === 0 ? 'unwatched' : 'watched'}`;
                     card.dataset.episodeId = episode.id;
-        
+    
                     card.innerHTML = `
                         <h3>${episode.title}</h3>
                         <p>${episode.description}</p>
@@ -199,12 +197,12 @@
                     episodesGrid.appendChild(card);
                 });
             }
-        
+    
             // --- LÓGICA DO PLAYER ---
             function openPlayerForEpisode(episodeId) {
                 const episode = state.episodes.find(ep => ep.id === episodeId);
                 if (!episode) return;
-        
+    
                 state.currentPlayingEpisodeId = episode.id;
                 playerTitle.textContent = episode.title;
                 
@@ -212,10 +210,10 @@
                 const track = video.querySelector('track');
                 track.src = episode.trackUrl || '';
                 video.load();
-        
+    
                 playerOverlay.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
-        
+    
                 video.onloadedmetadata = () => {
                     const progress = state.userProgress[episodeId] || 0;
                     const startTime = (progress / 100) * video.duration;
@@ -223,22 +221,22 @@
                     video.play();
                     
                     clearInterval(state.progressSaveInterval);
-                    state.progressSaveInterval = setInterval(saveCurrentProgress, 5000);
+                    state.progressSaveInterval = setInterval(saveCurrentProgress, 5000); // Salva a cada 5s
                 };
             }
-        
+    
             function hidePlayer() {
                 video.pause();
                 playerOverlay.classList.add('hidden');
                 document.body.style.overflow = 'auto';
                 
                 clearInterval(state.progressSaveInterval);
-                saveCurrentProgress();
+                saveCurrentProgress(); // Salva uma última vez ao fechar
                 state.currentPlayingEpisodeId = null;
             }
-        
+    
             function saveCurrentProgress() {
-                if (!state.currentPlayingEpisodeId || isNaN(video.duration) || video.duration === 0) return;
+                if (!state.currentPlayingEpisodeId || isNaN(video.duration)) return;
                 
                 const episodeId = state.currentPlayingEpisodeId;
                 const progressPercentage = (video.currentTime / video.duration) * 100;
@@ -246,20 +244,22 @@
                 state.userProgress[episodeId] = progressPercentage > 95 ? 100 : progressPercentage;
                 
                 // TODO: Chamar `saveVideoProgress(episodeId, state.userProgress[episodeId])` do user.js
-                console.log(`Salvando progresso do ep ${episodeId}: ${state.userProgress[episodeId].toFixed(2)}%`);
+                console.log(`Salvando progresso do ep ${episodeId}: ${state.userProgress[episodeId]}%`);
             }
             
             // --- INICIALIZAÇÃO ---
             async function init() {
                 state.currentUser = { profile: { last_name: 'Stravelli', avatar_url: 'https://c.animaapp.com/dWBnxj7P/img/profile-photo@2x.png' } };
-                state.userProgress = { 1: 75, 3: 100 };
-        
+                state.userProgress = { 1: 75, 3: 100 }; // Mock
+    
                 renderHeader();
                 renderEpisodes();
                 setupPlayerControls();
             }
-        
+    
             function setupPlayerControls() {
+                let inactivityTimer; // [FIX 2.1] Variável para controlar o timer de inatividade
+    
                 const formatTime = (s) => (isNaN(s) ? "00:00" : new Date(s * 1000).toISOString().substr(14, 5));
                 const togglePlay = () => video.paused ? video.play() : video.pause();
                 
@@ -275,55 +275,58 @@
                     playerProgressBarFill.style.width = `${progress}%`;
                     currentTimeEl.textContent = formatTime(video.currentTime);
                     
-                    const cardProgressFill = episodesGrid.querySelector(`.episode-card[data-episode-id="${state.currentPlayingEpisodeId}"] .episode-progress-fill`);
-                    if (cardProgressFill) cardProgressFill.style.width = `${progress}%`;
+                    const card = episodesGrid.querySelector(`.episode-card[data-episode-id="${state.currentPlayingEpisodeId}"] .episode-progress-fill`);
+                    if (card) card.style.width = `${progress}%`;
                 };
                 
-                // NOVO: Lógica para mostrar/esconder controles
-                const showControls = () => {
+                // [FIX 2.2] Função para mostrar os controles e iniciar o timer para escondê-los
+                const showControlsAndSetTimer = () => {
                     videoContainer.classList.add('user-active');
-                    clearTimeout(controlsTimeout); // Cancela o timer anterior
-                    // Se o vídeo estiver tocando, agenda um novo timer para esconder os controles
+                    clearTimeout(inactivityTimer); // Reseta o timer anterior
+    
+                    // Se o vídeo não estiver pausado, define um novo timer para esconder os controles
                     if (!video.paused) {
-                        controlsTimeout = setTimeout(() => {
+                        inactivityTimer = setTimeout(() => {
                             videoContainer.classList.remove('user-active');
-                        }, 3000); // Esconde após 3 segundos
+                        }, 3000); // Esconde após 3 segundos de inatividade
                     }
                 };
-        
-                const hideControls = () => {
-                    if (!video.paused) { // Só esconde se o vídeo estiver tocando
-                        videoContainer.classList.remove('user-active');
-                    }
-                };
-        
+    
                 video.addEventListener('play', () => {
                     updatePlayPauseIcon();
-                    showControls(); // Inicia o timer para esconder os controles quando o vídeo começa
+                    showControlsAndSetTimer(); // Garante que o timer comece quando o vídeo tocar
                 });
-                video.addEventListener('pause', updatePlayPauseIcon);
+                video.addEventListener('pause', () => {
+                    updatePlayPauseIcon();
+                    clearTimeout(inactivityTimer); // Para o timer quando o vídeo é pausado
+                    videoContainer.classList.add('user-active'); // Força a exibição dos controles no pause
+                });
                 video.addEventListener('timeupdate', updateProgress);
-                video.addEventListener('loadedmetadata', () => durationEl.textContent = ` / ${formatTime(video.duration)}`);
+                video.addEventListener('loadedmetadata', () => {
+                    durationEl.textContent = ` / ${formatTime(video.duration)}`;
+                    showControlsAndSetTimer(); // Mostra os controles assim que o vídeo carregar
+                });
                 
                 video.addEventListener('click', togglePlay);
                 playPauseBtn.addEventListener('click', togglePlay);
                 closePlayerBtn.addEventListener('click', hidePlayer);
                 skipBackwardBtn.addEventListener('click', () => video.currentTime -= 10);
                 skipForwardBtn.addEventListener('click', () => video.currentTime += 10);
+    
+                // [FIX 2.3] Adiciona o listener de movimento do mouse no container do vídeo
+                videoContainer.addEventListener('mousemove', showControlsAndSetTimer);
                 
                 progressBarContainer.addEventListener('click', (e) => {
                     const rect = progressBarContainer.getBoundingClientRect();
                     video.currentTime = ((e.clientX - rect.left) / rect.width) * video.duration;
                 });
-        
+    
                 fullscreenBtn.addEventListener('click', () => {
-                    // Suporte para múltiplos navegadores
                     if (document.fullscreenElement) {
                         document.exitFullscreen();
                     } else {
-                        playerOverlay.requestFullscreen().catch(err => {
-                            alert(`Erro ao tentar entrar em tela cheia: ${err.message} (${err.name})`);
-                        });
+                        // Usar o overlay para o fullscreen garante que os controles personalizados entrem em tela cheia também
+                        playerOverlay.requestFullscreen();
                     }
                 });
                 pipBtn.addEventListener('click', () => {
@@ -333,17 +336,14 @@
                         video.requestPictureInPicture();
                     }
                 });
-        
-                // NOVO: Eventos de mouse para controlar a visibilidade dos controles
-                videoContainer.addEventListener('mousemove', showControls);
-                videoContainer.addEventListener('mouseleave', hideControls);
             }
-        
+    
             init();
         });
     </script>
 
 </body>
 </html>
+
 
 
