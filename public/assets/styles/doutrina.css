@@ -76,6 +76,18 @@ foram removidos pois agora usamos a estrutura e o CSS de campo.css
 #player-overlay .time-display { font-size: 13px; }
 #player-overlay #duration { color: #7a7a7a; }
 #player-overlay .bottom-right-nav { display: flex; align-items: center; gap: 15px; font-size: 13px; }
+#player-overlay .center-controls button img {
+    /* Força um tamanho fixo para os ícones centrais */
+    width: 32px;
+    height: 32px;
+    object-fit: contain; /* Garante que o ícone não se estique */
+}
+
+#player-overlay .top-right-nav button img,
+#player-overlay .bottom-right-nav button img {
+    /* Garante que os ícones do topo e rodapé também tenham um bom alinhamento */
+    display: block;
+}
 
 @media (max-width: 1200px) {
     .episodes-grid { grid-template-columns: repeat(2, 1fr); }
@@ -98,3 +110,5 @@ foram removidos pois agora usamos a estrutura e o CSS de campo.css
 @media (max-width: 600px) {
     .episodes-grid { grid-template-columns: 1fr; }
 }
+
+
