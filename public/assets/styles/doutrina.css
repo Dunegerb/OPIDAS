@@ -49,7 +49,7 @@ foram removidos pois agora usamos a estrutura e o CSS de campo.css
 .episode-card h3 { font-size: 21px; font-weight: 500; margin-bottom: 21px; }
 .episode-card p { font-size: 13px; font-weight: 300; line-height: 1.3; height: 55px; margin-bottom: 25px; color: var(--secondary-text); }
 .thumbnail-container { position: relative; border-radius: 8px; overflow: hidden; }
-.thumbnail-container img { width: 100%; height: 333px; object-fit: cover; display: block; }
+.thumbnail-container img { width: 100%; /*height: 333px;*/ object-fit: cover; display: block; }
 .episode-card.unwatched .thumbnail-container img { mix-blend-mode: luminosity; }
 .episode-info-overlay { position: absolute; bottom: 20px; left: 20px; right: 20px; }
 .episode-meta { display: flex; align-items: center; gap: 5px; font-size: 8px; margin-bottom: 10px; }
@@ -110,5 +110,6 @@ foram removidos pois agora usamos a estrutura e o CSS de campo.css
 @media (max-width: 600px) {
     .episodes-grid { grid-template-columns: 1fr; }
 }
+
 
 
