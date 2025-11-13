@@ -239,7 +239,7 @@
                 btnGoToStep2.addEventListener('click', async () => {
                     // TODO: Chamar updateUserProfile(data) do user.js para salvar os dados parciais
                     console.log("Salvando dados da Etapa 1:", state.userData);
-                    await window.UserService.updateUserProfile(state.userData);
+                    await window.UserService.updateUserProfile({     first_name: state.userData.firstName,     last_name: state.userData.lastName,     avatar_url: state.userData.profilePhotoUrl });
                     navigateToStep(2);
                 });
             };
@@ -305,6 +305,7 @@
     </script>
 </body>
 </html>
+
 
 
 
