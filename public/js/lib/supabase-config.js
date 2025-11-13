@@ -7,11 +7,11 @@
     // ⚠️ IMPORTANTE: Substitua estas variáveis pelas suas credenciais do Supabase
     // Você pode encontrar essas informações em: https://app.supabase.com/project/_/settings/api
     
-    const SUPABASE_URL = 'SUA_URL_SUPABASE_AQUI'; // Ex: https://xyzcompany.supabase.co
-    const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANONIMA_AQUI'; // Chave pública (anon/public)
+    const SUPABASE_URL = 'https://vkdywsawrftrpxjaxejs.supabase.co'; // Ex: https://xyzcompany.supabase.co
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrZHl3c2F3cmZ0cnB4amF4ZWpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4NTc1OTMsImV4cCI6MjA3ODQzMzU5M30.5ro31_G_sIGJ1lz_rHmVNRK5XnjTbMocfkjwDJqaees'; // Chave pública (anon/public)
 
     // Verifica se as credenciais foram configuradas
-    if (SUPABASE_URL === 'SUA_URL_SUPABASE_AQUI' || SUPABASE_ANON_KEY === 'SUA_CHAVE_ANONIMA_AQUI') {
+    if (SUPABASE_URL === 'https://vkdywsawrftrpxjaxejs.supabase.co' || SUPABASE_ANON_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrZHl3c2F3cmZ0cnB4amF4ZWpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4NTc1OTMsImV4cCI6MjA3ODQzMzU5M30.5ro31_G_sIGJ1lz_rHmVNRK5XnjTbMocfkjwDJqaees') {
         console.error('❌ ERRO: Configure as credenciais do Supabase em js/lib/supabase-config.js');
         console.error('📖 Veja o README para instruções de configuração');
         
