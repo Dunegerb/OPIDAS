@@ -239,7 +239,7 @@
                 btnGoToStep2.addEventListener('click', async () => {
                     // TODO: Chamar updateUserProfile(data) do user.js para salvar os dados parciais
                     console.log("Salvando dados da Etapa 1:", state.userData);
-                    await updateUserProfile(state.userData);
+                    await window.UserService.updateUserProfile(state.userData);
                     navigateToStep(2);
                 });
             };
@@ -273,7 +273,7 @@
                 btnGoToStep4.addEventListener('click', async () => {
                     // TODO: Chamar updateUserProfile(data) para salvar a data e a patente calculada
                     console.log("Salvando dados da Etapa 3:", state.userData);
-                    await updateUserProfile({ lastHabitDate: state.userData.lastHabitDate, rank: state.userData.rank });
+                    await window.UserService.updateUserProfile({ lastHabitDate: state.userData.lastHabitDate, rank: state.userData.rank });
                     populateFinalScreen();
                     navigateToStep(4);
                 });
@@ -285,7 +285,7 @@
                 btnEnterField.addEventListener('click', async () => {
                     // TODO: Chamar updateUserProfile para marcar onboarding como 'completed'
                     console.log("Finalizando onboarding...");
-                    await updateUserProfile({ onboarding_status: 'completed' });
+                    await window.UserService.updateUserProfile({ onboarding_status: 'completed' });
                     window.location.href = 'campo.html';
                 });
             };
@@ -305,6 +305,7 @@
     </script>
 </body>
 </html>
+
 
 
 
