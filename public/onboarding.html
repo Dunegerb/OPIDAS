@@ -248,12 +248,31 @@
             const initStep2 = () => {
                 btnGoToStep1.addEventListener('click', () => navigateToStep(1));
                 btnGoToStep3.addEventListener('click', async () => {
-                    // TODO: Chamar createCheckoutSession() do stripe.js
                     console.log("Iniciando checkout...");
-                    await createCheckoutSession(); 
-                    // A função acima deve redirecionar o usuário, então o código abaixo pode não ser executado
-                    // Em um cenário de teste, podemos navegar manualmente:
-                    // navigateToStep(3);
+                    
+                    try {
+                        // Obtém o usuário autenticado
+                        const { data: { user }, error } = await window.supabase.auth.getUser();
+                        
+                        if (error || !user) {
+                            throw new Error('Usuário não autenticado');
+                        }
+                        
+                        // Cria a sessão de checkout
+                        const checkoutUrl = await window.StripeService.createCheckoutSession(
+                            user.id,
+                            user.email
+                        );
+                        
+                        console.log('✅ Sessão de checkout criada:', checkoutUrl);
+                        
+                        // Redireciona para a página de pagamento do Stripe
+                        window.location.href = checkoutUrl;
+                        
+                    } catch (error) {
+                        console.error('❌ Erro ao iniciar checkout:', error);
+                        alert('Erro ao iniciar pagamento. Tente novamente.');
+                    }
                 });
             };
 
@@ -305,6 +324,7 @@
     </script>
 </body>
 </html>
+
 
 
 
