@@ -26,9 +26,23 @@ async function signUp(email, password) {
 
         console.log('✅ Usuário registrado com sucesso:', data);
         
-        // Redireciona para onboarding
-        alert("Conta criada com sucesso! Você será redirecionado para completar seu perfil.");
-        window.location.href = 'onboarding.html';
+        // Verifica se o email precisa ser confirmado
+        if (data.user && !data.session) {
+            // Email precisa ser confirmado
+            alert("Conta criada! Verifique seu email para confirmar o cadastro antes de continuar.");
+            return;
+        }
+        
+        // Se a sessão foi criada, o usuário já está logado
+        if (data.session) {
+            console.log('✅ Sessão criada automaticamente');
+            
+            // Aguarda um pouco para garantir que a sessão foi persistida
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            alert("Conta criada com sucesso! Você será redirecionado para completar seu perfil.");
+            window.location.href = 'onboarding.html';
+        }
 
     } catch (error) {
         console.error('❌ Erro ao registrar:', error);
