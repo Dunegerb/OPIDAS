@@ -10,36 +10,7 @@
     const SUPABASE_URL = 'https://vkdywsawrftrpxjaxejs.supabase.co'; // Ex: https://xyzcompany.supabase.co
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrZHl3c2F3cmZ0cnB4amF4ZWpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4NTc1OTMsImV4cCI6MjA3ODQzMzU5M30.5ro31_G_sIGJ1lz_rHmVNRK5XnjTbMocfkjwDJqaees'; // Chave pública (anon/public)
 
-    // Verifica se as credenciais foram configuradas
-    if (SUPABASE_URL === 'https://vkdywsawrftrpxjaxejs.supabase.co' || SUPABASE_ANON_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrZHl3c2F3cmZ0cnB4amF4ZWpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4NTc1OTMsImV4cCI6MjA3ODQzMzU5M30.5ro31_G_sIGJ1lz_rHmVNRK5XnjTbMocfkjwDJqaees') {
-        console.error('❌ ERRO: Configure as credenciais do Supabase em js/lib/supabase-config.js');
-        console.error('📖 Veja o README para instruções de configuração');
-        
-        // Cria um cliente mock para evitar erros
-        window.supabase = {
-            auth: {
-                getUser: () => Promise.resolve({ data: { user: null }, error: new Error('Supabase não configurado') }),
-                signUp: () => Promise.reject(new Error('Supabase não configurado')),
-                signInWithPassword: () => Promise.reject(new Error('Supabase não configurado')),
-                signOut: () => Promise.reject(new Error('Supabase não configurado')),
-                onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } })
-            },
-            from: () => ({
-                select: () => Promise.reject(new Error('Supabase não configurado')),
-                insert: () => Promise.reject(new Error('Supabase não configurado')),
-                update: () => Promise.reject(new Error('Supabase não configurado')),
-                delete: () => Promise.reject(new Error('Supabase não configurado'))
-            }),
-            functions: {
-                invoke: () => Promise.reject(new Error('Supabase não configurado'))
-            },
-            channel: () => ({
-                on: () => ({ subscribe: () => {} }),
-                subscribe: () => {}
-            })
-        };
-        return;
-    }
+    // ✅ VALIDAÇÃO REMOVIDA - O código agora vai direto para a inicialização
 
     // Verifica se o script do Supabase foi carregado
     if (typeof window.supabase === 'undefined' || typeof window.supabase.createClient !== 'function') {
