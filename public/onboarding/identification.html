@@ -54,7 +54,7 @@
                 lastName: '',
                 habit: null,
                 profilePhotoUrl: null,
-                enlistmentDate: new Date().toISOString() // Salva como string para consistência
+                enlistmentDate: new Date().toISOString()
             };
 
             // --- Seletores de Elementos DOM ---
@@ -109,7 +109,6 @@
                 const savedData = localStorage.getItem('onboardingData');
                 if (savedData) {
                     const parsedData = JSON.parse(savedData);
-                    // Junta os dados salvos com o padrão para não perder novas propriedades
                     userData = { ...userData, ...parsedData };
                     
                     firstNameInput.value = userData.firstName || '';
@@ -187,11 +186,12 @@
                     // Salva no localStorage
                     saveState();
                     
-                    // Salva no Supabase (apenas os campos que existem na tabela)
+                    // Salva no Supabase (incluindo habit_id para recuperação posterior)
                     await window.UserService.updateUserProfile({
                         first_name: userData.firstName,
                         last_name: userData.lastName,
-                        avatar_url: userData.profilePhotoUrl
+                        avatar_url: userData.profilePhotoUrl,
+                        habit_id: userData.habit.id  // ← ADICIONADO para recuperação após Stripe
                     });
                     
                     console.log('✅ Dados da Etapa 1 salvos com sucesso');
