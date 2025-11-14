@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding: Investimento - OPIDAS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/investment.css">
+</head>
+<body>
+    <header class="page-header">
+        <img alt="OPIDAS Brand Logos" src="https://c.animaapp.com/rDKbXW1a/img/group-37@2x.png" />
+    </header>
+
+    <!-- Adicionamos a classe 'investment-step-active' diretamente aqui -->
+    <div class="onboarding-card investment-step-active">
+        <main class="main-content">
+            <div class="form-steps-container">
+                <section class="form-step investment-step">
+                    <section class="info-section">
+                        <h1 class="info-title">Investimento OPIDAS</h1>
+                        <p class="info-description"><span>Tenha acesso ao </span><span class="highlight">campo</span><span>, uma área para a </span><span class="highlight">comunidade</span><span> de pessoas que estão alinhados com seu </span><span class="highlight">propósito</span><span> de autoconhecimento. E uma </span><span class="highlight">área de séries</span><span> que você não encontrará na netflix.</span></p>
+                    </section>
+                    <section class="payment-section-wrapper">
+                        <div class="payment-card">
+                            <div class="opidas-logo-top"><img alt="OPIDAS Icon" src="https://c.animaapp.com/8j0Bi7lE/img/add-a-heading--4--2@2x.png" /><span>OPIDAS</span></div>
+                            <div class="price-box"><p class="price-text">R$3<span class="period">/semana</span></p></div>
+                            <button id="btnGoToNextStep" class="btn-invest-primary">Começar Gratuitamente</button>
+                            <div class="secure-payment-info"><img alt="Security icon" src="https://c.animaapp.com/8j0Bi7lE/img/vector.svg" /><p>Pagamento 100% seguro</p></div>
+                            <ul class="features-list">
+                                <svg width="0" height="0" style="display:none;"><symbol id="check-icon" viewBox="0 0 12 9"><path d="M1 4.5L4.33333 8L11 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
+                                <li><svg class="check-icon"><use xlink:href="#check-icon"></use></svg>Patentes Hierárquicas</li>
+                                <li><svg class="check-icon"><use xlink:href="#check-icon"></use></svg>Campo (Chat da comunidade)</li>
+                                <li><svg class="check-icon"><use xlink:href="#check-icon"></use></svg>Área de conhecimento (séries)</li>
+                                <li><svg class="check-icon"><use xlink:href="#check-icon"></use></svg>Veja seu progresso</li>
+                            </ul>
+                            <p class="trial-text">7 dias de avaliação gratuita</p>
+                            <button id="btnGoToPrevStep" class="btn-secondary">Voltar</button>
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('btnGoToNextStep').addEventListener('click', () => {
+                window.location.href = 'habit-tracking.html';
+            });
+            document.getElementById('btnGoToPrevStep').addEventListener('click', () => {
+                window.location.href = 'identification.html';
+            });
+
+            // Verificação para garantir que o usuário veio da etapa anterior
+            if (!localStorage.getItem('onboardingData')) {
+                alert('Dados não encontrados. Por favor, comece o processo de identificação.');
+                window.location.href = 'identification.html';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+/* css/base.css */
+
+/* --- Reset Básico e Estilos Globais --- */
+:root {
+    --bg-main: #0b0b0a;
+    --bg-section: #11110f;
+    --bg-card: #231d17;
+    --border-color: #27272a;
+    --border-light: rgba(183, 183, 183, 0.08);
+    --text-primary: #eeeeee;
+    --text-secondary: #b7b7b7;
+    --text-tertiary: #707070;
+    --text-placeholder: #707070;
+    --text-dark: #11110f;
+    --text-subtle: #4d4d4d;
+    --accent-color: #c5a47e;
+    --selected-day-bg: #d9d9d9;
+    --selected-day-text: #11110f;
+}
+
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+
+html { height: 100%; }
+
+body {
+    font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-primary);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+    overflow: hidden;
+    transition: padding 0.3s ease;
+}
+
+.page-header {
+    margin-bottom: 1.5rem; flex-shrink: 0;
+    transition: margin 0.3s ease, transform 0.3s ease;
+}
+.page-header img { width: 102px; height: auto; mix-blend-mode: exclusion; }
+
+.onboarding-card {
+    width: 100%; max-width: 1246px; border: 1.5px solid var(--border-color);
+    border-radius: 13px; position: relative; display: flex;
+    justify-content: center; align-items: center; padding: 1rem;
+    transition: transform 0.3s ease, padding 0.3s ease;
+}
+
+.main-content {
+    display: flex; justify-content: space-around; align-items: center; 
+    width: 100%; gap: 3rem; z-index: 1;
+}
+
+/* --- Seção do Cartão de Identidade (Comum para Etapas 1, 3, 4) --- */
+.identity-card-section {
+    width: 429px; height: 301px; position: relative; flex-shrink: 0;
+    border-radius: 13px; overflow: hidden;
+}
+.background-image-left { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; border-radius: 13px; mix-blend-mode: luminosity; opacity: 0.15; }
+.card-base, .card-texture, .card-logo-overlay, .card-background-mark, .card-vector-top1, .card-vector-top2 { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 13px; }
+.card-base { background-color: var(--bg-card); }
+.card-texture, .card-logo-overlay { mix-blend-mode: overlay; }
+.card-logo-overlay { top: 28px; left: 73%; transform: translateX(-50%); width: 227px; height: 273px; }
+.card-background-mark { left: 13px; width: 59px; height: 301px; background-image: url('https://c.animaapp.com/rDKbXW1a/img/backgroundmark@2x.png'); background-size: cover; background-position: center; display: flex; }
+.card-background-mark img { mix-blend-mode: multiply; width: 100%; height: 100%; object-fit: cover; }
+.card-vector-top1, .card-vector-top2 { top: 14px; left: 82px; width: 260px; height: 20px; }
+.card-vector-top2 { mix-blend-mode: hard-light; object-fit: cover; }
+.card-title { position: absolute; top: 19px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 500; text-align: center; white-space: nowrap; z-index: 2; }
+.card-logo-top-right { position: absolute; width: 50px; height: 20px; top: 13px; right: 13px; mix-blend-mode: exclusion; z-index: 2; }
+.card-profile-photo { position: absolute; top: 44px; left: 85px; width: 100px; height: 100px; object-fit: cover; border-radius: 50%; z-index: 2; }
+.card-data-heading { position: absolute; top: 157px; left: 85px; color: var(--accent-color); font-size: 10px; font-weight: 500; z-index: 2; }
+.card-field { position: absolute; height: 14px; font-size: 10px; display: flex; align-items: center; gap: 8px; white-space: nowrap; z-index: 2; }
+.card-field .label { color: var(--text-primary); }
+.card-field .value { border-bottom: 1.5px dashed #787878; height: 100%; flex-grow: 1; display: flex; align-items: center; padding: 0 4px; font-weight: 500; min-width: 50px; }
+.card-field.contra { top: 67px; left: 215px; width: 170px; }
+.card-field.registration { top: 177px; left: 85px; width: 220px; }
+.card-field.warrior-name { top: 204px; left: 85px; width: 300px; }
+.card-field.rank { top: 231px; left: 85px; width: 200px; }
+.card-field.signature { top: 115px; left: 215px; width: 170px; }
+.card-field.enlistment { top: 258px; left: 85px; width: 300px; }
+.card-field.enlistment .value { border: none; display: flex; gap: 5px; }
+.card-field.enlistment .date-part { border-bottom: 1.5px dashed #787878; padding: 0 5px; min-width: 24px; text-align: center;}
+
+
+/* --- Contêiner das Etapas do Formulário (Comum) --- */
+.form-steps-container {
+    width: 100%; max-width: 660px;
+}
+
+/* --- Estilo Base Comum para Etapas --- */
+.form-step {
+    width: 100%;
+    background-color: var(--bg-section); border-radius: 13px; padding: 2.5rem;
+    display: flex; flex-direction: column; align-items: center; gap: 1.25rem;
+    min-height: 570px;
+}
+.opidas-logo { display: flex; align-items: center; gap: 8px; mix-blend-mode: exclusion; }
+.opidas-logo img { width: 9px; height: 9px; }
+.opidas-logo span { font-size: 8px; color: white; }
+.form-title { font-size: 21px; font-weight: 400; text-align: center; margin-top: 1rem; }
+.form-subtitle { font-size: 10px; color: var(--text-secondary); text-align: center; }
+
+/* --- Ações e Botões (Comum) --- */
+.form-actions { display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 350px; margin-top: auto; padding-top: 2rem; }
+.btn { height: 43px; border-radius: 8px; font-size: 13px; font-weight: 400; cursor: pointer; border: none; display: flex; justify-content: center; align-items: center; transition: background-color 0.2s; }
+.btn-primary { background-color: var(--border-color); color: var(--text-primary); width: 100%; position: relative; }
+.btn-primary:hover { background-color: #3f3f46; }
+.btn-primary img { position: absolute; right: 5px; top: 5px; width: 33px; height: 33px; }
+.btn-secondary { background-color: transparent; color: var(--text-placeholder); font-size: 10px; cursor: pointer; border: none; }
+.btn-secondary:hover { color: var(--text-primary); }
+
+/* --- Media Queries Globais --- */
+@media (max-width: 1200px) {
+    body { justify-content: flex-start; overflow-y: auto; } 
+    .onboarding-card { flex-direction: column; margin-top: 1rem; border: none; }
+    .main-content { flex-direction: column; gap: 3rem; align-items: center; }
+    .background-image-left { display: none; }
+}
+@media (max-width: 768px) {
+    body { padding: 0; }
+    .page-header { margin-top: 2rem; }
+    .onboarding-card { border-radius: 0; }
+    .form-step { padding: 2rem 1rem; min-height: auto; }
+    .form-actions { width: 100%; max-width: 350px; margin-top: 2rem; padding-top: 0; }
+    .identity-card-section { transform: scale(0.9); margin-bottom: -30px; }
+}
+@media (max-width: 480px) {
+     .identity-card-section { transform: scale(0.8); margin-bottom: -60px; }
+     .card-field.warrior-name, .card-field.registration, .card-field.rank, .card-field.enlistment { width: auto; max-width: 280px; }
+}
+@media (max-height: 880px) and (min-width: 1201px) {
+    body { padding: 1rem; }
+    .onboarding-card { transform: scale(0.9); }
+    .page-header { margin-bottom: -1.5rem; }
+}
+@media (max-height: 780px) and (min-width: 1201px) {
+    .onboarding-card { transform: scale(0.85); }
+    .page-header { margin-bottom: 0; transform: scale(0.9); }
+}

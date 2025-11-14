@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding: Acompanhamento - OPIDAS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/habit-tracking.css">
+</head>
+<body>
+    <header class="page-header">
+        <img alt="OPIDAS Brand Logos" src="https://c.animaapp.com/rDKbXW1a/img/group-37@2x.png" />
+    </header>
+
+    <div class="onboarding-card">
+        <img class="background-image-left" alt="" src="https://c.animaapp.com/rDKbXW1a/img/rectangle-30.png" />
+        
+        <main class="main-content">
+            <!-- Seção do Cartão de Identidade (Preview Fixo) -->
+            <section class="identity-card-section" aria-label="Identity Card Preview">
+                <div class="card-base"></div><img class="card-texture" alt="" src="https://c.animaapp.com/rDKbXW1a/img/texturecard@2x.png" /><img class="card-logo-overlay" alt="Opidas logo" src="https://c.animaapp.com/rDKbXW1a/img/opidas-logo@4x.png" /><div class="card-background-mark"><img alt="" src="https://c.animaapp.com/rDKbXW1a/img/mark@2x.png" /></div><img class="card-vector-top1" alt="" src="https://c.animaapp.com/rDKbXW1a/img/vector-79.svg" /><img class="card-vector-top2" alt="" src="https://c.animaapp.com/rDKbXW1a/img/vector-80@2x.png" /><h1 class="card-title">IDENTIDADE DO CAMPO</h1><img class="card-logo-top-right" alt="" src="https://c.animaapp.com/rDKbXW1a/img/group-55@2x.png" /><img id="cardProfilePhoto" class="card-profile-photo" alt="Profile photo" src="https://c.animaapp.com/rDKbXW1a/img/rectangle-40@2x.png" /><div class="card-field contra"><span class="label">Contra:</span><span id="cardContra" class="value"></span></div><div class="card-field signature"><span class="label">Assinatura:</span><span id="cardSignature" class="value"></span></div><h2 class="card-data-heading">DADOS:</h2><div class="card-field registration"><span class="label">N.º de registro:</span><span id="cardRegistration" class="value"></span></div><div class="card-field warrior-name"><span class="label">Nome do Guerreiro(a):</span><span id="cardWarriorName" class="value"></span></div><div class="card-field rank"><span class="label">Patente:</span><span id="cardRank" class="value"></span></div><div class="card-field enlistment"><span class="label">Data de Alistamento:</span><span class="value"><span id="cardDay" class="date-part">--</span> /<span id="cardMonth" class="date-part">---</span> /<span id="cardYear" class="date-part">----</span></span></div>
+            </section>
+
+            <!-- Contêiner para a Etapa do Formulário -->
+            <div class="form-steps-container">
+                <section class="form-step habit-tracking-section">
+                    <div class="opidas-logo"><img alt="OPIDAS logo" src="https://c.animaapp.com/rDKbXW1a/img/add-a-heading--4--2@2x.png" /><span>OPIDAS</span></div>
+                    <h1 class="form-title">Última vez que cometeu o hábito</h1>
+                    <p class="form-subtitle">Coloque no calendário a última vez que praticou o hábito de <span id="selectedHabitText" class="highlight"></span>. Esta etapa calculará sua patente.</p>
+                    <div class="calendar-container">
+                        <div class="calendar-header"><button id="prevMonthBtn" class="calendar-nav" aria-label="Mês anterior"><img src="https://c.animaapp.com/ScVkXsrq/img/vector-1.svg" alt="Seta para esquerda"></button><span id="currentMonthYear"></span><button id="nextMonthBtn" class="calendar-nav" aria-label="Próximo mês"><img src="https://c.animaapp.com/ScVkXsrq/img/vector.svg" alt="Seta para direita"></button></div>
+                        <div class="calendar-body"><div class="calendar-weekdays"><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sxt</span><span>Sab</span><span>Dom</span></div><div id="calendarGrid" class="calendar-grid"></div></div>
+                    </div>
+                    <div class="form-actions">
+                        <button id="btnGoToNextStep" class="btn btn-primary" type="button"><span>Finalizar</span><img alt="" src="https://c.animaapp.com/rDKbXW1a/img/group-54@2x.png" /></button>
+                        <button id="btnGoToPrevStep" class="btn btn-secondary" type="button">Voltar</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Estado e Constantes ---
+            const patents = [ { name: "Recruta", minDays: 0, maxDays: 9 }, { name: "Soldado", minDays: 10, maxDays: 29 }, { name: "Cabo", minDays: 30, maxDays: 59 }, { name: "Sargento", minDays: 60, maxDays: 89 }, { name: "Marechal", minDays: 90, maxDays: 179 }, { name: "Tenente", minDays: 180, maxDays: 364 }, { name: "Capitão", minDays: 365, maxDays: Infinity }, ];
+            const monthNames = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+            const monthNamesFull = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            let userData = {};
+            let calendarDate = new Date();
+
+            // --- Seletores de DOM ---
+            const cardWarriorName = document.getElementById('cardWarriorName');
+            const cardContra = document.getElementById('cardContra');
+            const cardProfilePhoto = document.getElementById('cardProfilePhoto');
+            const cardRegistration = document.getElementById('cardRegistration');
+            const cardRank = document.getElementById('cardRank');
+            const cardSignature = document.getElementById('cardSignature');
+            const cardDay = document.getElementById('cardDay');
+            const cardMonth = document.getElementById('cardMonth');
+            const cardYear = document.getElementById('cardYear');
+            const selectedHabitText = document.getElementById('selectedHabitText');
+            const calendarGrid = document.getElementById('calendarGrid');
+            const currentMonthYearEl = document.getElementById('currentMonthYear');
+            const prevMonthBtn = document.getElementById('prevMonthBtn');
+            const nextMonthBtn = document.getElementById('nextMonthBtn');
+            const btnGoToNextStep = document.getElementById('btnGoToNextStep');
+            const btnGoToPrevStep = document.getElementById('btnGoToPrevStep');
+
+            // --- Funções ---
+            const loadState = () => {
+                const savedData = localStorage.getItem('onboardingData');
+                if (!savedData) {
+                    alert('Dados não encontrados. Por favor, comece o processo de identificação.');
+                    window.location.href = 'identification.html';
+                    return false;
+                }
+                userData = JSON.parse(savedData);
+                // Define uma data padrão se não houver
+                userData.lastHabitDate = userData.lastHabitDate ? new Date(userData.lastHabitDate) : new Date();
+                return true;
+            };
+
+            const saveState = () => {
+                // Convertemos a data para string ISO antes de salvar
+                userData.lastHabitDate = userData.lastHabitDate.toISOString();
+                localStorage.setItem('onboardingData', JSON.stringify(userData));
+            };
+
+            const populateCard = () => {
+                cardWarriorName.textContent = `${userData.firstName} ${userData.lastName}`.toUpperCase();
+                cardSignature.textContent = userData.lastName.toUpperCase();
+                cardContra.textContent = userData.habit.label.toUpperCase();
+                cardProfilePhoto.src = userData.profilePhotoUrl;
+                cardRegistration.textContent = "M0RSI-00000000";
+                const enlistment = new Date(userData.enlistmentDate);
+                cardDay.textContent = enlistment.getDate().toString().padStart(2, '0');
+                cardMonth.textContent = monthNames[enlistment.getMonth()];
+                cardYear.textContent = enlistment.getFullYear();
+                selectedHabitText.textContent = userData.habit.label.toLowerCase();
+            };
+
+            const calculateAndUpdateRank = () => {
+                const today = new Date(); today.setHours(0, 0, 0, 0);
+                const lastDate = new Date(userData.lastHabitDate); lastDate.setHours(0, 0, 0, 0);
+                
+                if (lastDate > today) { 
+                    cardRank.textContent = "DATA INVÁLIDA";
+                    userData.rank = null;
+                    userData.retentionDays = -1;
+                    return; 
+                }
+                
+                const diffTime = Math.abs(today - lastDate);
+                const retentionDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                userData.retentionDays = retentionDays;
+                
+                const currentPatent = patents.find(p => retentionDays >= p.minDays && retentionDays <= p.maxDays);
+                if (currentPatent) {
+                    userData.rank = currentPatent.name;
+                    cardRank.textContent = currentPatent.name.toUpperCase();
+                }
+            };
+            
+            const renderCalendar = () => {
+                const year = calendarDate.getFullYear();
+                const month = calendarDate.getMonth();
+                const today = new Date();
+                currentMonthYearEl.textContent = `${monthNamesFull[month]} ${year}`;
+                calendarGrid.innerHTML = '';
+                const firstDayOfMonth = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const dayOffset = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
+                const daysInPrevMonth = new Date(year, month, 0).getDate();
+                for (let i = dayOffset; i > 0; i--) { const day = document.createElement('button'); day.className = 'calendar-day other-month'; day.textContent = daysInPrevMonth - i + 1; day.disabled = true; calendarGrid.appendChild(day); }
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const day = document.createElement('button');
+                    const thisDayDate = new Date(year, month, i);
+                    day.className = 'calendar-day current-month';
+                    day.textContent = i;
+                    if (thisDayDate > today) { day.disabled = true; day.classList.add('other-month'); }
+                    if (i === userData.lastHabitDate.getDate() && month === userData.lastHabitDate.getMonth() && year === userData.lastHabitDate.getFullYear()) { day.classList.add('selected'); }
+                    day.addEventListener('click', () => { if (!day.disabled) { userData.lastHabitDate = thisDayDate; renderCalendar(); calculateAndUpdateRank(); } });
+                    calendarGrid.appendChild(day);
+                }
+                const totalCells = calendarGrid.children.length; const requiredCells = (totalCells > 35) ? 42 : 35;
+                for (let i = 1; i <= requiredCells - totalCells; i++) { const day = document.createElement('button'); day.className = 'calendar-day other-month'; day.textContent = i; day.disabled = true; calendarGrid.appendChild(day); }
+            };
+            
+            prevMonthBtn.addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() - 1); renderCalendar(); });
+            nextMonthBtn.addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() + 1); renderCalendar(); });
+
+            btnGoToNextStep.addEventListener('click', () => {
+                if (!userData.rank) {
+                    alert('Por favor, selecione uma data válida.');
+                    return;
+                }
+                saveState();
+                window.location.href = 'welcome.html';
+            });
+            btnGoToPrevStep.addEventListener('click', () => {
+                window.location.href = 'investment.html';
+            });
+
+            // --- Inicialização ---
+            if (loadState()) {
+                populateCard();
+                calculateAndUpdateRank();
+                renderCalendar();
+            }
+        });
+    </script>
+</body>
+</html>

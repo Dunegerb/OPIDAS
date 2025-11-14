@@ -1,0 +1,20 @@
+/* css/habit-tracking.css */
+@import url('base.css');
+
+/* --- ESTILOS ESPECÍFICOS ETAPA 3: Acompanhamento de Hábito --- */
+.habit-tracking-section .form-title { margin-bottom: 0.75rem; }
+.habit-tracking-section .form-subtitle { max-width: 300px; line-height: 1.5; margin-bottom: 2rem; }
+.habit-tracking-section .form-subtitle .highlight { color: var(--text-primary); font-weight: 500; }
+.calendar-container { width: 100%; max-width: 340px; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 1rem; }
+.calendar-header { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 1.5rem; }
+.calendar-nav { background: none; border: none; cursor: pointer; padding: 5px; }
+.calendar-nav img { display: block; }
+.calendar-body { display: grid; gap: 1rem 0; }
+.calendar-weekdays, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; }
+.calendar-weekdays { font-size: 10px; color: var(--text-placeholder); font-weight: 500; }
+.calendar-grid { row-gap: 1rem; }
+.calendar-day { background: none; border: none; color: var(--text-primary); font-size: 10px; width: 21px; height: 21px; display: flex; justify-content: center; align-items: center; margin: 0 auto; position: relative; border-radius: 50%; }
+.calendar-day:disabled { cursor: default; }
+.calendar-day.other-month { color: var(--text-placeholder); }
+.calendar-day.current-month:not(:disabled) { cursor: pointer; }
+.calendar-day.selected { background-color: var(--selected-day-bg); color: var(--selected-day-text); font-weight: 500; }

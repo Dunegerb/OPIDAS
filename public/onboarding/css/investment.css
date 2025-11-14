@@ -1,0 +1,65 @@
+/* css/investment.css */
+@import url('base.css');
+
+/* --- ESTILOS ESPECÍFICOS ETAPA 2: Investimento --- */
+
+/* Ajuste no card principal para a etapa de investimento */
+.onboarding-card.investment-step-active {
+    padding: 0;
+}
+/* O seletor abaixo é crucial para expandir o container do formulário */
+.onboarding-card.investment-step-active .form-steps-container {
+    max-width: 100%;
+}
+
+.form-step.investment-step {
+    padding: 1rem;
+    background-color: var(--bg-main);
+    border-radius: 13px;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: stretch;
+    min-height: auto;
+}
+.investment-step .info-section, .investment-step .payment-section-wrapper {
+    background-color: var(--bg-section);
+    border-radius: 13px;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.investment-step .info-section { flex: 1; flex-basis: 45%; flex-direction: column; text-align: center; padding: 4rem 2rem; gap: 1.75rem; }
+.investment-step .payment-section-wrapper { flex: 1; flex-basis: 55%; background-color: var(--bg-section); }
+.investment-step .info-title { font-size: 21px; font-weight: 400; color: var(--text-primary); }
+.investment-step .info-description { font-size: 10px; color: var(--text-secondary); line-height: 1.8; max-width: 322px; }
+.investment-step .info-description .highlight { color: var(--text-primary); }
+.investment-step .payment-card { background-color: var(--bg-section); width: 100%; max-width: 446px; padding: 2.5rem; border-radius: 13px; display: flex; flex-direction: column; align-items: center; position: relative; }
+.investment-step .opidas-logo-top { display: flex; align-items: center; gap: 6px; mix-blend-mode: exclusion; margin-bottom: 2.5rem; }
+.investment-step .opidas-logo-top img { width: 9px; height: 9px; }
+.investment-step .opidas-logo-top span { font-size: 8px; color: white; font-weight: 400; }
+.investment-step .price-box { width: 230px; height: 73px; border: 1px solid var(--border-light); border-radius: 13px; display: flex; justify-content: center; align-items: center; margin-bottom: 2.5rem; }
+.investment-step .price-text { font-size: 34px; font-weight: 500; color: var(--text-primary); }
+.investment-step .price-text .period { font-size: 21px; font-weight: 400; color: #7c7c7c; }
+.investment-step .btn-invest-primary { width: 100%; max-width: 337px; height: 43px; border-radius: 8px; background: linear-gradient(0deg, #b8b8b8 0%, #eeeeee 100%); box-shadow: inset 0px 2px 6px #ffffff, 0px 0px 21px rgba(255, 255, 255, 0.25); color: var(--text-dark); font-size: 13px; font-weight: 500; transition: transform 0.2s ease, box-shadow 0.2s ease; cursor: pointer; border:none; font-family: 'Inter', sans-serif;}
+.investment-step .btn-invest-primary:hover { transform: scale(1.02); box-shadow: inset 0px 2px 6px #ffffff, 0px 0px 30px rgba(255, 255, 255, 0.35); }
+.investment-step .secure-payment-info { display: flex; align-items: center; gap: 7px; margin-top: 1.5rem; margin-bottom: 2rem; }
+.investment-step .secure-payment-info img { width: 7px; height: 9px; }
+.investment-step .secure-payment-info p { font-size: 10px; color: var(--accent-color); }
+.investment-step .features-list { list-style: none; width: 100%; max-width: 200px; align-self: flex-start; margin-left: 2.5rem; margin-bottom: 2rem; padding-left: 0; }
+.investment-step .features-list li { font-size: 10px; color: var(--text-secondary); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+.investment-step .features-list li:last-child { margin-bottom: 0; }
+.investment-step .features-list .check-icon { width: 10px; height: 10px; fill: var(--accent-color); }
+.investment-step .trial-text { font-size: 10px; color: var(--text-subtle); margin-top: auto; }
+.investment-step .btn-secondary { color: var(--text-tertiary); font-size: 10px; margin-top: 1rem; transition: color 0.2s; align-self: center; }
+.investment-step .btn-secondary:hover { color: var(--text-primary); }
+
+@media (max-width: 1200px) {
+    .form-step.investment-step { flex-direction: column; }
+}
+@media (max-width: 768px) {
+    .investment-step .info-section, .investment-step .payment-section-wrapper { border-radius: 0; width: 100%; }
+    .investment-step .payment-card { padding: 2rem 1.5rem; }
+    .investment-step .features-list { align-self: center; margin-left: 0; }
+}

@@ -1,0 +1,11 @@
+/* css/welcome.css */
+@import url('base.css');
+
+/* --- ESTILOS ESPECÍFICOS ETAPA 4: Boas-vindas --- */
+.final-step-section .welcome-title { font-size: 21px; font-weight: 400; text-align: center; margin-top: 1.5rem; max-width: 300px; }
+.final-step-section .welcome-title .highlight { font-weight: 500; }
+.final-step-section .welcome-description { font-size: 10px; color: var(--text-secondary); text-align: center; max-width: 310px; line-height: 1.6; margin-top: 1.5rem; }
+.final-step-section .welcome-description .highlight { color: var(--text-primary); font-weight: 500; }
+.final-step-section .welcome-description .accent { color: var(--accent-color); }
+.final-step-section .video-placeholder { width: 100%; max-width: 427px; aspect-ratio: 427 / 225; margin-top: 2rem; border-radius: 8px; overflow: hidden; background-color: var(--bg-main); }
+.final-step-section .video-placeholder img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
