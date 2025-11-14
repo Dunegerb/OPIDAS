@@ -46,20 +46,54 @@
         </main>
     </div>
 
+    <!-- Scripts do Supabase e Stripe -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/lib/supabase-config.js"></script>
+    <script src="../js/services/stripe.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('btnGoToNextStep').addEventListener('click', () => {
-                window.location.href = 'habit-tracking.html';
-            });
-            document.getElementById('btnGoToPrevStep').addEventListener('click', () => {
-                window.location.href = 'identification.html';
-            });
-
             // Verificação para garantir que o usuário veio da etapa anterior
             if (!localStorage.getItem('onboardingData')) {
                 alert('Dados não encontrados. Por favor, comece o processo de identificação.');
                 window.location.href = 'identification.html';
+                return;
             }
+
+            document.getElementById('btnGoToNextStep').addEventListener('click', async () => {
+                try {
+                    console.log('💳 Iniciando checkout...');
+                    
+                    // Obtém o usuário autenticado
+                    const { data: { user }, error } = await window.supabase.auth.getUser();
+                    
+                    if (error || !user) {
+                        throw new Error('Usuário não autenticado');
+                    }
+                    
+                    console.log('👤 Usuário:', user.email);
+                    
+                    // Cria a sessão de checkout do Stripe
+                    const checkoutUrl = await window.StripeService.createCheckoutSession(
+                        user.id,
+                        user.email
+                    );
+                    
+                    console.log('✅ Sessão de checkout criada');
+                    console.log('🔗 Redirecionando para:', checkoutUrl);
+                    
+                    // Redireciona para a página de pagamento do Stripe
+                    window.location.href = checkoutUrl;
+                    
+                } catch (error) {
+                    console.error('❌ Erro ao iniciar checkout:', error);
+                    alert(`Erro ao iniciar pagamento: ${error.message}\n\nTente novamente.`);
+                }
+            });
+
+            document.getElementById('btnGoToPrevStep').addEventListener('click', () => {
+                window.location.href = 'identification.html';
+            });
         });
     </script>
 </body>
