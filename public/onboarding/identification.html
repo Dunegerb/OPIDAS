@@ -186,12 +186,12 @@
                     // Salva no localStorage
                     saveState();
                     
-                    // Salva no Supabase (incluindo habit_id para recuperação posterior)
+                    // Salva no Supabase (usando 'habit' conforme schema do banco)
                     await window.UserService.updateUserProfile({
                         first_name: userData.firstName,
                         last_name: userData.lastName,
                         avatar_url: userData.profilePhotoUrl,
-                        habit_id: userData.habit.id  // ← ADICIONADO para recuperação após Stripe
+                        habit: userData.habit.id  // ✅ CORRIGIDO: usa 'habit' em vez de 'habit_id'
                     });
                     
                     console.log('✅ Dados da Etapa 1 salvos com sucesso');

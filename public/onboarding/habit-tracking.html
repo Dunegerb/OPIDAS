@@ -213,15 +213,15 @@
                     
                     console.log('✅ Dados do perfil recuperados:', profile);
                     
-                    // ✅ CORREÇÃO: Usar 'habit' em vez de 'habit_id'
+                    // ✅ CORREÇÃO: Buscar hábito corretamente do banco
                     userData = {
-                        firstName: profile.first_name,
-                        lastName: profile.last_name,
-                        profilePhotoUrl: profile.avatar_url,
-                        habit: profile.habit ? habits.find(h => h.id === profile.habit) : habits[0],
-                        enlistmentDate: profile.created_at,
+                        firstName: profile.first_name || '',
+                        lastName: profile.last_name || '',
+                        profilePhotoUrl: profile.avatar_url || null,
+                        habit: profile.habit ? habits.find(h => h.id === profile.habit) : null,
+                        enlistmentDate: profile.created_at || new Date().toISOString(),
                         lastHabitDate: profile.last_habit_date ? new Date(profile.last_habit_date) : new Date(),
-                        registrationNumber: profile.registration_number,
+                        registrationNumber: profile.registration_number || 'M0RSI-00000000',
                         rank: profile.rank || 'RECRUTA',
                         retentionDays: profile.retention_days || 0
                     };
