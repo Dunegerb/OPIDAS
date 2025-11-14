@@ -39,6 +39,11 @@
         </main>
     </div>
 
+    <!-- Scripts do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/lib/supabase-config.js"></script>
+    <script src="../js/services/user.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- Estado e Constantes da Página ---
@@ -170,13 +175,32 @@
             dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--border-color)'; handleFile(e.dataTransfer.files[0]); });
             fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
             
-            btnGoToNextStep.addEventListener('click', () => {
+            btnGoToNextStep.addEventListener('click', async () => {
                 if (!userData.firstName || !userData.lastName || !userData.habit || !userData.profilePhotoUrl) {
                     alert('Por favor, preencha todos os campos e envie uma foto.');
                     return;
                 }
-                saveState();
-                window.location.href = 'investment.html';
+                
+                try {
+                    console.log('📝 Salvando dados da Etapa 1...');
+                    
+                    // Salva no localStorage
+                    saveState();
+                    
+                    // Salva no Supabase (apenas os campos que existem na tabela)
+                    await window.UserService.updateUserProfile({
+                        first_name: userData.firstName,
+                        last_name: userData.lastName,
+                        avatar_url: userData.profilePhotoUrl
+                    });
+                    
+                    console.log('✅ Dados da Etapa 1 salvos com sucesso');
+                    window.location.href = 'investment.html';
+                    
+                } catch (error) {
+                    console.error('❌ Erro ao salvar dados:', error);
+                    alert('Erro ao salvar dados. Tente novamente.');
+                }
             });
             
             // --- Inicialização ---
