@@ -32,13 +32,18 @@
                     <p id="welcome-description" class="welcome-description">De acordo com o calculo você está a <span id="retentionDays" class="highlight"></span> transmutando sua energia sagrada em objetivos maiores. Agora a batalha continua. <span class="accent">Bem vindo(a) ao campo.</span> <span class="highlight">Assista o tutorial abaixo.</span></p>
                     <div class="video-placeholder"><img alt="Videotutorial" src="https://c.animaapp.com/YigEEBTG/img/videotutorial@2x.png" onclick="alert('Tocando vídeo tutorial...')"/></div>
                     <div class="form-actions">
-                        <button class="btn btn-primary" type="button" onclick="alert('Entrando no Campo!')"><span>Entrar no Campo</span><img alt="" src="https://c.animaapp.com/YigEEBTG/img/group-54@2x.png" /></button>
+                        <button id="btnEnterField" class="btn btn-primary" type="button"><span>Entrar no Campo</span><img alt="" src="https://c.animaapp.com/YigEEBTG/img/group-54@2x.png" /></button>
                         <button id="btnGoToPrevStep" class="btn btn-secondary" type="button">Voltar</button>
                     </div>
                 </section>
             </div>
         </main>
     </div>
+
+    <!-- Scripts do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/lib/supabase-config.js"></script>
+    <script src="../js/services/user.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -72,6 +77,29 @@
                 document.getElementById('finalName').textContent = userData.lastName;
                 document.getElementById('retentionDays').textContent = `${userData.retentionDays} dias`;
             };
+
+            document.getElementById('btnEnterField').addEventListener('click', async () => {
+                try {
+                    console.log('🎉 Finalizando onboarding...');
+                    
+                    // Marca o onboarding como completo
+                    await window.UserService.updateUserProfile({
+                        onboarding_status: 'completed'
+                    });
+                    
+                    console.log('✅ Onboarding finalizado com sucesso');
+                    
+                    // Limpa o localStorage (opcional)
+                    // localStorage.removeItem('onboardingData');
+                    
+                    // Redireciona para o campo
+                    window.location.href = '../campo.html';
+                    
+                } catch (error) {
+                    console.error('❌ Erro ao finalizar onboarding:', error);
+                    alert('Erro ao finalizar. Tente novamente.');
+                }
+            });
 
             document.getElementById('btnGoToPrevStep').addEventListener('click', () => {
                 window.location.href = 'habit-tracking.html';
