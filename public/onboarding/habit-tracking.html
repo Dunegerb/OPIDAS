@@ -43,6 +43,11 @@
         </main>
     </div>
 
+    <!-- Scripts do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/lib/supabase-config.js"></script>
+    <script src="../js/services/user.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- Estado e Constantes ---
@@ -86,8 +91,9 @@
 
             const saveState = () => {
                 // Convertemos a data para string ISO antes de salvar
-                userData.lastHabitDate = userData.lastHabitDate.toISOString();
-                localStorage.setItem('onboardingData', JSON.stringify(userData));
+                const dataToSave = { ...userData };
+                dataToSave.lastHabitDate = userData.lastHabitDate.toISOString();
+                localStorage.setItem('onboardingData', JSON.stringify(dataToSave));
             };
 
             const populateCard = () => {
@@ -153,14 +159,36 @@
             prevMonthBtn.addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() - 1); renderCalendar(); });
             nextMonthBtn.addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() + 1); renderCalendar(); });
 
-            btnGoToNextStep.addEventListener('click', () => {
-                if (!userData.rank) {
-                    alert('Por favor, selecione uma data válida.');
+            btnGoToNextStep.addEventListener('click', async () => {
+                if (!userData.rank || userData.retentionDays < 0) {
+                    alert('Por favor, selecione uma data válida no calendário.');
                     return;
                 }
-                saveState();
-                window.location.href = 'welcome.html';
+                
+                try {
+                    console.log('📝 Salvando dados da Etapa 3...');
+                    console.log('📊 Patente:', userData.rank);
+                    console.log('📅 Dias de retenção:', userData.retentionDays);
+                    
+                    // Salva no localStorage
+                    saveState();
+                    
+                    // Salva no Supabase
+                    await window.UserService.updateUserProfile({
+                        last_habit_date: userData.lastHabitDate.toISOString(),
+                        rank: userData.rank,
+                        retention_days: userData.retentionDays
+                    });
+                    
+                    console.log('✅ Dados da Etapa 3 salvos com sucesso');
+                    window.location.href = 'welcome.html';
+                    
+                } catch (error) {
+                    console.error('❌ Erro ao salvar dados:', error);
+                    alert('Erro ao salvar dados. Tente novamente.');
+                }
             });
+
             btnGoToPrevStep.addEventListener('click', () => {
                 window.location.href = 'investment.html';
             });
