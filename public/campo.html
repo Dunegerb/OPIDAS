@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="assets/styles/base.css">
     <link rel="stylesheet" href="assets/styles/campo.css">
     <link rel="stylesheet" href="assets/styles/loading-screen.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 </head>
 <body>
 
@@ -111,11 +109,13 @@
     </div>
 
     <!-- Scripts do Projeto -->
-    <script src="js/components/loading-screen.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/lib/supabase-config.js"></script>
+    <script src="js/components/loading-screen.js"></script>
     <script src="js/services/auth.js"></script>
     <script src="js/services/user.js"></script>
     <script src="js/services/chat.js"></script>
+    <script src="js/app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
@@ -274,22 +274,17 @@
 
             // --- INICIALIZAÇÃO ---
             async function init() {
-                // TODO: Chamar protectRoute() do auth.js
-                
-                // TODO: Chamar `getCurrentUserProfile()` do user.js para obter os dados do usuário logado
-                // Por enquanto, mock:
-                state.currentUser = {
-                    profile: {
-                        id: 'uuid-123-abc',
-                        last_name: 'Stravelli',
-                        habit: 'Masturbação',
-                        avatar_url: 'https://c.animaapp.com/wYjpt5p0/img/profile-photo-5@2x.png',
-                        retention_days: 7,
-                        remaining_resets: 5,
-                        rank: 'recruta',
-                    },
-                    rankData: state.channels.find(c => c.id === 'recruta')
-                };
+                try {
+                    // Carrega os dados reais do usuário do Supabase
+                    state.currentUser = await window.loadTopBar();
+                    
+                    console.log('✅ Perfil do usuário carregado:', state.currentUser);
+                } catch (error) {
+                    console.error('❌ Erro ao carregar perfil do usuário:', error);
+                    // Redireciona para login se houver erro
+                    window.location.href = 'index.html';
+                    return;
+                }
 
                 if (!state.currentUser) {
                     window.location.href = 'index.html'; // Redireciona se não houver dados
@@ -297,7 +292,7 @@
                 }
                 
                 // Define o canal inicial baseado na patente do usuário
-                const initialChannelId = state.currentUser.profile.rank;
+                const initialChannelId = state.currentUser.rank;
                 await switchChannel(initialChannelId);
 
                 // Adiciona Event Listeners
