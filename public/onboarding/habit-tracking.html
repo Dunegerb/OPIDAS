@@ -15,6 +15,7 @@
         <img alt="OPIDAS Brand Logos" src="https://c.animaapp.com/rDKbXW1a/img/group-37@2x.png" />
     </header>
 
+
     <div class="onboarding-card">
         <img class="background-image-left" alt="" src="https://c.animaapp.com/rDKbXW1a/img/rectangle-30.png" />
         
@@ -23,6 +24,7 @@
             <section class="identity-card-section" aria-label="Identity Card Preview">
                 <div class="card-base"></div><img class="card-texture" alt="" src="https://c.animaapp.com/rDKbXW1a/img/texturecard@2x.png" /><img class="card-logo-overlay" alt="Opidas logo" src="https://c.animaapp.com/rDKbXW1a/img/opidas-logo@4x.png" /><div class="card-background-mark"><img alt="" src="https://c.animaapp.com/rDKbXW1a/img/mark@2x.png" /></div><img class="card-vector-top1" alt="" src="https://c.animaapp.com/rDKbXW1a/img/vector-79.svg" /><img class="card-vector-top2" alt="" src="https://c.animaapp.com/rDKbXW1a/img/vector-80@2x.png" /><h1 class="card-title">IDENTIDADE DO CAMPO</h1><img class="card-logo-top-right" alt="" src="https://c.animaapp.com/rDKbXW1a/img/group-55@2x.png" /><img id="cardProfilePhoto" class="card-profile-photo" alt="Profile photo" src="https://c.animaapp.com/rDKbXW1a/img/rectangle-40@2x.png" /><div class="card-field contra"><span class="label">Contra:</span><span id="cardContra" class="value"></span></div><div class="card-field signature"><span class="label">Assinatura:</span><span id="cardSignature" class="value"></span></div><h2 class="card-data-heading">DADOS:</h2><div class="card-field registration"><span class="label">N.º de registro:</span><span id="cardRegistration" class="value"></span></div><div class="card-field warrior-name"><span class="label">Nome do Guerreiro(a):</span><span id="cardWarriorName" class="value"></span></div><div class="card-field rank"><span class="label">Patente:</span><span id="cardRank" class="value"></span></div><div class="card-field enlistment"><span class="label">Data de Alistamento:</span><span class="value"><span id="cardDay" class="date-part">--</span> /<span id="cardMonth" class="date-part">---</span> /<span id="cardYear" class="date-part">----</span></span></div>
             </section>
+
 
             <!-- Contêiner para a Etapa do Formulário -->
             <div class="form-steps-container">
@@ -43,15 +45,25 @@
         </main>
     </div>
 
+
     <!-- Scripts do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/lib/supabase-config.js"></script>
     <script src="../js/services/user.js"></script>
 
+
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             // --- Estado e Constantes ---
-            const patents = [ { name: "Recruta", minDays: 0, maxDays: 9 }, { name: "Soldado", minDays: 10, maxDays: 29 }, { name: "Cabo", minDays: 30, maxDays: 59 }, { name: "Sargento", minDays: 60, maxDays: 89 }, { name: "Marechal", minDays: 90, maxDays: 179 }, { name: "Tenente", minDays: 180, maxDays: 364 }, { name: "Capitão", minDays: 365, maxDays: Infinity }, ];
+            const patents = [ 
+                { name: "Recruta", minDays: 0, maxDays: 9 }, 
+                { name: "Soldado", minDays: 10, maxDays: 29 }, 
+                { name: "Cabo", minDays: 30, maxDays: 59 }, 
+                { name: "Sargento", minDays: 60, maxDays: 89 }, 
+                { name: "Marechal", minDays: 90, maxDays: 179 }, 
+                { name: "Tenente", minDays: 180, maxDays: 364 }, 
+                { name: "Capitão", minDays: 365, maxDays: Infinity }, 
+            ];
             const monthNames = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
             const monthNamesFull = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
             
@@ -65,6 +77,7 @@
             
             let userData = {};
             let calendarDate = new Date();
+
 
             // --- Seletores de DOM ---
             const cardWarriorName = document.getElementById('cardWarriorName');
@@ -84,7 +97,75 @@
             const btnGoToNextStep = document.getElementById('btnGoToNextStep');
             const btnGoToPrevStep = document.getElementById('btnGoToPrevStep');
 
+
             // --- Funções ---
+            
+            // ✅ FUNÇÃO 1: Salvar estado no localStorage
+            const saveState = () => {
+                localStorage.setItem('onboardingData', JSON.stringify(userData));
+                console.log('💾 Estado salvo no localStorage');
+            };
+
+            // ✅ FUNÇÃO 2: Preencher o cartão de identificação com os dados do usuário
+            const populateCard = () => {
+                console.log('🎨 Preenchendo cartão de identificação...');
+                
+                // Preenche nome e sobrenome
+                cardWarriorName.textContent = `${userData.firstName} ${userData.lastName}`.toUpperCase().trim();
+                cardSignature.textContent = userData.lastName.toUpperCase().trim();
+                
+                // Preenche hábito (contra)
+                cardContra.textContent = userData.habit ? userData.habit.label.toUpperCase() : '';
+                
+                // Preenche foto de perfil
+                if (userData.profilePhotoUrl) {
+                    cardProfilePhoto.src = userData.profilePhotoUrl;
+                }
+                
+                // Preenche data de alistamento
+                const enlistDate = new Date(userData.enlistmentDate);
+                cardDay.textContent = enlistDate.getDate().toString().padStart(2, '0');
+                cardMonth.textContent = monthNames[enlistDate.getMonth()];
+                cardYear.textContent = enlistDate.getFullYear();
+                
+                // Preenche patente (será atualizada pelo calculateAndUpdateRank)
+                cardRank.textContent = userData.rank ? userData.rank.toUpperCase() : 'INDEFINIDA';
+                
+                // Preenche número de registro (se disponível)
+                if (userData.registrationNumber) {
+                    cardRegistration.textContent = userData.registrationNumber;
+                }
+                
+                console.log('✅ Cartão preenchido com sucesso');
+            };
+
+            // ✅ FUNÇÃO 3: Calcular patente e dias de retenção
+            const calculateAndUpdateRank = () => {
+                console.log('📊 Calculando patente...');
+                
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                const lastDate = new Date(userData.lastHabitDate);
+                lastDate.setHours(0, 0, 0, 0);
+                
+                // Calcula diferença em dias
+                const diffTime = Math.abs(today - lastDate);
+                const retentionDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                userData.retentionDays = retentionDays;
+                
+                // Encontra a patente correspondente
+                const currentPatent = patents.slice().reverse().find(p => retentionDays >= p.minDays);
+                if (currentPatent) {
+                    userData.rank = currentPatent.name;
+                    cardRank.textContent = currentPatent.name.toUpperCase();
+                }
+                
+                console.log(`✅ Patente calculada: ${userData.rank} (${retentionDays} dias)`);
+            };
+
+            // ✅ FUNÇÃO 4: Carregar estado do localStorage ou Supabase
             const loadState = async () => {
                 console.log('🔍 Carregando dados do onboarding...');
                 
@@ -132,72 +213,33 @@
                     
                     console.log('✅ Dados do perfil recuperados:', profile);
                     
-                    // Reconstrói o userData a partir do perfil do Supabase
+                    // ✅ CORREÇÃO: Usar 'habit' em vez de 'habit_id'
                     userData = {
                         firstName: profile.first_name,
                         lastName: profile.last_name,
                         profilePhotoUrl: profile.avatar_url,
-                        habit: profile.habit_id ? habits.find(h => h.id === profile.habit_id) : habits[0],
+                        habit: profile.habit ? habits.find(h => h.id === profile.habit) : habits[0],
                         enlistmentDate: profile.created_at,
-                        lastHabitDate: new Date()
+                        lastHabitDate: profile.last_habit_date ? new Date(profile.last_habit_date) : new Date(),
+                        registrationNumber: profile.registration_number,
+                        rank: profile.rank || 'RECRUTA',
+                        retentionDays: profile.retention_days || 0
                     };
                     
                     // Salva no localStorage para uso posterior
                     saveState();
                     
-                    console.log('✅ Dados recuperados e salvos no localStorage');
                     return true;
                     
                 } catch (error) {
                     console.error('❌ Erro ao carregar dados:', error);
-                    alert('Erro ao carregar dados. Por favor, comece o processo de identificação.');
+                    alert('Erro ao carregar dados. Tente novamente.');
                     window.location.href = 'identification.html';
                     return false;
                 }
             };
 
-            const saveState = () => {
-                // Convertemos a data para string ISO antes de salvar
-                const dataToSave = { ...userData };
-                dataToSave.lastHabitDate = userData.lastHabitDate.toISOString();
-                localStorage.setItem('onboardingData', JSON.stringify(dataToSave));
-            };
-
-            const populateCard = () => {
-                cardWarriorName.textContent = `${userData.firstName} ${userData.lastName}`.toUpperCase();
-                cardSignature.textContent = userData.lastName.toUpperCase();
-                cardContra.textContent = userData.habit.label.toUpperCase();
-                cardProfilePhoto.src = userData.profilePhotoUrl;
-                cardRegistration.textContent = "M0RSI-00000000";
-                const enlistment = new Date(userData.enlistmentDate);
-                cardDay.textContent = enlistment.getDate().toString().padStart(2, '0');
-                cardMonth.textContent = monthNames[enlistment.getMonth()];
-                cardYear.textContent = enlistment.getFullYear();
-                selectedHabitText.textContent = userData.habit.label.toLowerCase();
-            };
-
-            const calculateAndUpdateRank = () => {
-                const today = new Date(); today.setHours(0, 0, 0, 0);
-                const lastDate = new Date(userData.lastHabitDate); lastDate.setHours(0, 0, 0, 0);
-                
-                if (lastDate > today) { 
-                    cardRank.textContent = "DATA INVÁLIDA";
-                    userData.rank = null;
-                    userData.retentionDays = -1;
-                    return; 
-                }
-                
-                const diffTime = Math.abs(today - lastDate);
-                const retentionDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                userData.retentionDays = retentionDays;
-                
-                const currentPatent = patents.find(p => retentionDays >= p.minDays && retentionDays <= p.maxDays);
-                if (currentPatent) {
-                    userData.rank = currentPatent.name;
-                    cardRank.textContent = currentPatent.name.toUpperCase();
-                }
-            };
-            
+            // ✅ FUNÇÃO 5: Renderizar calendário
             const renderCalendar = () => {
                 const year = calendarDate.getFullYear();
                 const month = calendarDate.getMonth();
@@ -208,23 +250,58 @@
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
                 const dayOffset = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
                 const daysInPrevMonth = new Date(year, month, 0).getDate();
-                for (let i = dayOffset; i > 0; i--) { const day = document.createElement('button'); day.className = 'calendar-day other-month'; day.textContent = daysInPrevMonth - i + 1; day.disabled = true; calendarGrid.appendChild(day); }
+                for (let i = dayOffset; i > 0; i--) { 
+                    const day = document.createElement('button'); 
+                    day.className = 'calendar-day other-month'; 
+                    day.textContent = daysInPrevMonth - i + 1; 
+                    day.disabled = true; 
+                    calendarGrid.appendChild(day); 
+                }
                 for (let i = 1; i <= daysInMonth; i++) {
                     const day = document.createElement('button');
                     const thisDayDate = new Date(year, month, i);
                     day.className = 'calendar-day current-month';
                     day.textContent = i;
-                    if (thisDayDate > today) { day.disabled = true; day.classList.add('other-month'); }
-                    if (i === userData.lastHabitDate.getDate() && month === userData.lastHabitDate.getMonth() && year === userData.lastHabitDate.getFullYear()) { day.classList.add('selected'); }
-                    day.addEventListener('click', () => { if (!day.disabled) { userData.lastHabitDate = thisDayDate; renderCalendar(); calculateAndUpdateRank(); } });
+                    if (thisDayDate > today) { 
+                        day.disabled = true; 
+                        day.classList.add('other-month'); 
+                    }
+                    if (i === userData.lastHabitDate.getDate() && month === userData.lastHabitDate.getMonth() && year === userData.lastHabitDate.getFullYear()) { 
+                        day.classList.add('selected'); 
+                    }
+                    day.addEventListener('click', () => { 
+                        if (!day.disabled) { 
+                            userData.lastHabitDate = thisDayDate; 
+                            renderCalendar(); 
+                            calculateAndUpdateRank(); 
+                        } 
+                    });
                     calendarGrid.appendChild(day);
                 }
-                const totalCells = calendarGrid.children.length; const requiredCells = (totalCells > 35) ? 42 : 35;
-                for (let i = 1; i <= requiredCells - totalCells; i++) { const day = document.createElement('button'); day.className = 'calendar-day other-month'; day.textContent = i; day.disabled = true; calendarGrid.appendChild(day); }
+                const totalCells = calendarGrid.children.length; 
+                const requiredCells = (totalCells > 35) ? 42 : 35;
+                for (let i = 1; i <= requiredCells - totalCells; i++) { 
+                    const day = document.createElement('button'); 
+                    day.className = 'calendar-day other-month'; 
+                    day.textContent = i; 
+                    day.disabled = true; 
+                    calendarGrid.appendChild(day); 
+                }
             };
             
-            prevMonthBtn.addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() - 1); renderCalendar(); });
-            nextMonthBtn.addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() + 1); renderCalendar(); });
+            prevMonthBtn.addEventListener('click', () => { 
+                calendarDate.setMonth(calendarDate.getMonth() - 1); 
+                renderCalendar(); 
+            });
+            nextMonthBtn.addEventListener('click', () => { 
+                calendarDate.setMonth(calendarDate.getMonth() + 1); 
+                renderCalendar(); 
+            });
+
+            // Atualizar texto do hábito selecionado
+            const updateSelectedHabitText = () => {
+                selectedHabitText.textContent = userData.habit ? userData.habit.label : 'seu hábito';
+            };
 
             btnGoToNextStep.addEventListener('click', async () => {
                 if (!userData.rank || userData.retentionDays < 0) {
@@ -256,14 +333,17 @@
                 }
             });
 
+
             btnGoToPrevStep.addEventListener('click', () => {
                 window.location.href = 'investment.html';
             });
+
 
             // --- Inicialização ---
             const loaded = await loadState();
             if (loaded) {
                 populateCard();
+                updateSelectedHabitText();
                 calculateAndUpdateRank();
                 renderCalendar();
             }
