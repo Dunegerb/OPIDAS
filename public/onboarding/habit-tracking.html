@@ -56,13 +56,13 @@
         document.addEventListener('DOMContentLoaded', async () => {
             // --- Estado e Constantes ---
             const patents = [ 
-                { name: "Recruta", minDays: 0, maxDays: 9 }, 
-                { name: "Soldado", minDays: 10, maxDays: 29 }, 
-                { name: "Cabo", minDays: 30, maxDays: 59 }, 
-                { name: "Sargento", minDays: 60, maxDays: 89 }, 
-                { name: "Marechal", minDays: 90, maxDays: 179 }, 
-                { name: "Tenente", minDays: 180, maxDays: 364 }, 
-                { name: "Capitão", minDays: 365, maxDays: Infinity }, 
+                { name: "recruta", minDays: 0, maxDays: 9 },  // ✅ CORRIGIDO: lowercase
+                { name: "soldado", minDays: 10, maxDays: 29 },  // ✅ CORRIGIDO: lowercase
+                { name: "cabo", minDays: 30, maxDays: 59 },  // ✅ CORRIGIDO: lowercase
+                { name: "sargento", minDays: 60, maxDays: 89 },  // ✅ CORRIGIDO: lowercase
+                { name: "marechal", minDays: 90, maxDays: 179 },  // ✅ CORRIGIDO: lowercase
+                { name: "tenente", minDays: 180, maxDays: 364 },  // ✅ CORRIGIDO: lowercase
+                { name: "capitao", minDays: 365, maxDays: Infinity },  // ✅ CORRIGIDO: lowercase (sem acento)
             ];
             const monthNames = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
             const monthNamesFull = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
@@ -158,8 +158,8 @@
                 // Encontra a patente correspondente
                 const currentPatent = patents.slice().reverse().find(p => retentionDays >= p.minDays);
                 if (currentPatent) {
-                    userData.rank = currentPatent.name;
-                    cardRank.textContent = currentPatent.name.toUpperCase();
+                    userData.rank = currentPatent.name; // ✅ Já vem em lowercase
+                    cardRank.textContent = currentPatent.name.toUpperCase(); // ✅ Exibe em maiúsculo no card
                 }
                 
                 console.log(`✅ Patente calculada: ${userData.rank} (${retentionDays} dias)`);
@@ -192,7 +192,6 @@
                     
                     console.log('👤 Usuário autenticado:', user.email);
                     
-                    // Busca os dados do perfil no Supabase
                     const { data: profile, error: profileError } = await window.supabase
                         .from('profiles')
                         .select('*')
@@ -201,13 +200,6 @@
                     
                     if (profileError) {
                         console.error('❌ Erro ao buscar perfil:', profileError);
-                        throw profileError;
-                    }
-                    
-                    if (!profile || !profile.first_name || !profile.last_name) {
-                        console.error('❌ Dados do perfil incompletos');
-                        alert('Dados não encontrados. Por favor, comece o processo de identificação.');
-                        window.location.href = 'identification.html';
                         return false;
                     }
                     
@@ -218,11 +210,11 @@
                         firstName: profile.first_name || '',
                         lastName: profile.last_name || '',
                         profilePhotoUrl: profile.avatar_url || null,
-                        habit: profile.habit ? habits.find(h => h.id === profile.habit) : null,
+                        habit: profile.habit ? habits.find(h => h.id === profile.habit) : null,  // ✅ CORRIGIDO
                         enlistmentDate: profile.created_at || new Date().toISOString(),
                         lastHabitDate: profile.last_habit_date ? new Date(profile.last_habit_date) : new Date(),
                         registrationNumber: profile.registration_number || 'M0RSI-00000000',
-                        rank: profile.rank || 'RECRUTA',
+                        rank: profile.rank ? profile.rank.toLowerCase() : 'recruta',  // ✅ CORRIGIDO: normalizar para lowercase
                         retentionDays: profile.retention_days || 0
                     };
                     
@@ -230,11 +222,8 @@
                     saveState();
                     
                     return true;
-                    
                 } catch (error) {
                     console.error('❌ Erro ao carregar dados:', error);
-                    alert('Erro ao carregar dados. Tente novamente.');
-                    window.location.href = 'identification.html';
                     return false;
                 }
             };
@@ -243,69 +232,112 @@
             const renderCalendar = () => {
                 const year = calendarDate.getFullYear();
                 const month = calendarDate.getMonth();
-                const today = new Date();
+                
                 currentMonthYearEl.textContent = `${monthNamesFull[month]} ${year}`;
+                
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const daysInMonth = lastDay.getDate();
+                
+                let dayOfWeek = firstDay.getDay();
+                dayOfWeek = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+                
                 calendarGrid.innerHTML = '';
-                const firstDayOfMonth = new Date(year, month, 1).getDay();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
-                const dayOffset = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
-                const daysInPrevMonth = new Date(year, month, 0).getDate();
-                for (let i = dayOffset; i > 0; i--) { 
-                    const day = document.createElement('button'); 
-                    day.className = 'calendar-day other-month'; 
-                    day.textContent = daysInPrevMonth - i + 1; 
-                    day.disabled = true; 
-                    calendarGrid.appendChild(day); 
+                
+                for (let i = 0; i < dayOfWeek; i++) {
+                    const emptyDiv = document.createElement('div');
+                    emptyDiv.classList.add('calendar-day', 'empty');
+                    calendarGrid.appendChild(emptyDiv);
                 }
-                for (let i = 1; i <= daysInMonth; i++) {
-                    const day = document.createElement('button');
-                    const thisDayDate = new Date(year, month, i);
-                    day.className = 'calendar-day current-month';
-                    day.textContent = i;
-                    if (thisDayDate > today) { 
-                        day.disabled = true; 
-                        day.classList.add('other-month'); 
+                
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayDiv = document.createElement('div');
+                    dayDiv.classList.add('calendar-day');
+                    dayDiv.textContent = day;
+                    
+                    const currentDate = new Date(year, month, day);
+                    currentDate.setHours(0, 0, 0, 0);
+                    
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    
+                    if (currentDate > today) {
+                        dayDiv.classList.add('disabled');
+                    } else {
+                        const lastHabitDateNormalized = new Date(userData.lastHabitDate);
+                        lastHabitDateNormalized.setHours(0, 0, 0, 0);
+                        
+                        if (currentDate.getTime() === lastHabitDateNormalized.getTime()) {
+                            dayDiv.classList.add('selected');
+                        }
+                        
+                        dayDiv.addEventListener('click', () => {
+                            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+                            dayDiv.classList.add('selected');
+                            userData.lastHabitDate = new Date(year, month, day);
+                            calculateAndUpdateRank();
+                            saveState();
+                        });
                     }
-                    if (i === userData.lastHabitDate.getDate() && month === userData.lastHabitDate.getMonth() && year === userData.lastHabitDate.getFullYear()) { 
-                        day.classList.add('selected'); 
-                    }
-                    day.addEventListener('click', () => { 
-                        if (!day.disabled) { 
-                            userData.lastHabitDate = thisDayDate; 
-                            renderCalendar(); 
-                            calculateAndUpdateRank(); 
-                        } 
-                    });
-                    calendarGrid.appendChild(day);
-                }
-                const totalCells = calendarGrid.children.length; 
-                const requiredCells = (totalCells > 35) ? 42 : 35;
-                for (let i = 1; i <= requiredCells - totalCells; i++) { 
-                    const day = document.createElement('button'); 
-                    day.className = 'calendar-day other-month'; 
-                    day.textContent = i; 
-                    day.disabled = true; 
-                    calendarGrid.appendChild(day); 
+                    
+                    calendarGrid.appendChild(dayDiv);
                 }
             };
+
+            // --- Inicialização ---
+            const init = async () => {
+                const loaded = await loadState();
+                
+                if (!loaded || !userData.firstName) {
+                    alert('Dados do onboarding não encontrados. Redirecionando...');
+                    window.location.href = 'identification.html';
+                    return;
+                }
+                
+                // Preenche o card
+                populateCard();
+                
+                // Calcula patente inicial
+                calculateAndUpdateRank();
+                
+                // Renderiza calendário
+                renderCalendar();
+                
+                // Preenche texto do hábito selecionado
+                if (userData.habit) {
+                    selectedHabitText.textContent = userData.habit.label;
+                }
+            };
+
+            init();
+
+            // --- Event Listeners ---
             
-            prevMonthBtn.addEventListener('click', () => { 
-                calendarDate.setMonth(calendarDate.getMonth() - 1); 
-                renderCalendar(); 
-            });
-            nextMonthBtn.addEventListener('click', () => { 
-                calendarDate.setMonth(calendarDate.getMonth() + 1); 
-                renderCalendar(); 
+            // Navegação do calendário
+            prevMonthBtn.addEventListener('click', () => {
+                calendarDate.setMonth(calendarDate.getMonth() - 1);
+                renderCalendar();
             });
 
-            // Atualizar texto do hábito selecionado
-            const updateSelectedHabitText = () => {
-                selectedHabitText.textContent = userData.habit ? userData.habit.label : 'seu hábito';
-            };
+            nextMonthBtn.addEventListener('click', () => {
+                const today = new Date();
+                const nextMonth = new Date(calendarDate.getFullYear(), calendarDate.getMonth() + 1, 1);
+                
+                if (nextMonth <= today) {
+                    calendarDate.setMonth(calendarDate.getMonth() + 1);
+                    renderCalendar();
+                }
+            });
 
+            // Botão "Voltar"
+            btnGoToPrevStep.addEventListener('click', () => {
+                window.location.href = 'investment.html';
+            });
+
+            // Botão "Finalizar"
             btnGoToNextStep.addEventListener('click', async () => {
-                if (!userData.rank || userData.retentionDays < 0) {
-                    alert('Por favor, selecione uma data válida no calendário.');
+                if (!userData.lastHabitDate) {
+                    alert('Por favor, selecione uma data no calendário.');
                     return;
                 }
                 
@@ -317,10 +349,10 @@
                     // Salva no localStorage
                     saveState();
                     
-                    // Salva no Supabase
+                    // ✅ CORRIGIDO: Salva no Supabase com rank em lowercase
                     await window.UserService.updateUserProfile({
                         last_habit_date: userData.lastHabitDate.toISOString(),
-                        rank: userData.rank,
+                        rank: userData.rank.toLowerCase(),  // ✅ GARANTIR lowercase
                         retention_days: userData.retentionDays
                     });
                     
@@ -332,21 +364,6 @@
                     alert('Erro ao salvar dados. Tente novamente.');
                 }
             });
-
-
-            btnGoToPrevStep.addEventListener('click', () => {
-                window.location.href = 'investment.html';
-            });
-
-
-            // --- Inicialização ---
-            const loaded = await loadState();
-            if (loaded) {
-                populateCard();
-                updateSelectedHabitText();
-                calculateAndUpdateRank();
-                renderCalendar();
-            }
         });
     </script>
 </body>
