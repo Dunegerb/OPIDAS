@@ -6,14 +6,22 @@
 ALTER TABLE public.profiles 
 ADD COLUMN IF NOT EXISTS registration_number text;
 
--- Gerar números de registro para usuários existentes
-UPDATE public.profiles 
-SET registration_number = 'M0RSI-' || LPAD(CAST(ROW_NUMBER() OVER (ORDER BY created_at) AS TEXT), 8, '0')
-WHERE registration_number IS NULL;
-
 -- Adicionar campo subscription_end_date
 ALTER TABLE public.profiles 
 ADD COLUMN IF NOT EXISTS subscription_end_date timestamp with time zone;
+
+-- Gerar números de registro para usuários existentes usando CTE
+WITH numbered_profiles AS (
+    SELECT 
+        id,
+        'M0RSI-' || LPAD(CAST(ROW_NUMBER() OVER (ORDER BY created_at) AS TEXT), 8, '0') as new_registration_number
+    FROM public.profiles
+    WHERE registration_number IS NULL
+)
+UPDATE public.profiles p
+SET registration_number = np.new_registration_number
+FROM numbered_profiles np
+WHERE p.id = np.id;
 
 -- Criar índices para melhorar performance
 CREATE INDEX IF NOT EXISTS idx_profiles_habit ON public.profiles(habit);
