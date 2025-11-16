@@ -237,35 +237,70 @@
             async function switchChannel(channelId) {
                 if (!channelId || channelId === state.activeChannel) return;
 
-                state.activeChannel = channelId;
-                messagesContainerEl.innerHTML = '<h3>Carregando mensagens...</h3>';
-                updateUI(); // Atualiza a seleção visual
+                try {
+                    state.activeChannel = channelId;
+                    messagesContainerEl.innerHTML = '<h3>Carregando mensagens...</h3>';
+                    updateUI(); // Atualiza a seleção visual
 
-                // TODO: Chamar `unsubscribeFromChannel` do chat.js se houver uma inscrição anterior
-                
-                // TODO: Chamar `getMessages(channelId)` do chat.js
-                // Por enquanto, mock:
-                const messages = []; // await getMessages(channelId);
-                messagesContainerEl.innerHTML = '';
-                if (messages.length === 0) {
-                    messagesContainerEl.innerHTML = '<div class="system-message">Seja o primeiro a conversar neste canal.</div>';
-                } else {
-                    for(const msg of messages) {
-                        // let user = await getUserProfile(msg.user_id);
-                        // renderMessage(msg, user);
+                    console.log(`🔄 Mudando para o canal: ${channelId}`);
+
+                    // Cancela inscrição do canal anterior
+                    await window.ChatService.unsubscribeFromChannel();
+                    
+                    // Busca mensagens antigas do canal
+                    const messages = await window.ChatService.getMessages(channelId, 50);
+                    
+                    // Renderiza mensagens
+                    messagesContainerEl.innerHTML = '';
+                    if (messages.length === 0) {
+                        messagesContainerEl.innerHTML = '<div class="system-message">Seja o primeiro a conversar neste canal.</div>';
+                    } else {
+                        messages.forEach(msg => {
+                            // msg.profiles contém os dados do usuário (retornado pelo join)
+                            const userProfile = msg.profiles;
+                            renderMessage(msg, userProfile);
+                        });
                     }
+                    
+                    // Inscreve-se no canal para receber novas mensagens em tempo real
+                    await window.ChatService.subscribeToChannel(channelId, (message, profile) => {
+                        renderMessage(message, profile);
+                    });
+                    
+                    console.log(`✅ Canal ${channelId} carregado com sucesso`);
+                    
+                } catch (error) {
+                    console.error('❌ Erro ao trocar de canal:', error);
+                    messagesContainerEl.innerHTML = '<div class="system-message">Erro ao carregar mensagens. Tente novamente.</div>';
                 }
-                
-                // TODO: Chamar `subscribeToChannel(channelId, newMessageHandler)` do chat.js
             }
 
             async function handleSendMessage(event) {
                 event.preventDefault();
                 const content = chatInputFieldEl.value.trim();
-                if (content && state.activeChannel) {
-                    // TODO: Chamar `sendMessage(state.activeChannel, content)` do chat.js
-                    console.log(`Enviando "${content}" para o canal ${state.activeChannel}`);
+                
+                if (!content) return;
+                if (!state.activeChannel) {
+                    alert('Nenhum canal selecionado');
+                    return;
+                }
+                
+                try {
+                    console.log(`📤 Enviando "${content}" para o canal ${state.activeChannel}`);
+                    
+                    // Limpa o campo imediatamente para melhor UX
                     chatInputFieldEl.value = '';
+                    
+                    // Envia mensagem via ChatService
+                    await window.ChatService.sendMessage(state.activeChannel, content);
+                    
+                    console.log('✅ Mensagem enviada com sucesso');
+                    
+                } catch (error) {
+                    console.error('❌ Erro ao enviar mensagem:', error);
+                    alert('Erro ao enviar mensagem. Tente novamente.');
+                    // Restaura o texto se houver erro
+                    chatInputFieldEl.value = content;
                 }
             }
             
