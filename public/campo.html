@@ -154,7 +154,14 @@
             function updateUI() {
                 if (!state.currentUser) return;
 
-                const { profile, rankData } = state.currentUser;
+                // ✅ CORRIGIDO: state.currentUser já é um objeto flat com rankData dentro
+                const profile = state.currentUser;
+                const rankData = profile.rankData;
+                
+                if (!rankData) {
+                    console.error('❌ rankData não encontrado em state.currentUser');
+                    return;
+                }
                 
                 // Header
                 welcomeUsernameEl.textContent = `${rankData.name} ${profile.last_name}`;
