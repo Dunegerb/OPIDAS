@@ -1,333 +1,284 @@
-/**
- * OPIDAS Profile Widget - Dynamic Island
- * Animação estilo Apple Dynamic Island com funcionalidades completas
- */
+// Profile Widget Component - OPIDAS
+// Widget de perfil com funcionalidades completas
 
-window.ProfileWidgetDynamicIsland = (function () {
-    'use strict';
-
-    // Estado do widget
-    let isExpanded = false;
-    let userData = null;
-    let subscriptionData = null;
-
-    // Elementos DOM
-    let islandContainer = null;
-    let closeButton = null;
+const ProfileWidget = {
+    isOpen: false,
+    currentUser: null,
+    widgetElement: null,
 
     /**
-     * Inicializa o widget
+     * Inicializa o widget de perfil
      */
-    function init() {
-        createWidgetHTML();
-        attachEventListeners();
-        loadUserData();
-        loadSubscriptionData();
-    }
+    init() {
+        this.createWidget();
+        this.attachEventListeners();
+        console.log('✅ Profile Widget inicializado');
+    },
 
     /**
-     * Cria a estrutura HTML do widget
+     * Cria o HTML do widget
      */
-    function createWidgetHTML() {
-        // Remove widget existente se houver
-        const existing = document.getElementById('profile-island-container');
-        if (existing) {
-            existing.remove();
-        }
+    createWidget() {
+        const widgetHTML = `
+            <div id="profile-widget-overlay" class="profile-widget-overlay hidden">
+                <div class="profile-widget-container">
+                    <!-- Header do Widget -->
+                    <div class="widget-header">
+                        <div class="widget-user-info">
+                            <img id="widget-avatar" class="widget-avatar" src="" alt="Avatar">
+                            <div class="widget-user-text">
+                                <span class="widget-welcome">Bem vindo(a) de volta</span>
+                                <span id="widget-user-name" class="widget-user-name">Carregando...</span>
+                            </div>
+                        </div>
+                        <button id="widget-close-btn" class="widget-close-btn">
+                            <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                                <path d="M1 1L10 10M10 1L1 10" stroke="#D9D9D9" stroke-width="1.5"/>
+                            </svg>
+                        </button>
+                    </div>
 
-        // Cria o container principal
-        const container = document.createElement('div');
-        container.id = 'profile-island-container';
-        container.innerHTML = `
-            <div class="island-background"></div>
-            <div class="island-content-wrapper">
-                <div class="island-initial-content">
-                    <img class="user-avatar-circle" id="user-avatar-trigger" alt="Profile photo" src="">
-                </div>
+                    <!-- Campo Atual -->
+                    <div class="widget-current-field">
+                        <div class="field-label">Campo contra o(a)</div>
+                        <div id="widget-current-habit" class="field-value">Carregando...</div>
+                    </div>
 
-                <div class="island-expanded-content">
-                    <div class="main-container">
-                        <div class="flex-column-ef">
-                            <div class="vector"></div>
-                            
-                            <!-- Ver Identidade -->
-                            <div class="group" id="btn-ver-identidade">
-                                <div class="rectangle"></div>
-                                <div class="vector-1"></div>
-                                <span class="ver-identidade">Ver Identidade</span>
-                            </div>
-                            
-                            <div class="vector-2"></div>
-                            
-                            <!-- OPIDAS Investimento -->
-                            <div class="group-3">
-                                <div class="group-4" id="payment-progress-bar"></div>
-                                <div class="rectangle-5"></div>
-                                <div class="group-6">
-                                    <span class="semana">/semana</span>
-                                    <span class="number" id="subscription-price">3</span>
-                                    <span class="currency">R$</span>
-                                </div>
-                                <div class="group-7">
-                                    <div class="group-8">
-                                        <span class="opidas">OPIDAS</span>
-                                        <div class="rectangle-9"></div>
-                                    </div>
-                                    <span class="investment">Investimento</span>
-                                </div>
-                                <span class="next-payment">Próximo pagamento</span>
-                                <div class="days">
-                                    <span class="number-a" id="days-remaining">4</span>
-                                    <span class="days-b">/7 dias</span>
-                                </div>
-                                <div class="group-c" id="btn-config-pagamentos">
-                                    <div class="rectangle-d"></div>
-                                    <span class="configurar-pagamentos">Configurar Pagamentos</span>
-                                </div>
-                                <div class="group-e" id="btn-desistir">
-                                    <div class="rectangle-f"></div>
-                                    <span class="desistir-nao-quero">Desistir não quero mais</span>
-                                </div>
-                            </div>
-                            
-                            <div class="vector-10"></div>
-                            
-                            <!-- Trocar de Campo -->
-                            <div class="group-16" id="change-field-container">
-                                <div class="rectangle-17"></div>
-                                <div class="union"></div>
-                                <span class="change-field">Trocar de campo</span>
-                                <div id="selected-field-value">Masturbação</div>
-                                <ul id="field-options-list">
-                                    <li data-value="masturbacao">Masturbação</li>
-                                    <li data-value="pornografia">Pornografia</li>
-                                    <li data-value="bebida">Bebida Alcoólica</li>
-                                    <li data-value="fumar">Fumar</li>
-                                    <li data-value="outro">Outro</li>
-                                </ul>
-                            </div>
+                    <!-- Tabs: Patentes / Admin -->
+                    <div class="widget-tabs">
+                        <button class="widget-tab active" data-tab="patentes">Patentes</button>
+                        <button class="widget-tab" data-tab="admin">Admin</button>
+                    </div>
 
-                            <!-- Sair / Desconectar -->
-                            <div class="group-11" id="btn-sair">
-                                <div class="rectangle-12"></div>
-                                <div class="vector-13"></div>
-                                <span class="sair-desconectar">Sair / Desconectar</span>
+                    <div class="widget-divider"></div>
+
+                    <!-- Botão: Ver Identidade -->
+                    <button id="btn-ver-identidade" class="widget-button">
+                        <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+                            <path d="M1 6H15M1 1H15M1 11H15" stroke="#D9D9D9" stroke-width="1.5"/>
+                        </svg>
+                        <span>Ver Identidade</span>
+                    </button>
+
+                    <div class="widget-divider"></div>
+
+                    <!-- Botão: Trocar de Campo -->
+                    <button id="btn-trocar-campo" class="widget-button">
+                        <span>Trocar de campo</span>
+                        <div class="habit-selector">
+                            <select id="habit-select" class="habit-select">
+                                <option value="">Selecione...</option>
+                                <option value="masturbacao">Masturbação</option>
+                                <option value="pornografia">Pornografia</option>
+                                <option value="bebida">Bebida Alcoólica</option>
+                                <option value="fumar">Fumar</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                            <svg width="8" height="13" viewBox="0 0 8 13" fill="none">
+                                <path d="M1 1L6.5 6.5L1 12" stroke="#D9D9D9" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                    </button>
+
+                    <div class="widget-divider"></div>
+
+                    <!-- Seção: OPIDAS Investimento -->
+                    <div class="widget-investment-section">
+                        <div class="investment-header">
+                            <div class="investment-badge">
+                                <span>OPIDAS</span>
                             </div>
-                            
-                            <!-- Header com Foto e Boas-vindas -->
-                            <div class="welcome-photo">
-                                <div class="profile-photo" id="profile-photo-expanded"></div>
-                                <div class="welcome-back-user">
-                                    <span class="welcome-back-message">Bem vindo(a) de volta</span>
-                                    <span class="user-patent-name" id="user-patent-name">Capitão</span>
-                                </div>
+                            <span class="investment-label">Investimento</span>
+                        </div>
+                        
+                        <div class="investment-price">
+                            <span class="currency">R$</span>
+                            <span id="investment-price" class="price">3</span>
+                            <span class="period">/semana</span>
+                        </div>
+
+                        <div class="investment-next-payment">
+                            <span class="next-payment-label">Próximo pagamento</span>
+                            <div class="next-payment-days">
+                                <span id="days-until-payment" class="days-number">4</span>
+                                <span class="days-label">/7 dias</span>
                             </div>
-                            
-                            <!-- Botão Fechar -->
-                            <div class="vector-15" id="close-widget-btn"></div>
+                        </div>
+
+                        <div class="investment-progress-bar">
+                            <div id="payment-progress" class="investment-progress-fill" style="width: 57%"></div>
+                        </div>
+
+                        <div class="investment-buttons">
+                            <button id="btn-configurar-pagamento" class="investment-btn primary">
+                                Configurar Pagamentos
+                            </button>
+                            <button id="btn-desistir" class="investment-btn secondary">
+                                Desistir não quero mais
+                            </button>
                         </div>
                     </div>
+
+                    <div class="widget-divider"></div>
+
+                    <!-- Botão: Sair/Desconectar -->
+                    <button id="btn-logout" class="widget-button logout-btn">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path d="M4 1H2C1.44772 1 1 1.44772 1 2V10C1 10.5523 1.44772 11 2 11H4M8 9L11 6M11 6L8 3M11 6H4" stroke="#D9D9D9" stroke-width="1.5"/>
+                        </svg>
+                        <span>Sair / Desconectar</span>
+                    </button>
                 </div>
             </div>
         `;
 
-        document.body.appendChild(container);
-        islandContainer = container;
-        closeButton = document.getElementById('close-widget-btn');
-    }
+        // Adiciona ao body
+        document.body.insertAdjacentHTML('beforeend', widgetHTML);
+        this.widgetElement = document.getElementById('profile-widget-overlay');
+    },
 
     /**
-     * Anexa event listeners
+     * Anexa event listeners aos botões
      */
-    function attachEventListeners() {
-        // Abrir widget ao clicar no avatar
-        const avatarTrigger = document.getElementById('user-avatar-trigger');
-        if (avatarTrigger) {
-            avatarTrigger.addEventListener('click', (e) => {
-                e.stopPropagation();
-                openWidget();
-            });
-        }
-
+    attachEventListeners() {
         // Fechar widget
-        if (closeButton) {
-            closeButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                closeWidget();
-            });
-        }
-
-        // Fechar ao clicar fora (quando expandido)
-        document.addEventListener('click', (e) => {
-            if (isExpanded && !islandContainer.contains(e.target)) {
-                closeWidget();
+        document.getElementById('widget-close-btn').addEventListener('click', () => this.close());
+        document.getElementById('profile-widget-overlay').addEventListener('click', (e) => {
+            if (e.target.id === 'profile-widget-overlay') {
+                this.close();
             }
         });
 
-        // Prevenir propagação de cliques dentro do widget
-        islandContainer.addEventListener('click', (e) => {
-            if (isExpanded && e.target === islandContainer.querySelector('.island-background')) {
-                // Permite fechar clicando no fundo
-                closeWidget();
-            }
-        });
-
-        // Botões de ação
-        setupActionButtons();
-        setupFieldChanger();
-    }
-
-    /**
-     * Configura os botões de ação
-     */
-    function setupActionButtons() {
         // Ver Identidade
-        const btnIdentidade = document.getElementById('btn-ver-identidade');
-        if (btnIdentidade) {
-            btnIdentidade.addEventListener('click', (e) => {
-                e.stopPropagation();
-                handleVerIdentidade();
-            });
-        }
+        document.getElementById('btn-ver-identidade').addEventListener('click', () => this.handleVerIdentidade());
 
-        // Configurar Pagamentos
-        const btnPagamentos = document.getElementById('btn-config-pagamentos');
-        if (btnPagamentos) {
-            btnPagamentos.addEventListener('click', (e) => {
-                e.stopPropagation();
-                handleConfigurarPagamentos();
-            });
-        }
+        // Trocar de Campo
+        document.getElementById('habit-select').addEventListener('change', (e) => {
+            if (e.target.value) {
+                this.handleTrocarCampo(e.target.value);
+            }
+        });
+
+        // Configurar Pagamento
+        document.getElementById('btn-configurar-pagamento').addEventListener('click', () => this.handleConfigurarPagamento());
 
         // Desistir
-        const btnDesistir = document.getElementById('btn-desistir');
-        if (btnDesistir) {
-            btnDesistir.addEventListener('click', (e) => {
-                e.stopPropagation();
-                handleDesistir();
-            });
-        }
+        document.getElementById('btn-desistir').addEventListener('click', () => this.handleDesistir());
 
-        // Sair
-        const btnSair = document.getElementById('btn-sair');
-        if (btnSair) {
-            btnSair.addEventListener('click', (e) => {
-                e.stopPropagation();
-                handleSair();
+        // Logout
+        document.getElementById('btn-logout').addEventListener('click', () => this.handleLogout());
+
+        // Tabs
+        document.querySelectorAll('.widget-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                document.querySelectorAll('.widget-tab').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+                // TODO: Implementar troca de conteúdo entre Patentes e Admin
             });
-        }
-    }
+        });
+    },
 
     /**
-     * Configura o dropdown de trocar de campo
+     * Abre o widget e carrega dados do usuário
      */
-    function setupFieldChanger() {
-        const container = document.getElementById('change-field-container');
-        const selectedValueDiv = document.getElementById('selected-field-value');
-        const optionsList = document.getElementById('field-options-list');
-        const options = optionsList.querySelectorAll('li');
+    async open() {
+        try {
+            console.log('📂 Abrindo Profile Widget...');
 
-        container.addEventListener('click', (event) => {
-            event.stopPropagation();
-            optionsList.classList.toggle('visible');
-            container.classList.toggle('open');
-        });
+            // Carrega dados do usuário
+            this.currentUser = await window.UserService.getCurrentUserProfile();
+            
+            // Atualiza UI do widget
+            this.updateWidgetUI();
 
-        options.forEach(option => {
-            option.addEventListener('click', (event) => {
-                event.stopPropagation();
-                const newHabit = option.getAttribute('data-value');
-                const newHabitLabel = option.textContent;
-                handleTrocarCampo(newHabit, newHabitLabel);
-            });
-        });
+            // Mostra widget
+            this.widgetElement.classList.remove('hidden');
+            this.isOpen = true;
 
-        // Fechar dropdown ao clicar fora
-        document.addEventListener('click', (event) => {
-            if (!container.contains(event.target)) {
-                optionsList.classList.remove('visible');
-                container.classList.remove('open');
-            }
-        });
-    }
+            console.log('✅ Profile Widget aberto');
 
-    /**
-     * Abre o widget
-     */
-    function openWidget() {
-        if (!isExpanded) {
-            islandContainer.classList.add('expanded');
-            isExpanded = true;
+        } catch (error) {
+            console.error('❌ Erro ao abrir widget:', error);
+            alert('Erro ao carregar perfil. Tente novamente.');
         }
-    }
+    },
 
     /**
      * Fecha o widget
      */
-    function closeWidget() {
-        if (isExpanded) {
-            islandContainer.classList.remove('expanded');
-            isExpanded = false;
-            // Fecha dropdown se estiver aberto
-            const optionsList = document.getElementById('field-options-list');
-            const container = document.getElementById('change-field-container');
-            if (optionsList) optionsList.classList.remove('visible');
-            if (container) container.classList.remove('open');
-        }
-    }
+    close() {
+        this.widgetElement.classList.add('hidden');
+        this.isOpen = false;
+        console.log('✅ Profile Widget fechado');
+    },
 
     /**
-     * Carrega dados do usuário
+     * Atualiza UI do widget com dados do usuário
      */
-    async function loadUserData() {
+    updateWidgetUI() {
+        if (!this.currentUser) return;
+
+        const habitLabels = {
+            'masturbacao': 'Masturbação',
+            'pornografia': 'Pornografia',
+            'bebida': 'Bebida Alcoólica',
+            'fumar': 'Fumar',
+            'outro': 'Outro'
+        };
+
+        // Avatar
+        document.getElementById('widget-avatar').src = this.currentUser.avatar_url || 'https://via.placeholder.com/34';
+
+        // Nome do usuário
+        const rankData = this.currentUser.rankData;
+        const rankName = rankData ? rankData.name.charAt(0).toUpperCase() + rankData.name.slice(1) : 'Recruta';
+        document.getElementById('widget-user-name').textContent = `${rankName} ${this.currentUser.last_name || ''}`;
+
+        // Hábito atual
+        const habitLabel = habitLabels[this.currentUser.habit] || 'Não definido';
+        document.getElementById('widget-current-habit').textContent = habitLabel;
+
+        // Dados de investimento (mock - será integrado com Stripe)
+        // TODO: Buscar dados reais do Stripe
+        document.getElementById('investment-price').textContent = '3';
+        document.getElementById('days-until-payment').textContent = '4';
+        
+        // Calcula progresso do pagamento (4/7 dias = 57%)
+        const progress = (4 / 7) * 100;
+        document.getElementById('payment-progress').style.width = `${progress}%`;
+    },
+
+    /**
+     * Handler: Ver Identidade
+     * Abre modal com card de identidade completo
+     */
+    async handleVerIdentidade() {
         try {
-            const { data: { user } } = await window.supabaseClient.auth.getUser();
-            
-            if (!user) {
-                console.error('Usuário não autenticado');
-                return;
+            console.log('👁️ Abrindo Identidade...');
+
+            // Fecha widget
+            this.close();
+
+            // Abre modal de identidade (reutiliza o card do onboarding)
+            if (window.IdentityModal) {
+                await window.IdentityModal.open(this.currentUser);
+            } else {
+                // Fallback: redireciona para página de identidade
+                window.location.href = 'onboarding/habit-tracking.html';
             }
 
-            const { data: profile, error } = await window.supabaseClient
-                .from('profiles')
-                .select('*')
-                .eq('id', user.id)
-                .single();
-
-            if (error) throw error;
-
-            userData = profile;
-            updateUIWithUserData(profile);
         } catch (error) {
-            console.error('Erro ao carregar dados do usuário:', error);
+            console.error('❌ Erro ao abrir identidade:', error);
+            alert('Erro ao abrir identidade. Tente novamente.');
         }
-    }
+    },
 
     /**
-     * Atualiza a UI com os dados do usuário
+     * Handler: Trocar de Campo
+     * Troca o hábito do usuário, salvando progresso do anterior
      */
-    function updateUIWithUserData(profile) {
-        // Avatar
-        const avatarUrl = profile.avatar_url || 'https://via.placeholder.com/150';
-        const avatarTrigger = document.getElementById('user-avatar-trigger');
-        const profilePhotoExpanded = document.getElementById('profile-photo-expanded');
-        
-        if (avatarTrigger) avatarTrigger.src = avatarUrl;
-        if (profilePhotoExpanded) {
-            profilePhotoExpanded.style.backgroundImage = `url(${avatarUrl})`;
-        }
-
-        // Nome e patente
-        const patentName = document.getElementById('user-patent-name');
-        if (patentName) {
-            const rank = profile.rank || 'Recruta';
-            const name = profile.full_name || profile.email?.split('@')[0] || 'Usuário';
-            patentName.textContent = `${rank} ${name}`;
-        }
-
-        // Campo atual
-        const selectedField = document.getElementById('selected-field-value');
-        if (selectedField) {
+    async handleTrocarCampo(newHabit) {
+        try {
             const habitLabels = {
                 'masturbacao': 'Masturbação',
                 'pornografia': 'Pornografia',
@@ -335,256 +286,197 @@ window.ProfileWidgetDynamicIsland = (function () {
                 'fumar': 'Fumar',
                 'outro': 'Outro'
             };
-            selectedField.textContent = habitLabels[profile.habit] || 'Masturbação';
-        }
-    }
 
-    /**
-     * Carrega dados da assinatura
-     */
-    async function loadSubscriptionData() {
-        try {
-            const { data: { user } } = await window.supabaseClient.auth.getUser();
-            
-            if (!user) return;
+            const newHabitLabel = habitLabels[newHabit];
+            const currentHabitLabel = habitLabels[this.currentUser.habit];
 
-            const { data: profile } = await window.supabaseClient
-                .from('profiles')
-                .select('stripe_subscription_id, stripe_current_period_end')
-                .eq('id', user.id)
-                .single();
+            // Confirmação
+            const confirmed = confirm(
+                `Você quer mesmo mudar de campo?\n\n` +
+                `Campo atual: ${currentHabitLabel}\n` +
+                `Novo campo: ${newHabitLabel}\n\n` +
+                `Seu progresso no campo "${currentHabitLabel}" será salvo e você começará do zero no novo campo.\n\n` +
+                `Tem certeza?`
+            );
 
-            if (profile && profile.stripe_subscription_id) {
-                subscriptionData = profile;
-                updateSubscriptionUI(profile);
-            }
-        } catch (error) {
-            console.error('Erro ao carregar dados da assinatura:', error);
-        }
-    }
-
-    /**
-     * Atualiza a UI com dados da assinatura
-     */
-    function updateSubscriptionUI(subscription) {
-        if (!subscription.stripe_current_period_end) return;
-
-        const periodEnd = new Date(subscription.stripe_current_period_end);
-        const now = new Date();
-        const diffTime = periodEnd - now;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        // Atualiza dias restantes
-        const daysRemainingEl = document.getElementById('days-remaining');
-        if (daysRemainingEl) {
-            daysRemainingEl.textContent = Math.max(0, diffDays);
-        }
-
-        // Atualiza barra de progresso
-        const progressBar = document.getElementById('payment-progress-bar');
-        if (progressBar) {
-            const percentage = ((7 - diffDays) / 7) * 100;
-            progressBar.style.background = `linear-gradient(90deg, var(--opidas-gold) ${percentage}%, rgba(197, 164, 126, 0.2) ${percentage}%)`;
-        }
-    }
-
-    /**
-     * Handler: Ver Identidade
-     */
-    function handleVerIdentidade() {
-        closeWidget();
-        
-        // Dispara evento customizado para abrir o modal de identidade
-        if (window.IdentityModal && typeof window.IdentityModal.open === 'function') {
-            window.IdentityModal.open();
-        } else {
-            console.warn('IdentityModal não encontrado. Certifique-se de incluir identity-modal.js');
-            alert('Modal de identidade será aberto aqui');
-        }
-    }
-
-    /**
-     * Handler: Configurar Pagamentos
-     */
-    async function handleConfigurarPagamentos() {
-        try {
-            const { data: { user } } = await window.supabaseClient.auth.getUser();
-            
-            if (!user) {
-                alert('Você precisa estar logado para acessar esta funcionalidade.');
+            if (!confirmed) {
+                // Reseta select
+                document.getElementById('habit-select').value = '';
                 return;
             }
 
-            // Chama Edge Function para criar sessão do Stripe Portal
-            const { data, error } = await window.supabaseClient.functions.invoke('create-portal-session', {
-                body: { userId: user.id }
+            console.log(`🔄 Trocando de ${this.currentUser.habit} para ${newHabit}...`);
+
+            // Chama função do Supabase para trocar de campo
+            const { data, error } = await window.supabase.rpc('switch_user_habit', {
+                p_user_id: this.currentUser.id,
+                p_new_habit: newHabit,
+                p_current_habit: this.currentUser.habit,
+                p_current_retention_days: this.currentUser.retention_days,
+                p_current_rank: this.currentUser.rank
             });
 
             if (error) throw error;
 
-            if (data.url) {
-                window.location.href = data.url;
-            }
+            console.log('✅ Campo trocado com sucesso:', data);
+
+            // Mostra mensagem de sucesso
+            const hadPreviousProgress = data.had_previous_progress;
+            const message = hadPreviousProgress
+                ? `Campo trocado com sucesso!\n\nVocê já tinha ${data.retention_days} dias de progresso em "${newHabitLabel}". Seu progresso foi restaurado!`
+                : `Campo trocado com sucesso!\n\nBem-vindo ao campo "${newHabitLabel}"! Você está começando do zero.`;
+
+            alert(message);
+
+            // Recarrega página para atualizar todos os dados
+            window.location.reload();
+
         } catch (error) {
-            console.error('Erro ao abrir portal de pagamentos:', error);
-            alert('Erro ao abrir portal de pagamentos. Tente novamente.');
+            console.error('❌ Erro ao trocar de campo:', error);
+            alert('Erro ao trocar de campo. Tente novamente.');
+            document.getElementById('habit-select').value = '';
         }
-    }
+    },
 
     /**
-     * Handler: Desistir (Cancelar e Deletar Conta)
+     * Handler: Configurar Pagamento
+     * Abre portal do Stripe para gerenciar assinatura
      */
-    async function handleDesistir() {
-        // Primeira confirmação
-        if (!confirm('⚠️ ATENÇÃO: Você está prestes a CANCELAR sua assinatura e DELETAR sua conta permanentemente.\n\nTodos os seus dados serão perdidos. Tem certeza?')) {
-            return;
-        }
-
-        // Segunda confirmação
-        if (!confirm('🛑 ÚLTIMA CHANCE: Esta ação é IRREVERSÍVEL!\n\nSua conta, progresso e todos os dados serão permanentemente deletados.\n\nDeseja realmente continuar?')) {
-            return;
-        }
-
-        // Terceira confirmação com digitação
-        const confirmText = prompt('Digite "SIM" (em maiúsculas) para confirmar a exclusão definitiva da sua conta:');
-        
-        if (confirmText !== 'SIM') {
-            alert('Operação cancelada. Sua conta permanece ativa.');
-            return;
-        }
-
+    async handleConfigurarPagamento() {
         try {
-            const { data: { user } } = await window.supabaseClient.auth.getUser();
-            
-            if (!user) {
-                alert('Erro: Usuário não autenticado.');
+            console.log('💳 Abrindo portal de pagamento...');
+
+            // Verifica se tem stripe_customer_id
+            if (!this.currentUser.stripe_customer_id) {
+                alert('Você ainda não tem uma assinatura ativa.');
                 return;
             }
+
+            // Chama Edge Function para criar portal session
+            const { data, error } = await window.supabase.functions.invoke('create-portal-session', {
+                body: {
+                    customerId: this.currentUser.stripe_customer_id,
+                    returnUrl: window.location.origin + '/campo.html'
+                }
+            });
+
+            if (error) throw error;
+
+            // Redireciona para portal do Stripe
+            window.location.href = data.url;
+
+        } catch (error) {
+            console.error('❌ Erro ao abrir portal de pagamento:', error);
+            alert('Erro ao abrir portal de pagamento. Tente novamente.');
+        }
+    },
+
+    /**
+     * Handler: Desistir
+     * Cancela assinatura e deleta conta
+     */
+    async handleDesistir() {
+        try {
+            // Primeira confirmação
+            const confirmed1 = confirm(
+                '⚠️ ATENÇÃO ⚠️\n\n' +
+                'Você está prestes a CANCELAR sua assinatura e DELETAR sua conta permanentemente.\n\n' +
+                'Isso significa:\n' +
+                '• Seu progresso será PERDIDO\n' +
+                '• Sua assinatura será CANCELADA\n' +
+                '• Seus dados serão DELETADOS\n' +
+                '• Esta ação é IRREVERSÍVEL\n\n' +
+                'Tem certeza que deseja continuar?'
+            );
+
+            if (!confirmed1) return;
+
+            // Segunda confirmação (mais forte)
+            const confirmed2 = confirm(
+                '🛑 ÚLTIMA CHANCE 🛑\n\n' +
+                'Digite "SIM" no próximo prompt para confirmar que você realmente deseja deletar sua conta.\n\n' +
+                'Clique OK para continuar ou Cancelar para voltar.'
+            );
+
+            if (!confirmed2) return;
+
+            // Pede confirmação final com texto
+            const finalConfirmation = prompt(
+                'Digite "SIM" (em maiúsculas) para confirmar a exclusão da conta:'
+            );
+
+            if (finalConfirmation !== 'SIM') {
+                alert('Cancelamento abortado. Sua conta está segura.');
+                return;
+            }
+
+            console.log('🗑️ Deletando conta...');
 
             // Chama Edge Function para cancelar assinatura e deletar conta
-            const { data, error } = await window.supabaseClient.functions.invoke('cancel-subscription-and-delete', {
-                body: { userId: user.id }
+            const { data, error } = await window.supabase.functions.invoke('cancel-subscription-and-delete', {
+                body: {
+                    userId: this.currentUser.id,
+                    stripeCustomerId: this.currentUser.stripe_customer_id,
+                    stripeSubscriptionId: this.currentUser.stripe_subscription_id
+                }
             });
 
             if (error) throw error;
 
-            // Logout
-            await window.supabaseClient.auth.signOut();
+            console.log('✅ Conta deletada com sucesso');
 
-            // Mensagem de despedida
-            alert('Sua conta foi deletada com sucesso. Sentiremos sua falta! 👋');
+            // Mostra mensagem final
+            alert(
+                'Sua assinatura foi cancelada e sua conta foi deletada.\n\n' +
+                'Sentiremos sua falta, soldado. A porta está sempre aberta se quiser voltar.\n\n' +
+                'Você será redirecionado para a página inicial.'
+            );
 
-            // Redireciona para página inicial
+            // Faz logout
+            await window.supabase.auth.signOut();
+
+            // Redireciona para home
             window.location.href = '/index.html';
+
         } catch (error) {
-            console.error('Erro ao deletar conta:', error);
-            alert('Erro ao deletar conta. Por favor, entre em contato com o suporte.');
+            console.error('❌ Erro ao deletar conta:', error);
+            alert('Erro ao deletar conta. Entre em contato com o suporte.');
         }
-    }
+    },
 
     /**
-     * Handler: Sair / Desconectar
+     * Handler: Logout
+     * Desconecta usuário
      */
-    async function handleSair() {
-        if (!confirm('Deseja realmente sair?')) {
-            return;
-        }
-
+    async handleLogout() {
         try {
-            await window.supabaseClient.auth.signOut();
-            window.location.href = '/index.html';
-        } catch (error) {
-            console.error('Erro ao fazer logout:', error);
-            alert('Erro ao sair. Tente novamente.');
-        }
-    }
+            const confirmed = confirm('Tem certeza que deseja sair?');
+            if (!confirmed) return;
 
-    /**
-     * Handler: Trocar de Campo
-     */
-    async function handleTrocarCampo(newHabit, newHabitLabel) {
-        try {
-            const { data: { user } } = await window.supabaseClient.auth.getUser();
-            
-            if (!user) {
-                alert('Você precisa estar logado para trocar de campo.');
-                return;
-            }
+            console.log('👋 Fazendo logout...');
 
-            // Busca dados atuais
-            const { data: currentProfile } = await window.supabaseClient
-                .from('profiles')
-                .select('habit, retention_days, rank')
-                .eq('id', user.id)
-                .single();
-
-            if (!currentProfile) {
-                alert('Erro ao carregar perfil.');
-                return;
-            }
-
-            // Confirma troca
-            if (!confirm(`Deseja trocar de "${currentProfile.habit}" para "${newHabitLabel}"?\n\nSeu progresso atual será salvo e você poderá voltar depois.`)) {
-                return;
-            }
-
-            // Chama função do banco para trocar de campo
-            const { data: result, error } = await window.supabaseClient
-                .rpc('switch_user_habit', {
-                    p_user_id: user.id,
-                    p_new_habit: newHabit,
-                    p_current_habit: currentProfile.habit,
-                    p_current_retention_days: currentProfile.retention_days,
-                    p_current_rank: currentProfile.rank
-                });
-
+            // Faz logout no Supabase
+            const { error } = await window.supabase.auth.signOut();
             if (error) throw error;
 
-            // Atualiza UI
-            const selectedField = document.getElementById('selected-field-value');
-            if (selectedField) {
-                selectedField.textContent = newHabitLabel;
-            }
+            console.log('✅ Logout realizado com sucesso');
 
-            // Fecha dropdown
-            const optionsList = document.getElementById('field-options-list');
-            const container = document.getElementById('change-field-container');
-            if (optionsList) optionsList.classList.remove('visible');
-            if (container) container.classList.remove('open');
-
-            // Mensagem de sucesso
-            if (result.had_previous_progress) {
-                alert(`✅ Campo trocado com sucesso!\n\nVocê voltou para "${newHabitLabel}" com ${result.retention_days} dias de progresso.`);
-            } else {
-                alert(`✅ Campo trocado com sucesso!\n\nVocê começou em "${newHabitLabel}". Boa sorte!`);
-            }
-
-            // Recarrega a página para atualizar todos os dados
-            setTimeout(() => {
-                window.location.reload();
-            }, 1500);
+            // Redireciona para página de login
+            window.location.href = '/index.html';
 
         } catch (error) {
-            console.error('Erro ao trocar de campo:', error);
-            alert('Erro ao trocar de campo. Tente novamente.');
+            console.error('❌ Erro ao fazer logout:', error);
+            alert('Erro ao fazer logout. Tente novamente.');
         }
     }
+};
 
-    /**
-     * API pública
-     */
-    return {
-        init,
-        open: openWidget,
-        close: closeWidget
-    };
-})();
+// Exporta para uso global
+window.ProfileWidget = ProfileWidget;
 
-// Inicializa automaticamente quando o DOM estiver pronto
+// Inicializa quando DOM estiver pronto
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        window.ProfileWidgetDynamicIsland.init();
-    });
+    document.addEventListener('DOMContentLoaded', () => ProfileWidget.init());
 } else {
-    window.ProfileWidgetDynamicIsland.init();
+    ProfileWidget.init();
 }

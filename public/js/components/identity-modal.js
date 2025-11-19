@@ -1,301 +1,233 @@
-/**
- * OPIDAS Identity Modal
- * Modal para exibir a identidade completa do usuário
- */
+// Identity Modal Component - OPIDAS
+// Modal para exibir card de identidade completo
 
-window.IdentityModal = (function () {
-    'use strict';
-
-    let modalOverlay = null;
-    let userData = null;
+const IdentityModal = {
+    isOpen: false,
+    modalElement: null,
+    currentUser: null,
 
     /**
-     * Inicializa o modal
+     * Inicializa o modal de identidade
      */
-    function init() {
-        createModalHTML();
-        attachEventListeners();
-    }
+    init() {
+        this.createModal();
+        this.attachEventListeners();
+        console.log('✅ Identity Modal inicializado');
+    },
 
     /**
-     * Cria a estrutura HTML do modal
+     * Cria o HTML do modal
      */
-    function createModalHTML() {
-        // Remove modal existente se houver
-        const existing = document.getElementById('identity-modal-overlay');
-        if (existing) {
-            existing.remove();
-        }
+    createModal() {
+        const modalHTML = `
+            <div id="identity-modal-overlay" class="identity-modal-overlay hidden">
+                <div class="identity-modal-container">
+                    <button id="identity-close-btn" class="identity-close-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M18 6L6 18M6 6L18 18" stroke="#D9D9D9" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
 
-        // Cria o overlay e modal
-        const overlay = document.createElement('div');
-        overlay.id = 'identity-modal-overlay';
-        overlay.className = 'identity-modal-overlay';
-        overlay.innerHTML = `
-            <div class="identity-modal-container">
-                <button class="identity-modal-close" aria-label="Fechar"></button>
-                
-                <div class="identity-modal-header">
-                    <h2 class="identity-modal-title">🪪 Identidade OPIDAS</h2>
-                    <p class="identity-modal-subtitle">Seus dados de soldado</p>
-                </div>
+                    <!-- Card de Identidade (reutiliza design do onboarding) -->
+                    <div class="identity-card">
+                        <!-- Header do Card -->
+                        <div class="identity-card-header">
+                            <img src="assets/styles/images/campologo.svg" alt="OPIDAS" class="identity-logo">
+                            <div class="identity-title">IDENTIDADE OPIDAS</div>
+                        </div>
 
-                <div class="identity-modal-avatar">
-                    <img id="identity-avatar" src="https://via.placeholder.com/150" alt="Avatar">
-                </div>
+                        <!-- Foto e Nome -->
+                        <div class="identity-profile">
+                            <img id="identity-avatar" class="identity-avatar" src="" alt="Avatar">
+                            <div id="identity-name" class="identity-name">NOME SOBRENOME</div>
+                        </div>
 
-                <div class="identity-modal-info">
-                    <div class="identity-info-row">
-                        <span class="identity-info-label">Nome Completo</span>
-                        <div class="identity-info-value" id="identity-full-name">-</div>
-                    </div>
+                        <!-- Informações -->
+                        <div class="identity-info-grid">
+                            <div class="identity-info-item">
+                                <div class="identity-info-label">Contra</div>
+                                <div id="identity-habit" class="identity-info-value">HÁBITO</div>
+                            </div>
 
-                    <div class="identity-info-row">
-                        <span class="identity-info-label">E-mail</span>
-                        <div class="identity-info-value" id="identity-email">-</div>
-                    </div>
+                            <div class="identity-info-item">
+                                <div class="identity-info-label">Patente</div>
+                                <div id="identity-rank" class="identity-info-value">PATENTE</div>
+                            </div>
 
-                    <div class="identity-info-row">
-                        <span class="identity-info-label">Patente Atual</span>
-                        <div class="identity-info-value">
-                            <span class="identity-rank-badge" id="identity-rank">Recruta</span>
+                            <div class="identity-info-item">
+                                <div class="identity-info-label">Data de Alistamento</div>
+                                <div id="identity-enlistment" class="identity-info-value">DD/MM/AAAA</div>
+                            </div>
+
+                            <div class="identity-info-item">
+                                <div class="identity-info-label">Dias de Retenção</div>
+                                <div id="identity-retention" class="identity-info-value">0 DIAS</div>
+                            </div>
+
+                            <div class="identity-info-item">
+                                <div class="identity-info-label">Matrícula</div>
+                                <div id="identity-registration" class="identity-info-value">M0RSI-00000000</div>
+                            </div>
+
+                            <div class="identity-info-item">
+                                <div class="identity-info-label">Status</div>
+                                <div id="identity-status" class="identity-info-value status-active">ATIVO</div>
+                            </div>
+                        </div>
+
+                        <!-- Ícone da Patente -->
+                        <div class="identity-rank-badge">
+                            <img id="identity-rank-icon" src="" alt="Patente">
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="identity-card-footer">
+                            <div class="identity-footer-text">
+                                "A disciplina é a ponte entre metas e conquistas"
+                            </div>
+                            <div class="identity-footer-signature">
+                                — OPIDAS
+                            </div>
                         </div>
                     </div>
-
-                    <div class="identity-info-row">
-                        <span class="identity-info-label">Campo de Batalha</span>
-                        <div class="identity-info-value" id="identity-habit">-</div>
-                    </div>
-
-                    <div class="identity-info-row">
-                        <span class="identity-info-label">Dias de Retenção</span>
-                        <div class="identity-info-value">
-                            <span class="identity-days-badge" id="identity-retention-days">0 dias</span>
-                        </div>
-                    </div>
-
-                    <div class="identity-info-row">
-                        <span class="identity-info-label">Data de Nascimento</span>
-                        <div class="identity-info-value" id="identity-birth-date">-</div>
-                    </div>
-
-                    <div class="identity-info-row">
-                        <span class="identity-info-label">Sexo</span>
-                        <div class="identity-info-value" id="identity-gender">-</div>
-                    </div>
-                </div>
-
-                <div class="identity-stats">
-                    <div class="identity-stat-card">
-                        <div class="identity-stat-value" id="identity-stat-days">0</div>
-                        <div class="identity-stat-label">Dias Limpo</div>
-                    </div>
-                    <div class="identity-stat-card">
-                        <div class="identity-stat-value" id="identity-stat-rank-level">1</div>
-                        <div class="identity-stat-label">Nível de Patente</div>
-                    </div>
-                </div>
-
-                <div class="identity-modal-footer">
-                    <p class="identity-modal-footer-text">
-                        Continue firme na sua jornada! 💪<br>
-                        Cada dia é uma vitória.
-                    </p>
                 </div>
             </div>
         `;
 
-        document.body.appendChild(overlay);
-        modalOverlay = overlay;
-    }
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        this.modalElement = document.getElementById('identity-modal-overlay');
+    },
 
     /**
      * Anexa event listeners
      */
-    function attachEventListeners() {
-        // Fechar ao clicar no botão X
-        const closeButton = modalOverlay.querySelector('.identity-modal-close');
-        if (closeButton) {
-            closeButton.addEventListener('click', close);
-        }
-
-        // Fechar ao clicar no overlay (fora do modal)
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) {
-                close();
+    attachEventListeners() {
+        // Fechar modal
+        document.getElementById('identity-close-btn').addEventListener('click', () => this.close());
+        document.getElementById('identity-modal-overlay').addEventListener('click', (e) => {
+            if (e.target.id === 'identity-modal-overlay') {
+                this.close();
             }
         });
 
-        // Fechar com tecla ESC
+        // ESC para fechar
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-                close();
+            if (e.key === 'Escape' && this.isOpen) {
+                this.close();
             }
         });
-
-        // Prevenir propagação de cliques dentro do modal
-        const modalContainer = modalOverlay.querySelector('.identity-modal-container');
-        if (modalContainer) {
-            modalContainer.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
-        }
-    }
+    },
 
     /**
-     * Abre o modal
+     * Abre o modal com dados do usuário
      */
-    async function open() {
-        await loadUserData();
-        modalOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Previne scroll da página
-    }
+    async open(userData = null) {
+        try {
+            console.log('🪪 Abrindo Identity Modal...');
+
+            // Se não passou userData, busca do Supabase
+            if (!userData) {
+                this.currentUser = await window.UserService.getCurrentUserProfile();
+            } else {
+                this.currentUser = userData;
+            }
+
+            // Atualiza UI do modal
+            this.updateModalUI();
+
+            // Mostra modal
+            this.modalElement.classList.remove('hidden');
+            this.isOpen = true;
+
+            console.log('✅ Identity Modal aberto');
+
+        } catch (error) {
+            console.error('❌ Erro ao abrir Identity Modal:', error);
+            alert('Erro ao carregar identidade. Tente novamente.');
+        }
+    },
 
     /**
      * Fecha o modal
      */
-    function close() {
-        modalOverlay.classList.remove('active');
-        document.body.style.overflow = ''; // Restaura scroll da página
-    }
+    close() {
+        this.modalElement.classList.add('hidden');
+        this.isOpen = false;
+        console.log('✅ Identity Modal fechado');
+    },
 
     /**
-     * Carrega dados do usuário
+     * Atualiza UI do modal com dados do usuário
      */
-    async function loadUserData() {
-        try {
-            const { data: { user } } = await window.supabaseClient.auth.getUser();
-            
-            if (!user) {
-                console.error('Usuário não autenticado');
-                return;
-            }
+    updateModalUI() {
+        if (!this.currentUser) return;
 
-            const { data: profile, error } = await window.supabaseClient
-                .from('profiles')
-                .select('*')
-                .eq('id', user.id)
-                .single();
+        const habitLabels = {
+            'masturbacao': 'MASTURBAÇÃO',
+            'pornografia': 'PORNOGRAFIA',
+            'bebida': 'BEBIDA ALCOÓLICA',
+            'fumar': 'FUMAR',
+            'outro': 'OUTRO'
+        };
 
-            if (error) throw error;
+        const rankIcons = {
+            'recruta': 'assets/styles/images/patentes/Recruta.png',
+            'soldado': 'assets/styles/images/patentes/Soldado.png',
+            'cabo': 'assets/styles/images/patentes/Cabo.png',
+            'sargento': 'assets/styles/images/patentes/Sargento.png',
+            'marechal': 'assets/styles/images/patentes/Marechal.png',
+            'tenente': 'assets/styles/images/patentes/Tenente.png',
+            'capitao': 'assets/styles/images/patentes/Capitão.png'
+        };
 
-            userData = profile;
-            updateModalWithUserData(profile, user);
-        } catch (error) {
-            console.error('Erro ao carregar dados do usuário:', error);
-        }
-    }
-
-    /**
-     * Atualiza o modal com os dados do usuário
-     */
-    function updateModalWithUserData(profile, user) {
         // Avatar
-        const avatarEl = document.getElementById('identity-avatar');
-        if (avatarEl) {
-            avatarEl.src = profile.avatar_url || 'https://via.placeholder.com/150';
-        }
+        document.getElementById('identity-avatar').src = this.currentUser.avatar_url || 'https://via.placeholder.com/120';
 
-        // Nome completo
-        const fullNameEl = document.getElementById('identity-full-name');
-        if (fullNameEl) {
-            fullNameEl.textContent = profile.full_name || user.email?.split('@')[0] || 'Não informado';
-        }
+        // Nome
+        const fullName = `${this.currentUser.first_name || ''} ${this.currentUser.last_name || ''}`.trim().toUpperCase();
+        document.getElementById('identity-name').textContent = fullName || 'NOME NÃO DEFINIDO';
 
-        // E-mail
-        const emailEl = document.getElementById('identity-email');
-        if (emailEl) {
-            emailEl.textContent = user.email || 'Não informado';
-        }
+        // Hábito
+        const habitLabel = habitLabels[this.currentUser.habit] || 'NÃO DEFINIDO';
+        document.getElementById('identity-habit').textContent = habitLabel;
 
         // Patente
-        const rankEl = document.getElementById('identity-rank');
-        if (rankEl) {
-            rankEl.textContent = profile.rank || 'Recruta';
-        }
+        const rankData = this.currentUser.rankData;
+        const rankName = rankData ? rankData.name.toUpperCase() : 'RECRUTA';
+        document.getElementById('identity-rank').textContent = rankName;
 
-        // Campo de batalha (hábito)
-        const habitEl = document.getElementById('identity-habit');
-        if (habitEl) {
-            const habitLabels = {
-                'masturbacao': 'Masturbação',
-                'pornografia': 'Pornografia',
-                'bebida': 'Bebida Alcoólica',
-                'fumar': 'Fumar',
-                'outro': 'Outro'
-            };
-            habitEl.textContent = habitLabels[profile.habit] || 'Não definido';
-        }
+        // Ícone da patente
+        const rankIcon = rankIcons[this.currentUser.rank] || rankIcons['recruta'];
+        document.getElementById('identity-rank-icon').src = rankIcon;
+
+        // Data de alistamento
+        const enlistmentDate = this.currentUser.created_at 
+            ? new Date(this.currentUser.created_at).toLocaleDateString('pt-BR')
+            : 'NÃO DEFINIDO';
+        document.getElementById('identity-enlistment').textContent = enlistmentDate;
 
         // Dias de retenção
-        const retentionDaysEl = document.getElementById('identity-retention-days');
-        if (retentionDaysEl) {
-            const days = profile.retention_days || 0;
-            retentionDaysEl.textContent = `${days} ${days === 1 ? 'dia' : 'dias'}`;
-        }
+        const retentionDays = this.currentUser.retention_days || 0;
+        document.getElementById('identity-retention').textContent = `${retentionDays} DIAS`;
 
-        // Data de nascimento
-        const birthDateEl = document.getElementById('identity-birth-date');
-        if (birthDateEl) {
-            if (profile.birth_date) {
-                const date = new Date(profile.birth_date);
-                birthDateEl.textContent = date.toLocaleDateString('pt-BR');
-            } else {
-                birthDateEl.textContent = 'Não informado';
-            }
-        }
+        // Matrícula
+        const registration = this.currentUser.registration_number || 'M0RSI-00000000';
+        document.getElementById('identity-registration').textContent = registration;
 
-        // Sexo
-        const genderEl = document.getElementById('identity-gender');
-        if (genderEl) {
-            const genderLabels = {
-                'masculino': 'Masculino',
-                'feminino': 'Feminino',
-                'outro': 'Outro',
-                'prefiro_nao_dizer': 'Prefiro não dizer'
-            };
-            genderEl.textContent = genderLabels[profile.gender] || 'Não informado';
-        }
-
-        // Estatísticas
-        const statDaysEl = document.getElementById('identity-stat-days');
-        if (statDaysEl) {
-            statDaysEl.textContent = profile.retention_days || 0;
-        }
-
-        const statRankLevelEl = document.getElementById('identity-stat-rank-level');
-        if (statRankLevelEl) {
-            const rankLevels = {
-                'recruta': 1,
-                'soldado': 2,
-                'cabo': 3,
-                'sargento': 4,
-                'tenente': 5,
-                'capitao': 6,
-                'major': 7,
-                'coronel': 8,
-                'general': 9
-            };
-            const rankKey = (profile.rank || 'recruta').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-            statRankLevelEl.textContent = rankLevels[rankKey] || 1;
-        }
+        // Status
+        const isActive = !this.currentUser.is_blocked;
+        const statusElement = document.getElementById('identity-status');
+        statusElement.textContent = isActive ? 'ATIVO' : 'BLOQUEADO';
+        statusElement.className = isActive ? 'identity-info-value status-active' : 'identity-info-value status-blocked';
     }
+};
 
-    /**
-     * API pública
-     */
-    return {
-        init,
-        open,
-        close
-    };
-})();
+// Exporta para uso global
+window.IdentityModal = IdentityModal;
 
-// Inicializa automaticamente quando o DOM estiver pronto
+// Inicializa quando DOM estiver pronto
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        window.IdentityModal.init();
-    });
+    document.addEventListener('DOMContentLoaded', () => IdentityModal.init());
 } else {
-    window.IdentityModal.init();
+    IdentityModal.init();
 }
