@@ -441,7 +441,7 @@ input, select, textarea, button {
     position: absolute;
     height: 34px;
     top: 0;
-    right: 20px;
+    right: 34px;
     color: #d9d9d9;
     font-family: Inter, var(--default-font-family);
     font-size: 34px;
