@@ -70,7 +70,7 @@ const ProfileWidget = {
                                         <span class="investment">Investimento</span>
                                     </div>
                                     <span class="next-payment">Próximo pagamento</span>
-                                    <div class="days">
+                                    <div class="days" style="position: absolute;">
                                         <span id="days-until-payment" class="number-a">4</span><span class="days-b">/7 dias</span>
                                     </div>
                                     
