@@ -49,50 +49,81 @@
         document.addEventListener('DOMContentLoaded', () => {
             const monthNames = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
             
+            // ✅ NOVO: Função melhorada para carregar e validar dados
             const loadStateAndPopulate = () => {
+                console.log('🔍 Carregando dados para welcome.html...');
+                
                 const savedData = localStorage.getItem('onboardingData');
                 if (!savedData) {
+                    console.error('❌ Dados não encontrados no localStorage');
                     alert('Dados não encontrados. Por favor, comece o processo de identificação.');
                     window.location.href = 'identification.html';
-                    return;
+                    return false;
                 }
                 
-                const userData = JSON.parse(savedData);
+                try {
+                    const userData = JSON.parse(savedData);
 
-                // Popular Cartão de Identidade
-                document.getElementById('cardWarriorName').textContent = `${userData.firstName} ${userData.lastName}`.toUpperCase();
-                document.getElementById('cardSignature').textContent = userData.lastName.toUpperCase();
-                document.getElementById('cardContra').textContent = userData.habit.label.toUpperCase();
-                document.getElementById('cardProfilePhoto').src = userData.profilePhotoUrl;
-                document.getElementById('cardRegistration').textContent = "M0RSI-00000000";
-                document.getElementById('cardRank').textContent = userData.rank.toUpperCase();
-                
-                const enlistment = new Date(userData.enlistmentDate);
-                document.getElementById('cardDay').textContent = enlistment.getDate().toString().padStart(2, '0');
-                document.getElementById('cardMonth').textContent = monthNames[enlistment.getMonth()];
-                document.getElementById('cardYear').textContent = enlistment.getFullYear();
-                
-                // Popular Mensagem de Boas-vindas
-                document.getElementById('finalRank').textContent = userData.rank;
-                document.getElementById('finalName').textContent = userData.lastName;
-                document.getElementById('retentionDays').textContent = `${userData.retentionDays} dias`;
+                    // ✅ Validação de dados obrigatórios
+                    if (!userData.firstName || !userData.lastName || !userData.rank || userData.retentionDays === undefined) {
+                        console.error('❌ Dados incompletos:', userData);
+                        alert('Dados incompletos. Por favor, complete todas as etapas.');
+                        window.location.href = 'identification.html';
+                        return false;
+                    }
+
+                    // ✅ Popular Cartão de Identidade com dados reais
+                    console.log('🎨 Populando cartão com dados reais...');
+                    document.getElementById('cardWarriorName').textContent = `${userData.firstName} ${userData.lastName}`.toUpperCase();
+                    document.getElementById('cardSignature').textContent = userData.lastName.toUpperCase();
+                    document.getElementById('cardContra').textContent = userData.habit ? userData.habit.label.toUpperCase() : 'SEM HÁBITO';
+                    
+                    if (userData.profilePhotoUrl) {
+                        document.getElementById('cardProfilePhoto').src = userData.profilePhotoUrl;
+                    }
+                    
+                    document.getElementById('cardRegistration').textContent = "M0RSI-00000000";
+                    document.getElementById('cardRank').textContent = userData.rank.toUpperCase();
+                    
+                    const enlistment = new Date(userData.enlistmentDate);
+                    document.getElementById('cardDay').textContent = enlistment.getDate().toString().padStart(2, '0');
+                    document.getElementById('cardMonth').textContent = monthNames[enlistment.getMonth()];
+                    document.getElementById('cardYear').textContent = enlistment.getFullYear();
+                    
+                    // ✅ Popular Mensagem de Boas-vindas com dados reais
+                    console.log('📝 Populando mensagem de boas-vindas...');
+                    document.getElementById('finalRank').textContent = userData.rank;
+                    document.getElementById('finalName').textContent = userData.lastName;
+                    document.getElementById('retentionDays').textContent = `${userData.retentionDays} dias`;
+                    
+                    console.log('✅ Dados carregados e populados com sucesso');
+                    return true;
+                    
+                } catch (error) {
+                    console.error('❌ Erro ao parsear dados:', error);
+                    alert('Erro ao carregar dados. Tente novamente.');
+                    window.location.href = 'identification.html';
+                    return false;
+                }
             };
 
+            // ✅ NOVO: Botão "Entrar no Campo" com melhor tratamento
             document.getElementById('btnEnterField').addEventListener('click', async () => {
                 try {
                     console.log('🎉 Finalizando onboarding...');
                     
-                    // Marca o onboarding como completo
+                    // ✅ Marca o onboarding como completo
                     await window.UserService.updateUserProfile({
                         onboarding_status: 'completed'
                     });
                     
                     console.log('✅ Onboarding finalizado com sucesso');
                     
-                    // Limpa o localStorage (opcional)
-                    // localStorage.removeItem('onboardingData');
+                    // ✅ Limpa o localStorage após finalizar
+                    localStorage.removeItem('onboardingData');
+                    console.log('🗑️ Dados do onboarding removidos do localStorage');
                     
-                    // Redireciona para o campo
+                    // ✅ Redireciona para o campo
                     window.location.href = '../campo.html';
                     
                 } catch (error) {
@@ -101,10 +132,12 @@
                 }
             });
 
+            // ✅ Botão "Voltar"
             document.getElementById('btnGoToPrevStep').addEventListener('click', () => {
                 window.location.href = 'habit-tracking.html';
             });
             
+            // ✅ Carrega e popula dados ao inicializar
             loadStateAndPopulate();
         });
     </script>
