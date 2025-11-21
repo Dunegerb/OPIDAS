@@ -556,7 +556,7 @@ input, select, textarea, button {
 }
 
 .days {
-    position: absolute;
+    /* position: absolute; --Estava causando erro de alinhamento*/
     width: 50px;
     height: 12px;
     top: 80px;
