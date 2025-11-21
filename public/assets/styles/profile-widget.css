@@ -54,7 +54,7 @@
 #profile-island-container.expanded .island-content-wrapper {
     overflow: visible;
     width: 371px;
-    height: 490px;
+    /* height: 490px;*/ /*-Estavaexpandindo para cima por causa disso */
 }
 
 /* ================================================= */
@@ -371,7 +371,7 @@ input, select, textarea, button {
     position: relative;
     width: 346px;
     height: 154px;
-    margin: 12.25px auto 0;
+    margin: 55px auto 0;
     z-index: 27;
     overflow: visible;
 }
@@ -439,7 +439,7 @@ input, select, textarea, button {
     align-items: flex-start;
     justify-content: flex-start;
     position: absolute;
-    height: 25px;
+    height: 34px;
     top: 0;
     right: 20px;
     color: #d9d9d9;
