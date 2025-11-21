@@ -1,7 +1,6 @@
 /* ================================================= */
 /* === PROFILE WIDGET - DYNAMIC ISLAND STYLE     === */
-/* === OPIDAS - Substituição Completa            === */
-/* === VERSÃO CORRIGIDA                          === */
+/* === OPIDAS - VERSÃO FINAL CORRIGIDA           === */
 /* ================================================= */
 
 :root {
@@ -32,7 +31,7 @@
     height: 50px;
     border-radius: 50px;
     transition: all 0.6s cubic-bezier(0.6, 0, 0.2, 1);
-    transform-origin: top left; /* ✅ CORRIGIDO: Expande para baixo e direita */
+    transform-origin: top left; /* Expande a partir do canto superior esquerdo */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
@@ -67,7 +66,7 @@
     align-items: center;
     justify-content: flex-start;
     padding: 8px 12px;
-    height: 50px; /* ✅ CORRIGIDO: Mesma altura do container */
+    height: 50px;
     opacity: 1;
     transition: opacity 0.4s ease-in 0.3s;
 }
@@ -82,7 +81,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    height: 100%; /* ✅ CORRIGIDO: Ocupa toda altura do pai */
+    height: 100%;
 }
 
 .user-welcome img {
@@ -90,7 +89,7 @@
     height: 34px;
     border-radius: 50%;
     object-fit: cover;
-    flex-shrink: 0; /* ✅ CORRIGIDO: Impede que a imagem encolha */
+    flex-shrink: 0;
 }
 
 .user-welcome-text {
@@ -859,7 +858,7 @@ input, select, textarea, button {
 }
 
 /* ================================================= */
-/* === CORREÇÃO PARA STATUS-BAR                  === */
+/* === CORREÇÃO PARA STATUS-BAR (DIAS)          === */
 /* ================================================= */
 
 /* Garante que o top-bar mantenha layout correto */
@@ -868,6 +867,7 @@ input, select, textarea, button {
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    flex-wrap: nowrap; /* Impede quebra de linha */
 }
 
 /* Garante que o status-bar não seja afetado pela Dynamic Island */
@@ -875,7 +875,8 @@ input, select, textarea, button {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    flex-shrink: 0; /* ✅ CORRIGIDO: Impede que o status-bar encolha */
+    flex-shrink: 0; /* Impede que o status-bar encolha */
+    min-width: fit-content; /* Mantém largura mínima */
 }
 
 /* Garante que o progress-info mantenha largura fixa */
@@ -884,13 +885,20 @@ input, select, textarea, button {
     flex-direction: column;
     gap: 0.5rem;
     width: 180px;
-    flex-shrink: 0; /* ✅ CORRIGIDO: Impede que encolha */
+    min-width: 180px; /* Largura mínima garantida */
+    flex-shrink: 0; /* Impede que encolha */
 }
 
 /* Garante que os dias fiquem alinhados corretamente */
 .progress-info .days {
     font-size: 13px;
-    white-space: nowrap; /* ✅ CORRIGIDO: Impede quebra de linha */
+    white-space: nowrap; /* Impede quebra de linha */
+    text-align: right; /* Alinha à direita */
+}
+
+/* Garante que o span interno dos dias também não quebre */
+.progress-info .days span {
+    white-space: nowrap;
 }
 
 /* ================================================= */
