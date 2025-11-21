@@ -47,8 +47,15 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- Estado e Constantes da Página ---
-            const habits = [ { id: "masturbacao", label: "Masturbação" }, { id: "pornografia", label: "Pornografia" }, { id: "fumar", label: "Fumar" }, { id: "bebida", label: "Bebida Alcólica" }, { id: "outro", label: "Outro" }, ];
+            const habits = [ 
+                { id: "masturbacao", label: "Masturbação" }, 
+                { id: "pornografia", label: "Pornografia" }, 
+                { id: "fumar", label: "Fumar" }, 
+                { id: "bebida", label: "Bebida Alcólica" }, 
+                { id: "outro", label: "Outro" }, 
+            ];
             const monthNames = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+            
             let userData = {
                 firstName: '',
                 lastName: '',
@@ -76,53 +83,61 @@
             const cardYear = document.getElementById('cardYear');
             const btnGoToNextStep = document.getElementById('btnGoToNextStep');
 
+            // ✅ NOVO: Gerenciador de Persistência
+            const persistenceManager = {
+                saveState: () => {
+                    const dataToSave = {
+                        ...userData,
+                        enlistmentDate: userData.enlistmentDate
+                    };
+                    localStorage.setItem('onboardingData', JSON.stringify(dataToSave));
+                    console.log('💾 Dados salvos automaticamente');
+                },
+
+                loadState: () => {
+                    const saved = localStorage.getItem('onboardingData');
+                    if (saved) {
+                        const data = JSON.parse(saved);
+                        userData = {
+                            ...data,
+                            enlistmentDate: data.enlistmentDate
+                        };
+                        console.log('📦 Dados carregados do localStorage');
+                        return true;
+                    }
+                    return false;
+                }
+            };
+
             // --- Funções de Atualização da UI ---
             const updateCardName = () => {
                 userData.firstName = firstNameInput.value.trim();
                 userData.lastName = lastNameInput.value.trim();
                 cardWarriorName.textContent = `${userData.firstName} ${userData.lastName}`.toUpperCase().trim();
                 cardSignature.textContent = userData.lastName.toUpperCase().trim();
+                persistenceManager.saveState(); // ✅ NOVO: Salva ao digitar
             };
-            const updateCardContra = () => { cardContra.textContent = userData.habit ? userData.habit.label.toUpperCase() : ''; };
+
+            const updateCardContra = () => { 
+                cardContra.textContent = userData.habit ? userData.habit.label.toUpperCase() : ''; 
+            };
+
             const updateCardPhoto = (file) => {
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = (e) => {
                         userData.profilePhotoUrl = e.target.result;
                         cardProfilePhoto.src = userData.profilePhotoUrl;
+                        persistenceManager.saveState(); // ✅ NOVO: Salva ao fazer upload
                     };
                     reader.readAsDataURL(file);
                 }
             };
+
             const setEnlistmentDate = (date) => {
                 cardDay.textContent = date.getDate().toString().padStart(2, '0');
                 cardMonth.textContent = monthNames[date.getMonth()];
                 cardYear.textContent = date.getFullYear();
-            };
-
-            // --- Lógica de Carregamento e Persistência ---
-            const saveState = () => {
-                localStorage.setItem('onboardingData', JSON.stringify(userData));
-            };
-
-            const loadState = () => {
-                const savedData = localStorage.getItem('onboardingData');
-                if (savedData) {
-                    const parsedData = JSON.parse(savedData);
-                    userData = { ...userData, ...parsedData };
-                    
-                    firstNameInput.value = userData.firstName || '';
-                    lastNameInput.value = userData.lastName || '';
-                    if (userData.habit) {
-                        dropdownLabel.textContent = userData.habit.label;
-                        dropdownLabel.classList.remove('placeholder');
-                    }
-                    if (userData.profilePhotoUrl) {
-                        cardProfilePhoto.src = userData.profilePhotoUrl;
-                    }
-                    updateCardName();
-                    updateCardContra();
-                }
             };
 
             // --- Lógica de Eventos ---
@@ -149,6 +164,7 @@
                         dropdownMenu.classList.remove('open');
                         dropdownButton.setAttribute('aria-expanded', 'false');
                         updateCardContra();
+                        persistenceManager.saveState(); // ✅ NOVO: Salva ao selecionar
                     });
                     dropdownMenu.appendChild(li);
                 });
@@ -169,6 +185,7 @@
                     updateCardPhoto(file);
                 }
             };
+
             dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--accent-color)'; });
             dropZone.addEventListener('dragleave', () => dropZone.style.borderColor = 'var(--border-color)');
             dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--border-color)'; handleFile(e.dataTransfer.files[0]); });
@@ -183,34 +200,52 @@
                 try {
                     console.log('📝 Salvando dados da Etapa 1...');
                     
-                    // Salva no localStorage
-                    saveState();
+                    // ✅ Salva no localStorage
+                    persistenceManager.saveState();
                     
-                    // Salva no Supabase (usando 'habit' conforme schema do banco)
+                    // ✅ Salva no Supabase
                     await window.UserService.updateUserProfile({
                         first_name: userData.firstName,
                         last_name: userData.lastName,
                         avatar_url: userData.profilePhotoUrl,
-                        habit: userData.habit.id  // ✅ CORRIGIDO: usa 'habit' em vez de 'habit_id'
+                        habit: userData.habit.id
                     });
                     
                     console.log('✅ Dados da Etapa 1 salvos com sucesso');
                     window.location.href = 'investment.html';
                     
                 } catch (error) {
-                    console.error('❌ Erro ao salvar dados:', error);
+                    console.error('❌ Erro ao salvar:', error);
                     alert('Erro ao salvar dados. Tente novamente.');
                 }
             });
-            
+
             // --- Inicialização ---
-            const initialize = () => {
-                loadState();
+            const init = () => {
                 cardRegistration.textContent = "M0RSI-00000000";
+                setEnlistmentDate(new Date());
+                
+                // ✅ NOVO: Carrega dados salvos
+                persistenceManager.loadState();
+                
+                // Restaura UI
+                firstNameInput.value = userData.firstName || '';
+                lastNameInput.value = userData.lastName || '';
+                if (userData.habit) {
+                    dropdownLabel.textContent = userData.habit.label;
+                    dropdownLabel.classList.remove('placeholder');
+                }
+                if (userData.profilePhotoUrl) {
+                    cardProfilePhoto.src = userData.profilePhotoUrl;
+                    fileNameDisplay.textContent = 'Foto carregada';
+                }
+                
                 populateDropdown();
-                setEnlistmentDate(new Date(userData.enlistmentDate));
+                updateCardName();
+                updateCardContra();
             };
-            initialize();
+
+            init();
         });
     </script>
 </body>
