@@ -1,4 +1,4 @@
-// --- MÓDULO DE AUTENTICAÇÃO (auth.js) ---
+// --- MÓDULO DE AUTENTICAÇÃO (auth.js) - OTIMIZADO ---
 // Responsável por login, logout, registro e proteção de rotas.
 
 /**
@@ -28,7 +28,6 @@ async function signUp(email, password) {
         
         // Verifica se o email precisa ser confirmado
         if (data.user && !data.session) {
-            // Email precisa ser confirmado
             alert("Conta criada! Verifique seu email para confirmar o cadastro antes de continuar.");
             return;
         }
@@ -69,10 +68,10 @@ async function signIn(email, password) {
 
         console.log('✅ Login bem-sucedido:', data);
 
-        // Busca o perfil do usuário para verificar o status do onboarding
+        // ✅ CORRIGIDO: Busca o perfil do usuário para verificar o status do onboarding
         const { data: profile, error: profileError } = await window.supabase
             .from('profiles')
-            .select('onboarding_status')
+            .select('onboarding_status, id')
             .eq('id', data.user.id)
             .single();
 
@@ -82,12 +81,20 @@ async function signIn(email, password) {
             return;
         }
 
-        // Redireciona baseado no status do onboarding
+        // ✅ CORRIGIDO: Verifica o status do onboarding
         if (profile.onboarding_status === 'completed') {
             console.log('✅ Onboarding completo, redirecionando para campo');
+            // ✅ NOVO: Limpa cache ao fazer login
+            if (window.clearSupabaseCache) {
+                window.clearSupabaseCache();
+            }
             window.location.href = 'campo.html';
-        } else {
+        } else if (profile.onboarding_status === 'pending') {
             console.log('⚠️ Onboarding pendente, redirecionando para onboarding');
+            window.location.href = 'onboarding.html';
+        } else {
+            // Se não tem status definido, assume onboarding pendente
+            console.log('⚠️ Status desconhecido, redirecionando para onboarding');
             window.location.href = 'onboarding.html';
         }
 
@@ -107,6 +114,11 @@ async function signOut() {
         const { error } = await window.supabase.auth.signOut();
         
         if (error) throw error;
+
+        // ✅ NOVO: Limpa cache ao fazer logout
+        if (window.clearSupabaseCache) {
+            window.clearSupabaseCache();
+        }
 
         console.log('✅ Logout realizado com sucesso');
         window.location.href = 'index.html';
@@ -199,6 +211,12 @@ function initAuthPage() {
         
         const email = emailInput.value;
         const password = passwordInput.value;
+
+        // ✅ NOVO: Validação básica
+        if (!email || !password) {
+            alert('Por favor, preencha todos os campos');
+            return;
+        }
 
         // Desabilita o botão durante o processo
         const submitButton = authForm.querySelector('button[type="submit"]');
