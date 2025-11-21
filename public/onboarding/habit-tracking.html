@@ -15,7 +15,6 @@
         <img alt="OPIDAS Brand Logos" src="https://c.animaapp.com/rDKbXW1a/img/group-37@2x.png" />
     </header>
 
-
     <div class="onboarding-card">
         <img class="background-image-left" alt="" src="https://c.animaapp.com/rDKbXW1a/img/rectangle-30.png" />
         
@@ -24,7 +23,6 @@
             <section class="identity-card-section" aria-label="Identity Card Preview">
                 <div class="card-base"></div><img class="card-texture" alt="" src="https://c.animaapp.com/rDKbXW1a/img/texturecard@2x.png" /><img class="card-logo-overlay" alt="Opidas logo" src="https://c.animaapp.com/rDKbXW1a/img/opidas-logo@4x.png" /><div class="card-background-mark"><img alt="" src="https://c.animaapp.com/rDKbXW1a/img/mark@2x.png" /></div><img class="card-vector-top1" alt="" src="https://c.animaapp.com/rDKbXW1a/img/vector-79.svg" /><img class="card-vector-top2" alt="" src="https://c.animaapp.com/rDKbXW1a/img/vector-80@2x.png" /><h1 class="card-title">IDENTIDADE DO CAMPO</h1><img class="card-logo-top-right" alt="" src="https://c.animaapp.com/rDKbXW1a/img/group-55@2x.png" /><img id="cardProfilePhoto" class="card-profile-photo" alt="Profile photo" src="https://c.animaapp.com/rDKbXW1a/img/rectangle-40@2x.png" /><div class="card-field contra"><span class="label">Contra:</span><span id="cardContra" class="value"></span></div><div class="card-field signature"><span class="label">Assinatura:</span><span id="cardSignature" class="value"></span></div><h2 class="card-data-heading">DADOS:</h2><div class="card-field registration"><span class="label">N.º de registro:</span><span id="cardRegistration" class="value"></span></div><div class="card-field warrior-name"><span class="label">Nome do Guerreiro(a):</span><span id="cardWarriorName" class="value"></span></div><div class="card-field rank"><span class="label">Patente:</span><span id="cardRank" class="value"></span></div><div class="card-field enlistment"><span class="label">Data de Alistamento:</span><span class="value"><span id="cardDay" class="date-part">--</span> /<span id="cardMonth" class="date-part">---</span> /<span id="cardYear" class="date-part">----</span></span></div>
             </section>
-
 
             <!-- Contêiner para a Etapa do Formulário -->
             <div class="form-steps-container">
@@ -45,24 +43,22 @@
         </main>
     </div>
 
-
     <!-- Scripts do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/lib/supabase-config.js"></script>
     <script src="../js/services/user.js"></script>
 
-
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             // --- Estado e Constantes ---
             const patents = [ 
-                { name: "recruta", minDays: 0, maxDays: 9 },  // ✅ CORRIGIDO: lowercase
-                { name: "soldado", minDays: 10, maxDays: 29 },  // ✅ CORRIGIDO: lowercase
-                { name: "cabo", minDays: 30, maxDays: 59 },  // ✅ CORRIGIDO: lowercase
-                { name: "sargento", minDays: 60, maxDays: 89 },  // ✅ CORRIGIDO: lowercase
-                { name: "marechal", minDays: 90, maxDays: 179 },  // ✅ CORRIGIDO: lowercase
-                { name: "tenente", minDays: 180, maxDays: 364 },  // ✅ CORRIGIDO: lowercase
-                { name: "capitao", minDays: 365, maxDays: Infinity },  // ✅ CORRIGIDO: lowercase (sem acento)
+                { name: "recruta", minDays: 0, maxDays: 9 },
+                { name: "soldado", minDays: 10, maxDays: 29 },
+                { name: "cabo", minDays: 30, maxDays: 59 },
+                { name: "sargento", minDays: 60, maxDays: 89 },
+                { name: "marechal", minDays: 90, maxDays: 179 },
+                { name: "tenente", minDays: 180, maxDays: 364 },
+                { name: "capitao", minDays: 365, maxDays: Infinity },
             ];
             const monthNames = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
             const monthNamesFull = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
@@ -77,7 +73,6 @@
             
             let userData = {};
             let calendarDate = new Date();
-
 
             // --- Seletores de DOM ---
             const cardWarriorName = document.getElementById('cardWarriorName');
@@ -97,7 +92,6 @@
             const btnGoToNextStep = document.getElementById('btnGoToNextStep');
             const btnGoToPrevStep = document.getElementById('btnGoToPrevStep');
 
-
             // --- Funções ---
             
             // ✅ FUNÇÃO 1: Salvar estado no localStorage
@@ -110,28 +104,21 @@
             const populateCard = () => {
                 console.log('🎨 Preenchendo cartão de identificação...');
                 
-                // Preenche nome e sobrenome
                 cardWarriorName.textContent = `${userData.firstName} ${userData.lastName}`.toUpperCase().trim();
                 cardSignature.textContent = userData.lastName.toUpperCase().trim();
-                
-                // Preenche hábito (contra)
                 cardContra.textContent = userData.habit ? userData.habit.label.toUpperCase() : '';
                 
-                // Preenche foto de perfil
                 if (userData.profilePhotoUrl) {
                     cardProfilePhoto.src = userData.profilePhotoUrl;
                 }
                 
-                // Preenche data de alistamento
                 const enlistDate = new Date(userData.enlistmentDate);
                 cardDay.textContent = enlistDate.getDate().toString().padStart(2, '0');
                 cardMonth.textContent = monthNames[enlistDate.getMonth()];
                 cardYear.textContent = enlistDate.getFullYear();
                 
-                // Preenche patente (será atualizada pelo calculateAndUpdateRank)
                 cardRank.textContent = userData.rank ? userData.rank.toUpperCase() : 'INDEFINIDA';
                 
-                // Preenche número de registro (se disponível)
                 if (userData.registrationNumber) {
                     cardRegistration.textContent = userData.registrationNumber;
                 }
@@ -149,17 +136,15 @@
                 const lastDate = new Date(userData.lastHabitDate);
                 lastDate.setHours(0, 0, 0, 0);
                 
-                // Calcula diferença em dias
                 const diffTime = Math.abs(today - lastDate);
                 const retentionDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 
                 userData.retentionDays = retentionDays;
                 
-                // Encontra a patente correspondente
                 const currentPatent = patents.slice().reverse().find(p => retentionDays >= p.minDays);
                 if (currentPatent) {
-                    userData.rank = currentPatent.name; // ✅ Já vem em lowercase
-                    cardRank.textContent = currentPatent.name.toUpperCase(); // ✅ Exibe em maiúsculo no card
+                    userData.rank = currentPatent.name;
+                    cardRank.textContent = currentPatent.name.toUpperCase();
                 }
                 
                 console.log(`✅ Patente calculada: ${userData.rank} (${retentionDays} dias)`);
@@ -169,7 +154,7 @@
             const loadState = async () => {
                 console.log('🔍 Carregando dados do onboarding...');
                 
-                // Tenta carregar do localStorage primeiro
+                // ✅ NOVO: Tenta carregar do localStorage primeiro
                 const savedData = localStorage.getItem('onboardingData');
                 if (savedData) {
                     console.log('✅ Dados encontrados no localStorage');
@@ -205,16 +190,16 @@
                     
                     console.log('✅ Dados do perfil recuperados:', profile);
                     
-                    // ✅ CORREÇÃO: Buscar hábito corretamente do banco
+                    // ✅ Buscar hábito corretamente
                     userData = {
                         firstName: profile.first_name || '',
                         lastName: profile.last_name || '',
                         profilePhotoUrl: profile.avatar_url || null,
-                        habit: profile.habit ? habits.find(h => h.id === profile.habit) : null,  // ✅ CORRIGIDO
+                        habit: profile.habit ? habits.find(h => h.id === profile.habit) : null,
                         enlistmentDate: profile.created_at || new Date().toISOString(),
                         lastHabitDate: profile.last_habit_date ? new Date(profile.last_habit_date) : new Date(),
                         registrationNumber: profile.registration_number || 'M0RSI-00000000',
-                        rank: profile.rank ? profile.rank.toLowerCase() : 'recruta',  // ✅ CORRIGIDO: normalizar para lowercase
+                        rank: profile.rank ? profile.rank.toLowerCase() : 'recruta',
                         retentionDays: profile.retention_days || 0
                     };
                     
@@ -276,7 +261,7 @@
                             dayDiv.classList.add('selected');
                             userData.lastHabitDate = new Date(year, month, day);
                             calculateAndUpdateRank();
-                            saveState();
+                            saveState(); // ✅ NOVO: Salva ao selecionar data
                         });
                     }
                     
@@ -294,16 +279,10 @@
                     return;
                 }
                 
-                // Preenche o card
                 populateCard();
-                
-                // Calcula patente inicial
                 calculateAndUpdateRank();
-                
-                // Renderiza calendário
                 renderCalendar();
                 
-                // Preenche texto do hábito selecionado
                 if (userData.habit) {
                     selectedHabitText.textContent = userData.habit.label;
                 }
@@ -313,7 +292,6 @@
 
             // --- Event Listeners ---
             
-            // Navegação do calendário
             prevMonthBtn.addEventListener('click', () => {
                 calendarDate.setMonth(calendarDate.getMonth() - 1);
                 renderCalendar();
@@ -329,12 +307,10 @@
                 }
             });
 
-            // Botão "Voltar"
             btnGoToPrevStep.addEventListener('click', () => {
                 window.location.href = 'investment.html';
             });
 
-            // Botão "Finalizar"
             btnGoToNextStep.addEventListener('click', async () => {
                 if (!userData.lastHabitDate) {
                     alert('Por favor, selecione uma data no calendário.');
@@ -346,13 +322,12 @@
                     console.log('📊 Patente:', userData.rank);
                     console.log('📅 Dias de retenção:', userData.retentionDays);
                     
-                    // Salva no localStorage
                     saveState();
                     
-                    // ✅ CORRIGIDO: Salva no Supabase com rank em lowercase
+                    // ✅ Salva no Supabase com rank em lowercase
                     await window.UserService.updateUserProfile({
                         last_habit_date: userData.lastHabitDate.toISOString(),
-                        rank: userData.rank.toLowerCase(),  // ✅ GARANTIR lowercase
+                        rank: userData.rank.toLowerCase(),
                         retention_days: userData.retentionDays
                     });
                     
