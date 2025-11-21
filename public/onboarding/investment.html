@@ -53,18 +53,39 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Verificação para garantir que o usuário veio da etapa anterior
-            if (!localStorage.getItem('onboardingData')) {
-                alert('Dados não encontrados. Por favor, comece o processo de identificação.');
-                window.location.href = 'identification.html';
-                return;
-            }
+            // ✅ MELHORADO: Verificação mais robusta dos dados
+            const checkOnboardingData = () => {
+                const savedData = localStorage.getItem('onboardingData');
+                if (!savedData) {
+                    console.warn('⚠️ Dados do onboarding não encontrados');
+                    alert('Dados não encontrados. Por favor, comece o processo de identificação.');
+                    window.location.href = 'identification.html';
+                    return false;
+                }
+
+                try {
+                    const data = JSON.parse(savedData);
+                    if (!data.firstName || !data.lastName || !data.habit) {
+                        console.warn('⚠️ Dados incompletos');
+                        alert('Dados incompletos. Por favor, complete a identificação.');
+                        window.location.href = 'identification.html';
+                        return false;
+                    }
+                    return true;
+                } catch (error) {
+                    console.error('❌ Erro ao validar dados:', error);
+                    window.location.href = 'identification.html';
+                    return false;
+                }
+            };
+
+            if (!checkOnboardingData()) return;
 
             document.getElementById('btnGoToNextStep').addEventListener('click', async () => {
                 try {
                     console.log('💳 Iniciando checkout...');
                     
-                    // Obtém o usuário autenticado
+                    // ✅ Obtém o usuário autenticado
                     const { data: { user }, error } = await window.supabase.auth.getUser();
                     
                     if (error || !user) {
@@ -73,7 +94,7 @@
                     
                     console.log('👤 Usuário:', user.email);
                     
-                    // Cria a sessão de checkout do Stripe
+                    // ✅ Cria a sessão de checkout do Stripe
                     const checkoutUrl = await window.StripeService.createCheckoutSession(
                         user.id,
                         user.email
@@ -82,7 +103,7 @@
                     console.log('✅ Sessão de checkout criada');
                     console.log('🔗 Redirecionando para:', checkoutUrl);
                     
-                    // Redireciona para a página de pagamento do Stripe
+                    // ✅ Redireciona para a página de pagamento do Stripe
                     window.location.href = checkoutUrl;
                     
                 } catch (error) {
