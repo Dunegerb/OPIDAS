@@ -1,5 +1,5 @@
 /**
- * Serviço de integração com Stripe
+ * Serviço de integração com Stripe - OTIMIZADO
  * Gerencia checkout, assinaturas e portal do cliente
  */
 const StripeService = {
@@ -11,13 +11,13 @@ const StripeService = {
      */
     async createCheckoutSession(userId, email) {
         try {
+            // ✅ CORRIGIDO: Redireciona para welcome.html em vez de habit-tracking.html
             const { data, error } = await window.supabase.functions.invoke('create-checkout-session', {
                 body: {
                     userId: userId,
                     email: email,
-                    // ✅ URL CORRIGIDA: Redireciona para habit-tracking.html após pagamento
-                    successUrl: `${window.location.origin}/onboarding/habit-tracking.html?session_id={CHECKOUT_SESSION_ID}`,
-                    cancelUrl: `${window.location.origin}/onboarding/investment.html`
+                    successUrl: `${window.location.origin}/onboarding/welcome.html?session_id={CHECKOUT_SESSION_ID}`,
+                    cancelUrl: `${window.location.origin}/onboarding.html`
                 }
             });
 
@@ -60,6 +60,21 @@ const StripeService = {
      */
     async checkSubscriptionStatus(userId) {
         try {
+            // ✅ NOVO: Usa cache se disponível
+            if (window.getCachedProfile) {
+                const cachedProfile = await window.getCachedProfile(userId);
+                if (cachedProfile) {
+                    return {
+                        isActive: cachedProfile.subscription_status === 'active' || cachedProfile.subscription_status === 'trialing',
+                        status: cachedProfile.subscription_status,
+                        endDate: cachedProfile.subscription_end_date,
+                        isTrialing: cachedProfile.subscription_status === 'trialing',
+                        isPastDue: cachedProfile.subscription_status === 'past_due',
+                        isCanceled: cachedProfile.subscription_status === 'canceled'
+                    };
+                }
+            }
+
             const { data: profile, error } = await window.supabase
                 .from('profiles')
                 .select('subscription_status, subscription_end_date')
