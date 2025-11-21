@@ -1,6 +1,7 @@
 /* ================================================= */
 /* === PROFILE WIDGET - DYNAMIC ISLAND STYLE     === */
 /* === OPIDAS - Substituição Completa            === */
+/* === VERSÃO CORRIGIDA                          === */
 /* ================================================= */
 
 :root {
@@ -31,7 +32,7 @@
     height: 50px;
     border-radius: 50px;
     transition: all 0.6s cubic-bezier(0.6, 0, 0.2, 1);
-    transform-origin: top left;
+    transform-origin: top left; /* ✅ CORRIGIDO: Expande para baixo e direita */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
@@ -64,7 +65,9 @@
 .island-initial-content {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     padding: 8px 12px;
+    height: 50px; /* ✅ CORRIGIDO: Mesma altura do container */
     opacity: 1;
     transition: opacity 0.4s ease-in 0.3s;
 }
@@ -79,6 +82,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+    height: 100%; /* ✅ CORRIGIDO: Ocupa toda altura do pai */
 }
 
 .user-welcome img {
@@ -86,10 +90,14 @@
     height: 34px;
     border-radius: 50%;
     object-fit: cover;
+    flex-shrink: 0; /* ✅ CORRIGIDO: Impede que a imagem encolha */
 }
 
 .user-welcome-text {
     color: #d9d9d9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .greeting {
@@ -848,6 +856,41 @@ input, select, textarea, button {
     top: 50%;
     right: 0;
     margin-top: -2px;
+}
+
+/* ================================================= */
+/* === CORREÇÃO PARA STATUS-BAR                  === */
+/* ================================================= */
+
+/* Garante que o top-bar mantenha layout correto */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+/* Garante que o status-bar não seja afetado pela Dynamic Island */
+.status-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0; /* ✅ CORRIGIDO: Impede que o status-bar encolha */
+}
+
+/* Garante que o progress-info mantenha largura fixa */
+.progress-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 180px;
+    flex-shrink: 0; /* ✅ CORRIGIDO: Impede que encolha */
+}
+
+/* Garante que os dias fiquem alinhados corretamente */
+.progress-info .days {
+    font-size: 13px;
+    white-space: nowrap; /* ✅ CORRIGIDO: Impede quebra de linha */
 }
 
 /* ================================================= */
