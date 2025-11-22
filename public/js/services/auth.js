@@ -243,3 +243,8 @@ function initAuthPage() {
         });
     });
 }
+
+// Chama a função de inicialização se o formulário de autenticação existir na página
+if (document.getElementById('auth-form')) {
+    initAuthPage();
+}
