@@ -48,7 +48,7 @@ async function loadTopBar(options = {}) {
 
         // Atualiza o avatar do usuário
         if (includeAvatar && topBarElements.avatar) {
-            topBarElements.avatar.src = userProfile.avatar_url || 'assets/styles/images/profile-card.png';
+            topBarElements.avatar.src = userProfile.avatar_url || 'https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/profile-card.png';
             console.log('✅ Avatar atualizado');
         }
 
@@ -123,4 +123,3 @@ window.loadTopBar = loadTopBar;
 window.refreshTopBar = refreshTopBar;
 
 console.log('✅ Funções de Top-Bar disponíveis globalmente');
-
