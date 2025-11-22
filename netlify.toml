@@ -29,8 +29,23 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Headers para JavaScript global
 [[headers]]
   for = "/js/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
     Content-Type = "text/javascript; charset=utf-8"
+
+# ✅ NOVO: Headers para CSS do onboarding
+[[headers]]
+  for = "/onboarding/css/*"
+  [headers.values]
+    Content-Type = "text/css; charset=utf-8"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# ✅ NOVO: Headers para JavaScript do onboarding (se houver no futuro)
+[[headers]]
+  for = "/onboarding/js/*"
+  [headers.values]
+    Content-Type = "text/javascript; charset=utf-8"
+    Cache-Control = "public, max-age=31536000, immutable"

@@ -1,0 +1,18 @@
+# Arquivo _redirects para Netlify
+# Este arquivo deve ser colocado em: public/_redirects
+
+# ✅ Arquivos estáticos não devem ser redirecionados
+# Garante que CSS, JS e assets sejam servidos corretamente
+
+# CSS do onboarding
+/onboarding/css/*  /onboarding/css/:splat  200
+
+# JavaScript global
+/js/*              /js/:splat              200
+
+# Assets globais
+/assets/*          /assets/:splat          200
+
+# ✅ SPA fallback - DEVE SER A ÚLTIMA REGRA
+# Redireciona todas as outras rotas para index.html
+/*  /index.html  200
