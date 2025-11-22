@@ -7,8 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/onboarding/css/base.css">
-    <link rel="stylesheet" href="/onboarding/css/investment.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/investment.css">
 </head>
 <body>
     <header class="page-header">
@@ -47,45 +47,24 @@
     </div>
 
     <!-- Scripts do Supabase e Stripe -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0"></script>
-    <script src="/js/lib/supabase-config.js"></script>
-    <script src="/js/services/stripe.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/lib/supabase-config.js"></script>
+    <script src="../js/services/stripe.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // ✅ MELHORADO: Verificação mais robusta dos dados
-            const checkOnboardingData = () => {
-                const savedData = localStorage.getItem('onboardingData');
-                if (!savedData) {
-                    console.warn('⚠️ Dados do onboarding não encontrados');
-                    alert('Dados não encontrados. Por favor, comece o processo de identificação.');
-                    window.location.href = 'identification.html';
-                    return false;
-                }
-
-                try {
-                    const data = JSON.parse(savedData);
-                    if (!data.firstName || !data.lastName || !data.habit) {
-                        console.warn('⚠️ Dados incompletos');
-                        alert('Dados incompletos. Por favor, complete a identificação.');
-                        window.location.href = 'identification.html';
-                        return false;
-                    }
-                    return true;
-                } catch (error) {
-                    console.error('❌ Erro ao validar dados:', error);
-                    window.location.href = 'identification.html';
-                    return false;
-                }
-            };
-
-            if (!checkOnboardingData()) return;
+            // Verificação para garantir que o usuário veio da etapa anterior
+            if (!localStorage.getItem('onboardingData')) {
+                alert('Dados não encontrados. Por favor, comece o processo de identificação.');
+                window.location.href = 'identification.html';
+                return;
+            }
 
             document.getElementById('btnGoToNextStep').addEventListener('click', async () => {
                 try {
                     console.log('💳 Iniciando checkout...');
                     
-                    // ✅ Obtém o usuário autenticado
+                    // Obtém o usuário autenticado
                     const { data: { user }, error } = await window.supabase.auth.getUser();
                     
                     if (error || !user) {
@@ -94,7 +73,7 @@
                     
                     console.log('👤 Usuário:', user.email);
                     
-                    // ✅ Cria a sessão de checkout do Stripe
+                    // Cria a sessão de checkout do Stripe
                     const checkoutUrl = await window.StripeService.createCheckoutSession(
                         user.id,
                         user.email
@@ -103,7 +82,7 @@
                     console.log('✅ Sessão de checkout criada');
                     console.log('🔗 Redirecionando para:', checkoutUrl);
                     
-                    // ✅ Redireciona para a página de pagamento do Stripe
+                    // Redireciona para a página de pagamento do Stripe
                     window.location.href = checkoutUrl;
                     
                 } catch (error) {
