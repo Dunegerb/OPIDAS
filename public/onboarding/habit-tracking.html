@@ -49,27 +49,19 @@
     <script src="../js/services/user.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded', () => {
             // --- Estado e Constantes ---
             const patents = [ 
-                { name: "recruta", minDays: 0, maxDays: 9 },
-                { name: "soldado", minDays: 10, maxDays: 29 },
-                { name: "cabo", minDays: 30, maxDays: 59 },
-                { name: "sargento", minDays: 60, maxDays: 89 },
-                { name: "marechal", minDays: 90, maxDays: 179 },
-                { name: "tenente", minDays: 180, maxDays: 364 },
-                { name: "capitao", minDays: 365, maxDays: Infinity },
+                { name: "recruta", minDays: 0, maxDays: 9 }, 
+                { name: "soldado", minDays: 10, maxDays: 29 }, 
+                { name: "cabo", minDays: 30, maxDays: 59 }, 
+                { name: "sargento", minDays: 60, maxDays: 89 }, 
+                { name: "marechal", minDays: 90, maxDays: 179 }, 
+                { name: "tenente", minDays: 180, maxDays: 364 }, 
+                { name: "capitao", minDays: 365, maxDays: Infinity }, 
             ];
             const monthNames = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
             const monthNamesFull = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-            
-            const habits = [
-                { id: "masturbacao", label: "Masturbação" },
-                { id: "pornografia", label: "Pornografia" },
-                { id: "fumar", label: "Fumar" },
-                { id: "bebida", label: "Bebida Alcólica" },
-                { id: "outro", label: "Outro" }
-            ];
             
             let userData = {};
             let calendarDate = new Date();
@@ -94,39 +86,102 @@
 
             // --- Funções ---
             
-            // ✅ FUNÇÃO 1: Salvar estado no localStorage
+            // ✅ Verifica se o usuário veio do Stripe (validação de pagamento)
+            const checkStripeSession = () => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const sessionId = urlParams.get('session_id');
+                
+                if (sessionId) {
+                    console.log('✅ Sessão do Stripe detectada:', sessionId);
+                    // Marca que o pagamento foi realizado
+                    userData.stripeSessionId = sessionId;
+                    userData.paymentCompleted = true;
+                    return true;
+                }
+                
+                // Se não veio do Stripe, verifica se já tinha completado antes
+                if (userData.paymentCompleted) {
+                    console.log('✅ Pagamento já foi completado anteriormente');
+                    return true;
+                }
+                
+                console.warn('⚠️ Usuário não completou o pagamento');
+                return false;
+            };
+
+            // ✅ Carrega dados do localStorage
+            const loadState = () => {
+                console.log('🔍 Carregando dados do localStorage...');
+                const savedData = localStorage.getItem('onboardingData');
+                
+                if (!savedData) {
+                    console.error('❌ Dados não encontrados');
+                    alert('Dados não encontrados. Por favor, comece o processo de identificação.');
+                    window.location.href = 'identification.html';
+                    return false;
+                }
+                
+                try {
+                    userData = JSON.parse(savedData);
+                    
+                    // Valida dados obrigatórios
+                    if (!userData.firstName || !userData.lastName || !userData.habit) {
+                        console.error('❌ Dados incompletos:', userData);
+                        alert('Dados incompletos. Por favor, complete a identificação.');
+                        window.location.href = 'identification.html';
+                        return false;
+                    }
+                    
+                    // Define uma data padrão se não houver
+                    userData.lastHabitDate = userData.lastHabitDate ? new Date(userData.lastHabitDate) : new Date();
+                    
+                    console.log('✅ Dados carregados com sucesso:', userData);
+                    return true;
+                    
+                } catch (error) {
+                    console.error('❌ Erro ao parsear dados:', error);
+                    alert('Erro ao carregar dados. Tente novamente.');
+                    window.location.href = 'identification.html';
+                    return false;
+                }
+            };
+
+            // ✅ Salva estado no localStorage
             const saveState = () => {
-                localStorage.setItem('onboardingData', JSON.stringify(userData));
+                // Converte a data para string ISO antes de salvar
+                const dataToSave = {
+                    ...userData,
+                    lastHabitDate: userData.lastHabitDate.toISOString()
+                };
+                localStorage.setItem('onboardingData', JSON.stringify(dataToSave));
                 console.log('💾 Estado salvo no localStorage');
             };
 
-            // ✅ FUNÇÃO 2: Preencher o cartão de identificação com os dados do usuário
+            // ✅ Preenche o cartão de identificação com os dados do usuário
             const populateCard = () => {
                 console.log('🎨 Preenchendo cartão de identificação...');
                 
-                cardWarriorName.textContent = `${userData.firstName} ${userData.lastName}`.toUpperCase().trim();
-                cardSignature.textContent = userData.lastName.toUpperCase().trim();
+                cardWarriorName.textContent = `${userData.firstName} ${userData.lastName}`.toUpperCase();
+                cardSignature.textContent = userData.lastName.toUpperCase();
                 cardContra.textContent = userData.habit ? userData.habit.label.toUpperCase() : '';
                 
                 if (userData.profilePhotoUrl) {
                     cardProfilePhoto.src = userData.profilePhotoUrl;
                 }
                 
-                const enlistDate = new Date(userData.enlistmentDate);
-                cardDay.textContent = enlistDate.getDate().toString().padStart(2, '0');
-                cardMonth.textContent = monthNames[enlistDate.getMonth()];
-                cardYear.textContent = enlistDate.getFullYear();
+                cardRegistration.textContent = "M0RSI-00000000";
                 
-                cardRank.textContent = userData.rank ? userData.rank.toUpperCase() : 'INDEFINIDA';
+                const enlistment = new Date(userData.enlistmentDate);
+                cardDay.textContent = enlistment.getDate().toString().padStart(2, '0');
+                cardMonth.textContent = monthNames[enlistment.getMonth()];
+                cardYear.textContent = enlistment.getFullYear();
                 
-                if (userData.registrationNumber) {
-                    cardRegistration.textContent = userData.registrationNumber;
-                }
+                selectedHabitText.textContent = userData.habit.label.toLowerCase();
                 
                 console.log('✅ Cartão preenchido com sucesso');
             };
 
-            // ✅ FUNÇÃO 3: Calcular patente e dias de retenção
+            // ✅ Calcula patente e dias de retenção
             const calculateAndUpdateRank = () => {
                 console.log('📊 Calculando patente...');
                 
@@ -136,250 +191,147 @@
                 const lastDate = new Date(userData.lastHabitDate);
                 lastDate.setHours(0, 0, 0, 0);
                 
+                // Valida se a data não é futura
+                if (lastDate > today) {
+                    cardRank.textContent = "DATA INVÁLIDA";
+                    userData.rank = null;
+                    userData.retentionDays = -1;
+                    console.warn('⚠️ Data selecionada é futura');
+                    return;
+                }
+                
                 const diffTime = Math.abs(today - lastDate);
                 const retentionDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                
                 userData.retentionDays = retentionDays;
                 
-                const currentPatent = patents.slice().reverse().find(p => retentionDays >= p.minDays);
+                const currentPatent = patents.find(p => retentionDays >= p.minDays && retentionDays <= p.maxDays);
                 if (currentPatent) {
                     userData.rank = currentPatent.name;
                     cardRank.textContent = currentPatent.name.toUpperCase();
-                }
-                
-                console.log(`✅ Patente calculada: ${userData.rank} (${retentionDays} dias)`);
-            };
-
-            // ✅ FUNÇÃO 4: Carregar estado do localStorage ou Supabase
-            const loadState = async () => {
-                console.log('🔍 Carregando dados do onboarding...');
-                
-                // ✅ NOVO: Tenta carregar do localStorage primeiro
-                const savedData = localStorage.getItem('onboardingData');
-                if (savedData) {
-                    console.log('✅ Dados encontrados no localStorage');
-                    userData = JSON.parse(savedData);
-                    userData.lastHabitDate = userData.lastHabitDate ? new Date(userData.lastHabitDate) : new Date();
-                    return true;
-                }
-                
-                // Se não houver no localStorage, busca do Supabase
-                console.log('📡 Buscando dados do Supabase...');
-                try {
-                    const { data: { user }, error: authError } = await window.supabase.auth.getUser();
-                    
-                    if (authError || !user) {
-                        console.error('❌ Usuário não autenticado');
-                        alert('Sessão expirada. Por favor, faça login novamente.');
-                        window.location.href = '../index.html';
-                        return false;
-                    }
-                    
-                    console.log('👤 Usuário autenticado:', user.email);
-                    
-                    const { data: profile, error: profileError } = await window.supabase
-                        .from('profiles')
-                        .select('*')
-                        .eq('id', user.id)
-                        .single();
-                    
-                    if (profileError) {
-                        console.error('❌ Erro ao buscar perfil:', profileError);
-                        return false;
-                    }
-                    
-                    console.log('✅ Dados do perfil recuperados:', profile);
-                    
-                    // ✅ Buscar hábito corretamente
-                    userData = {
-                        firstName: profile.first_name || '',
-                        lastName: profile.last_name || '',
-                        profilePhotoUrl: profile.avatar_url || null,
-                        habit: profile.habit ? habits.find(h => h.id === profile.habit) : null,
-                        enlistmentDate: profile.created_at || new Date().toISOString(),
-                        lastHabitDate: profile.last_habit_date ? new Date(profile.last_habit_date) : new Date(),
-                        registrationNumber: profile.registration_number || 'M0RSI-00000000',
-                        rank: profile.rank ? profile.rank.toLowerCase() : 'recruta',
-                        retentionDays: profile.retention_days || 0
-                    };
-                    
-                    // Salva no localStorage para uso posterior
-                    saveState();
-                    
-                    return true;
-                } catch (error) {
-                    console.error('❌ Erro ao carregar dados:', error);
-                    return false;
+                    console.log(`✅ Patente calculada: ${userData.rank} (${retentionDays} dias)`);
                 }
             };
-
-            // ✅ FUNÇÃO 5: Renderizar calendário
+            
+            // ✅ Renderiza o calendário
             const renderCalendar = () => {
                 const year = calendarDate.getFullYear();
                 const month = calendarDate.getMonth();
+                const today = new Date();
                 
                 currentMonthYearEl.textContent = `${monthNamesFull[month]} ${year}`;
-                
-                const firstDay = new Date(year, month, 1);
-                const lastDay = new Date(year, month + 1, 0);
-                const daysInMonth = lastDay.getDate();
-                
-                let dayOfWeek = firstDay.getDay();
-                dayOfWeek = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-                
                 calendarGrid.innerHTML = '';
                 
-                for (let i = 0; i < dayOfWeek; i++) {
-                    const emptyDiv = document.createElement('div');
-                    emptyDiv.classList.add('calendar-day', 'empty');
-                    calendarGrid.appendChild(emptyDiv);
+                const firstDayOfMonth = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const dayOffset = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
+                const daysInPrevMonth = new Date(year, month, 0).getDate();
+                
+                // Dias do mês anterior
+                for (let i = dayOffset; i > 0; i--) {
+                    const day = document.createElement('button');
+                    day.className = 'calendar-day other-month';
+                    day.textContent = daysInPrevMonth - i + 1;
+                    day.disabled = true;
+                    calendarGrid.appendChild(day);
                 }
                 
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const dayDiv = document.createElement('div');
-                    dayDiv.classList.add('calendar-day');
-                    dayDiv.textContent = day;
+                // Dias do mês atual
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const day = document.createElement('button');
+                    const thisDayDate = new Date(year, month, i);
+                    day.className = 'calendar-day current-month';
+                    day.textContent = i;
                     
-                    const currentDate = new Date(year, month, day);
-                    currentDate.setHours(0, 0, 0, 0);
-                    
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    
-                    if (currentDate > today) {
-                        dayDiv.classList.add('disabled');
-                    } else {
-                        const lastHabitDateNormalized = new Date(userData.lastHabitDate);
-                        lastHabitDateNormalized.setHours(0, 0, 0, 0);
-                        
-                        if (currentDate.getTime() === lastHabitDateNormalized.getTime()) {
-                            dayDiv.classList.add('selected');
-                        }
-                        
-                        dayDiv.addEventListener('click', () => {
-                            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
-                            dayDiv.classList.add('selected');
-                            userData.lastHabitDate = new Date(year, month, day);
-                            calculateAndUpdateRank();
-                            saveState(); // ✅ NOVO: Salva ao selecionar data
-                        });
+                    // Desabilita datas futuras
+                    if (thisDayDate > today) {
+                        day.disabled = true;
+                        day.classList.add('other-month');
                     }
                     
-                    calendarGrid.appendChild(dayDiv);
+                    // Marca o dia selecionado
+                    if (i === userData.lastHabitDate.getDate() && 
+                        month === userData.lastHabitDate.getMonth() && 
+                        year === userData.lastHabitDate.getFullYear()) {
+                        day.classList.add('selected');
+                    }
+                    
+                    // Evento de clique
+                    day.addEventListener('click', () => {
+                        if (!day.disabled) {
+                            userData.lastHabitDate = thisDayDate;
+                            renderCalendar();
+                            calculateAndUpdateRank();
+                            saveState();
+                        }
+                    });
+                    
+                    calendarGrid.appendChild(day);
+                }
+                
+                // Preenche células vazias para completar o grid
+                const totalCells = calendarGrid.children.length;
+                const requiredCells = (totalCells > 35) ? 42 : 35;
+                for (let i = 1; i <= requiredCells - totalCells; i++) {
+                    const day = document.createElement('button');
+                    day.className = 'calendar-day other-month';
+                    day.textContent = i;
+                    day.disabled = true;
+                    calendarGrid.appendChild(day);
                 }
             };
+            
+            // Navegação do calendário
+            prevMonthBtn.addEventListener('click', () => {
+                calendarDate.setMonth(calendarDate.getMonth() - 1);
+                renderCalendar();
+            });
+            
+            nextMonthBtn.addEventListener('click', () => {
+                calendarDate.setMonth(calendarDate.getMonth() + 1);
+                renderCalendar();
+            });
 
-            // --- Inicialização ---
-            const init = async () => {
-                const loaded = await loadState();
-
-                // Se o usuário está voltando do Stripe, o status pode ter mudado
-                const urlParams = new URLSearchParams(window.location.search);
-                if (urlParams.has('session_id')) {
-                    console.log('Retornando do Stripe, forçando atualização de dados do Supabase...');
-                    localStorage.removeItem('onboardingData'); // Limpa dados locais para forçar recarga
-                    const reloaded = await loadState(); // Recarrega do Supabase
-                    if (!reloaded) {
-                        alert('Não foi possível verificar os dados atualizados após o pagamento. Por favor, tente novamente.');
-                        window.location.href = 'identification.html';
-                        return;
-                    }
-                }
-                
-                if (!loaded || !userData.firstName) {
-                    alert('Dados do onboarding não encontrados. Redirecionando...');
-                    window.location.href = 'identification.html';
+            // ✅ Botão "Finalizar" - Avança para welcome.html
+            btnGoToNextStep.addEventListener('click', async () => {
+                if (!userData.rank || userData.retentionDays < 0) {
+                    alert('Por favor, selecione uma data válida.');
                     return;
                 }
+                
+                try {
+                    console.log('💾 Salvando dados finais...');
+                    saveState();
+                    
+                    // ✅ Aqui você pode salvar no Supabase se necessário
+                    // Mas por enquanto, apenas salva no localStorage
+                    
+                    console.log('✅ Onboarding completo! Redirecionando para welcome...');
+                    window.location.href = 'welcome.html';
+                    
+                } catch (error) {
+                    console.error('❌ Erro ao finalizar:', error);
+                    alert('Erro ao finalizar. Tente novamente.');
+                }
+            });
+            
+            // ✅ Botão "Voltar" - Volta para investment.html
+            btnGoToPrevStep.addEventListener('click', () => {
+                window.location.href = 'investment.html';
+            });
+
+            // --- Inicialização ---
+            console.log('🚀 Inicializando habit-tracking.html...');
+            
+            if (loadState()) {
+                // Verifica se veio do Stripe
+                checkStripeSession();
                 
                 populateCard();
                 calculateAndUpdateRank();
                 renderCalendar();
                 
-                if (userData.habit) {
-                    selectedHabitText.textContent = userData.habit.label;
-                }
-            };
-
-            init();
-
-            // --- Event Listeners ---
-            
-            prevMonthBtn.addEventListener('click', () => {
-                calendarDate.setMonth(calendarDate.getMonth() - 1);
-                renderCalendar();
-            });
-
-            nextMonthBtn.addEventListener('click', () => {
-                const today = new Date();
-                const nextMonth = new Date(calendarDate.getFullYear(), calendarDate.getMonth() + 1, 1);
-                
-                if (nextMonth <= today) {
-                    calendarDate.setMonth(calendarDate.getMonth() + 1);
-                    renderCalendar();
-                }
-            });
-
-            btnGoToPrevStep.addEventListener('click', () => {
-                window.location.href = 'investment.html';
-            });
-
-            btnGoToNextStep.addEventListener('click', async () => {
-                console.log('Finalizando onboarding...');
-                
-                try {
-                    // Salva os dados finais no Supabase
-                    const { data: { user } } = await window.supabase.auth.getUser();
-                    if (!user) throw new Error('Usuário não autenticado');
-
-                    const updates = {
-                        id: user.id,
-                        last_habit_date: userData.lastHabitDate.toISOString(),
-                        rank: userData.rank,
-                        retention_days: userData.retentionDays,
-                        onboarding_status: 'completed', // Marca como completo
-                        updated_at: new Date(),
-                    };
-
-                    const { error } = await window.supabase.from('profiles').upsert(updates);
-                    if (error) throw error;
-
-                    console.log('✅ Dados de onboarding salvos no Supabase');
-                    localStorage.removeItem('onboardingData'); // Limpa o cache local
-                    window.location.href = 'welcome.html';
-
-                } catch (error) {
-                    console.error('❌ Erro ao finalizar onboarding:', error);
-                    alert(`Erro ao salvar seus dados: ${error.message}`);
-                }
-            });
-                if (!userData.lastHabitDate) {
-                    alert('Por favor, selecione uma data no calendário.');
-                    return;
-                }
-                
-                try {
-                    console.log('📝 Salvando dados da Etapa 3...');
-                    console.log('📊 Patente:', userData.rank);
-                    console.log('📅 Dias de retenção:', userData.retentionDays);
-                    
-                    saveState();
-                    
-                    // ✅ Salva no Supabase com rank em lowercase
-                    await window.UserService.updateUserProfile({
-                        last_habit_date: userData.lastHabitDate.toISOString(),
-                        rank: userData.rank.toLowerCase(),
-                        retention_days: userData.retentionDays
-                    });
-                    
-                    console.log('✅ Dados da Etapa 3 salvos com sucesso');
-                    window.location.href = 'welcome.html';
-                    
-                } catch (error) {
-                    console.error('❌ Erro ao salvar dados:', error);
-                    alert('Erro ao salvar dados. Tente novamente.');
-                }
-            });
+                console.log('✅ Página inicializada com sucesso');
+            }
         });
     </script>
 </body>
