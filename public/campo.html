@@ -21,7 +21,7 @@
         
         <header class="top-bar">
             <div class="user-welcome">
-                <img id="user-avatar" alt="Profile photo" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/profile-card.png" />
+                <img id="user-avatar" alt="Profile photo" src="assets/styles/images/profile-card.png" />
                 <div class="user-welcome-text">
                     <div class="greeting">Bem vindo(a) de volta</div>
                     <div class="username" id="welcome-username">Carregando...</div>
@@ -30,7 +30,7 @@
 
             <div class="status-bar">
                 <div class="rank-icon" id="status-rank-icon-container">
-                    <img id="status-rank-icon" alt="Patente" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/patentes/Recruta.png" />
+                    <img id="status-rank-icon" alt="Patente" src="assets/styles/images/patentes/Recruta.png" />
                 </div>
                 <div class="progress-info">
                     <p class="days" id="progress-days">
@@ -41,10 +41,10 @@
                     </div>
                 </div>
                 <button class="icon-button">
-                    <img alt="Notificação button" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/notifica%C3%A7%C3%A3obutton.svg" />
+                    <img alt="Notificação button" src="assets/styles/images/notifica%C3%A7%C3%A3obutton.svg" />
                 </button>
                 <button class="icon-button" id="logout-button">
-                    <img alt="Logout" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/darkmode-button.svg" />
+                    <img alt="Logout" src="assets/styles/images/darkmode-button.svg" />
                 </button>
             </div>
         </header>
@@ -76,7 +76,7 @@
             
             <main class="panel chat-area">
                 <header class="chat-header">
-                    <img alt="Logo Chat Opidas" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/icones/logochatopidas.svg" style="width: 34px; height: 34px;">
+                    <img alt="Logo Chat Opidas" src="assets/styles/images/icones/logochatopidas.svg" style="width: 34px; height: 34px;">
                     <button class="icon-button">
                         <img alt="Membros do grupo" src="assets/styles/images/icones/pessoasdogrupobotão.svg">
                     </button>
@@ -96,12 +96,12 @@
                 <div class="chat-input-wrapper">
                     <form class="chat-input" id="chat-form">
                         <div class="input-field-container">
-                            <button type="button"><img src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/icones/uploadbutton.svg" alt="Upload"></button>
+                            <button type="button"><img src="assets/styles/images/icones/uploadbutton.svg" alt="Upload"></button>
                             <input type="text" id="chat-input-field" placeholder="Conversar com o campo">
-                            <button type="button"><img src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/icones/sendemojibutton.svg" alt="Emoji"></button>
+                            <button type="button"><img src="assets/styles/images/icones/sendemojibutton.svg" alt="Emoji"></button>
                         </div>
                         <button class="mic-button" type="button">
-                            <img alt="Gravar voz" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/icones/voicebutton.svg">
+                            <img alt="Gravar voz" src="assets/styles/images/icones/voicebutton.svg">
                         </button>
                     </form>
                 </div>
@@ -110,13 +110,13 @@
     </div>
 
     <!-- Scripts do Projeto -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0"></script>
     <script src="js/lib/supabase-config.js"></script>
     <script src="js/components/loading-screen.js"></script>
     <script src="js/services/auth.js"></script>
     <script src="js/services/user.js"></script>
     <script src="js/services/chat.js"></script>
-    // <script src="js/app.js"></script> // Removido, pois a lógica foi integrada aqui.
+    // app.js foi removido - lógica integrada neste arquivo
     <script src="js/components/identity-modal.js"></script>
     <script src="js/components/profile-widget.js"></script>
     <script>
