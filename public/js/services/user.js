@@ -315,7 +315,7 @@ const UserService = {
 
         // Atualiza avatar
         if (elements.avatar) {
-            elements.avatar.src = profile.avatar_url || 'https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/profile-card.png';
+            elements.avatar.src = profile.avatar_url || 'assets/styles/images/profile-card.png';
         }
 
         // Atualiza nome de usuário
