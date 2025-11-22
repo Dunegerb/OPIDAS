@@ -21,7 +21,7 @@
         
         <header class="top-bar">
             <div class="user-welcome">
-                <img id="user-avatar" alt="Profile photo" src="assets/styles/images/profile-card.png" />
+                <img id="user-avatar" alt="Profile photo" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/profile-card.png" />
                 <div class="user-welcome-text">
                     <div class="greeting">Bem vindo(a) de volta</div>
                     <div class="username" id="welcome-username">Carregando...</div>
@@ -30,7 +30,7 @@
 
             <div class="status-bar">
                 <div class="rank-icon" id="status-rank-icon-container">
-                    <img id="status-rank-icon" alt="Patente" src="assets/styles/images/patentes/Recruta.png" />
+                    <img id="status-rank-icon" alt="Patente" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/patentes/Recruta.png" />
                 </div>
                 <div class="progress-info">
                     <p class="days" id="progress-days">
@@ -41,10 +41,10 @@
                     </div>
                 </div>
                 <button class="icon-button">
-                    <img alt="Notificação button" src="assets/styles/images/notifica%C3%A7%C3%A3obutton.svg" />
+                    <img alt="Notificação button" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/notifica%C3%A7%C3%A3obutton.svg" />
                 </button>
                 <button class="icon-button" id="logout-button">
-                    <img alt="Logout" src="assets/styles/images/darkmode-button.svg" />
+                    <img alt="Logout" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/darkmode-button.svg" />
                 </button>
             </div>
         </header>
@@ -76,7 +76,7 @@
             
             <main class="panel chat-area">
                 <header class="chat-header">
-                    <img alt="Logo Chat Opidas" src="assets/styles/images/icones/logochatopidas.svg" style="width: 34px; height: 34px;">
+                    <img alt="Logo Chat Opidas" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/icones/logochatopidas.svg" style="width: 34px; height: 34px;">
                     <button class="icon-button">
                         <img alt="Membros do grupo" src="assets/styles/images/icones/pessoasdogrupobotão.svg">
                     </button>
@@ -96,12 +96,12 @@
                 <div class="chat-input-wrapper">
                     <form class="chat-input" id="chat-form">
                         <div class="input-field-container">
-                            <button type="button"><img src="assets/styles/images/icones/uploadbutton.svg" alt="Upload"></button>
+                            <button type="button"><img src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/icones/uploadbutton.svg" alt="Upload"></button>
                             <input type="text" id="chat-input-field" placeholder="Conversar com o campo">
-                            <button type="button"><img src="assets/styles/images/icones/sendemojibutton.svg" alt="Emoji"></button>
+                            <button type="button"><img src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/icones/sendemojibutton.svg" alt="Emoji"></button>
                         </div>
                         <button class="mic-button" type="button">
-                            <img alt="Gravar voz" src="assets/styles/images/icones/voicebutton.svg">
+                            <img alt="Gravar voz" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/icones/voicebutton.svg">
                         </button>
                     </form>
                 </div>
@@ -110,13 +110,13 @@
     </div>
 
     <!-- Scripts do Projeto -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/lib/supabase-config.js"></script>
     <script src="js/components/loading-screen.js"></script>
     <script src="js/services/auth.js"></script>
     <script src="js/services/user.js"></script>
     <script src="js/services/chat.js"></script>
-    // app.js foi removido - lógica integrada neste arquivo
+    <script src="js/app.js"></script>
     <script src="js/components/identity-modal.js"></script>
     <script src="js/components/profile-widget.js"></script>
     <script>
@@ -312,64 +312,39 @@
                 });
             
             async function handleResetClick() {
-                if (state.currentUser.remaining_resets <= 0) {
-                    alert('Você não tem mais chances de reset disponíveis.');
-                    return;
-                }
-
-                const confirmed = confirm(`Você tem certeza que quer resetar sua contagem? Isso usará uma de suas ${state.currentUser.remaining_resets} chances.`);
+                const confirmed = confirm(`Você tem certeza que quer resetar sua contagem? Isso usará uma de suas chances.`);
                 if(confirmed) {
-                    try {
-                        const result = await window.UserService.handleReset();
-                        alert(`Contagem resetada com sucesso! Você agora tem ${result.remaining_resets} chances restantes.`);
-                        // Recarrega a página para atualizar todos os dados
-                        window.location.reload();
-                    } catch (error) {
-                        console.error('Erro ao resetar:', error);
-                        alert(`Erro ao resetar contagem: ${error.message}`);
-                    }
+                    // TODO: Chamar `handleReset()` do user.js
+                    console.log("Reset solicitado.");
+                    alert("Contagem resetada com sucesso!");
+                    // A UI será atualizada via Supabase Realtime ou recarregando os dados do usuário
                 }
             }
 
             // --- INICIALIZAÇÃO ---
             async function init() {
-                // 1. Protege a rota e carrega o usuário
-                const user = await window.protectRoute();
-                if (!user) return; // protectRoute já redireciona se não autenticado
-
                 try {
-                    // 2. Carrega os dados reais do perfil do usuário
-                    state.currentUser = await window.UserService.getCurrentUserProfile();
+                    // Carrega os dados reais do usuário do Supabase
+                    state.currentUser = await window.loadTopBar();
                     
                     console.log('✅ Perfil do usuário carregado:', state.currentUser);
                 } catch (error) {
                     console.error('❌ Erro ao carregar perfil do usuário:', error);
-                    // Se o perfil não for encontrado, pode ser que o onboarding não foi finalizado
-                    if (error.message.includes('row not found')) {
-                        alert('Seu perfil não foi encontrado. Redirecionando para o onboarding.');
-                        window.location.href = 'onboarding.html';
-                        return;
-                    }
-                    alert('Erro ao carregar dados. Redirecionando para o login.');
+                    // Redireciona para login se houver erro
                     window.location.href = 'index.html';
                     return;
                 }
 
-                // 3. Verifica se o onboarding foi concluído
-                if (state.currentUser.onboarding_status !== 'completed') {
-                    alert('Por favor, complete o processo de alistamento.');
-                    window.location.href = 'onboarding.html';
+                if (!state.currentUser) {
+                    window.location.href = 'index.html'; // Redireciona se não houver dados
                     return;
                 }
                 
-                // 4. Atualiza a UI
-                updateUI();
-
-                // 5. Define o canal inicial baseado na patente do usuário
+                // Define o canal inicial baseado na patente do usuário
                 const initialChannelId = state.currentUser.rank;
                 await switchChannel(initialChannelId);
 
-                // 6. Adiciona Event Listeners
+                // Adiciona Event Listeners
                 ranksListEl.addEventListener('click', (e) => {
                     const rankItem = e.target.closest('.rank-item');
                     if (rankItem && !rankItem.classList.contains('locked')) {
@@ -380,7 +355,9 @@
                 chatFormEl.addEventListener('submit', handleSendMessage);
                 resetButtonEl.addEventListener('click', handleResetClick);
                 logoutButton.addEventListener('click', () => {
-                    window.signOut(); // Chama a função signOut de auth.js
+                    // TODO: Chamar signOut() de auth.js
+                    console.log("Logout...");
+                    window.location.href = 'index.html';
                 });
             }
 
@@ -390,7 +367,6 @@
     
 </body>
 </html>
-
 
 
 
