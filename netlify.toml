@@ -6,46 +6,8 @@
   # Comando de build (não necessário para um site estático vanilla)
   command = ""
 
-# Redirecionamento para SPA - CORRIGIDO
-# force = false garante que arquivos estáticos (JS, CSS, imagens) não sejam redirecionados
+# Redirecionamento para SPA (se necessário no futuro)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  force = false
-
-# Headers de segurança e performance
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-
-# Cache para assets estáticos
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# Headers para JavaScript global
-[[headers]]
-  for = "/js/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Content-Type = "text/javascript; charset=utf-8"
-
-# ✅ NOVO: Headers para CSS do onboarding
-[[headers]]
-  for = "/onboarding/css/*"
-  [headers.values]
-    Content-Type = "text/css; charset=utf-8"
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# ✅ NOVO: Headers para JavaScript do onboarding (se houver no futuro)
-[[headers]]
-  for = "/onboarding/js/*"
-  [headers.values]
-    Content-Type = "text/javascript; charset=utf-8"
-    Cache-Control = "public, max-age=31536000, immutable"
