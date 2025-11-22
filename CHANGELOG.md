@@ -124,3 +124,25 @@ Resultado esperado:
 **Autor:** Manus AI
 **Data:** 22/11/2025
 **Versão:** 1.0.0
+
+---
+
+## 🔄 Atualização - Correção de Caminho Stripe
+
+### Data: 22 de Novembro de 2025 (Atualização 2)
+
+#### 8. **public/js/services/stripe.js** - CORRIGIDO
+- **Problema:** URL de redirecionamento após pagamento continha `/public/` duplicado
+- **Erro causado:** `Refused to apply style... MIME type ('text/html')`
+- **Solução:** Removido `/public/` da URL de sucesso do checkout
+- **Mudança:**
+  ```javascript
+  // ANTES
+  successUrl: `${window.location.origin}/public/onboarding/habit-tracking.html?session_id={CHECKOUT_SESSION_ID}`
+  
+  // DEPOIS
+  successUrl: `${window.location.origin}/onboarding/habit-tracking.html?session_id={CHECKOUT_SESSION_ID}`
+  ```
+- **Impacto:** Resolve erros de MIME type após pagamento no Stripe
+
+**Versão:** 1.0.1
