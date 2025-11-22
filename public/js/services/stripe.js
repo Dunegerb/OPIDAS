@@ -16,7 +16,7 @@ const StripeService = {
                 body: {
                     userId: userId,
                     email: email,
-                    successUrl: `${window.location.origin}/onboarding/welcome.html?session_id={CHECKOUT_SESSION_ID}`,
+                    successUrl: `${window.location.origin}/public/onboarding/habit-tracking.html?session_id={CHECKOUT_SESSION_ID}`,
                     cancelUrl: `${window.location.origin}/onboarding.html`
                 }
             });

@@ -116,7 +116,7 @@
     <script src="js/services/auth.js"></script>
     <script src="js/services/user.js"></script>
     <script src="js/services/chat.js"></script>
-    <script src="js/app.js"></script>
+    // <script src="js/app.js"></script> // Removido, pois a lógica foi integrada aqui.
     <script src="js/components/identity-modal.js"></script>
     <script src="js/components/profile-widget.js"></script>
     <script>
@@ -312,39 +312,64 @@
                 });
             
             async function handleResetClick() {
-                const confirmed = confirm(`Você tem certeza que quer resetar sua contagem? Isso usará uma de suas chances.`);
+                if (state.currentUser.remaining_resets <= 0) {
+                    alert('Você não tem mais chances de reset disponíveis.');
+                    return;
+                }
+
+                const confirmed = confirm(`Você tem certeza que quer resetar sua contagem? Isso usará uma de suas ${state.currentUser.remaining_resets} chances.`);
                 if(confirmed) {
-                    // TODO: Chamar `handleReset()` do user.js
-                    console.log("Reset solicitado.");
-                    alert("Contagem resetada com sucesso!");
-                    // A UI será atualizada via Supabase Realtime ou recarregando os dados do usuário
+                    try {
+                        const result = await window.UserService.handleReset();
+                        alert(`Contagem resetada com sucesso! Você agora tem ${result.remaining_resets} chances restantes.`);
+                        // Recarrega a página para atualizar todos os dados
+                        window.location.reload();
+                    } catch (error) {
+                        console.error('Erro ao resetar:', error);
+                        alert(`Erro ao resetar contagem: ${error.message}`);
+                    }
                 }
             }
 
             // --- INICIALIZAÇÃO ---
             async function init() {
+                // 1. Protege a rota e carrega o usuário
+                const user = await window.protectRoute();
+                if (!user) return; // protectRoute já redireciona se não autenticado
+
                 try {
-                    // Carrega os dados reais do usuário do Supabase
-                    state.currentUser = await window.loadTopBar();
+                    // 2. Carrega os dados reais do perfil do usuário
+                    state.currentUser = await window.UserService.getCurrentUserProfile();
                     
                     console.log('✅ Perfil do usuário carregado:', state.currentUser);
                 } catch (error) {
                     console.error('❌ Erro ao carregar perfil do usuário:', error);
-                    // Redireciona para login se houver erro
+                    // Se o perfil não for encontrado, pode ser que o onboarding não foi finalizado
+                    if (error.message.includes('row not found')) {
+                        alert('Seu perfil não foi encontrado. Redirecionando para o onboarding.');
+                        window.location.href = 'onboarding.html';
+                        return;
+                    }
+                    alert('Erro ao carregar dados. Redirecionando para o login.');
                     window.location.href = 'index.html';
                     return;
                 }
 
-                if (!state.currentUser) {
-                    window.location.href = 'index.html'; // Redireciona se não houver dados
+                // 3. Verifica se o onboarding foi concluído
+                if (state.currentUser.onboarding_status !== 'completed') {
+                    alert('Por favor, complete o processo de alistamento.');
+                    window.location.href = 'onboarding.html';
                     return;
                 }
                 
-                // Define o canal inicial baseado na patente do usuário
+                // 4. Atualiza a UI
+                updateUI();
+
+                // 5. Define o canal inicial baseado na patente do usuário
                 const initialChannelId = state.currentUser.rank;
                 await switchChannel(initialChannelId);
 
-                // Adiciona Event Listeners
+                // 6. Adiciona Event Listeners
                 ranksListEl.addEventListener('click', (e) => {
                     const rankItem = e.target.closest('.rank-item');
                     if (rankItem && !rankItem.classList.contains('locked')) {
@@ -355,9 +380,7 @@
                 chatFormEl.addEventListener('submit', handleSendMessage);
                 resetButtonEl.addEventListener('click', handleResetClick);
                 logoutButton.addEventListener('click', () => {
-                    // TODO: Chamar signOut() de auth.js
-                    console.log("Logout...");
-                    window.location.href = 'index.html';
+                    window.signOut(); // Chama a função signOut de auth.js
                 });
             }
 

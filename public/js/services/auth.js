@@ -68,7 +68,7 @@ async function signIn(email, password) {
 
         console.log('✅ Login bem-sucedido:', data);
 
-        // ✅ CORRIGIDO: Busca o perfil do usuário para verificar o status do onboarding
+        // Busca o perfil do usuário para verificar o status do onboarding
         const { data: profile, error: profileError } = await window.supabase
             .from('profiles')
             .select('onboarding_status, id')
@@ -81,10 +81,10 @@ async function signIn(email, password) {
             return;
         }
 
-        // ✅ CORRIGIDO: Verifica o status do onboarding
+        // Verifica o status do onboarding
         if (profile.onboarding_status === 'completed') {
             console.log('✅ Onboarding completo, redirecionando para campo');
-            // ✅ NOVO: Limpa cache ao fazer login
+            // Limpa cache ao fazer login
             if (window.clearSupabaseCache) {
                 window.clearSupabaseCache();
             }
@@ -115,7 +115,7 @@ async function signOut() {
         
         if (error) throw error;
 
-        // ✅ NOVO: Limpa cache ao fazer logout
+        // Limpa cache ao fazer logout
         if (window.clearSupabaseCache) {
             window.clearSupabaseCache();
         }

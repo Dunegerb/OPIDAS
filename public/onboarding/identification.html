@@ -126,9 +126,10 @@
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = (e) => {
+                        // Salva o Data URL temporariamente para o preview
                         userData.profilePhotoUrl = e.target.result;
                         cardProfilePhoto.src = userData.profilePhotoUrl;
-                        persistenceManager.saveState(); // ✅ NOVO: Salva ao fazer upload
+                        persistenceManager.saveState(); 
                     };
                     reader.readAsDataURL(file);
                 }
@@ -192,7 +193,8 @@
             fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
             
             btnGoToNextStep.addEventListener('click', async () => {
-                if (!userData.firstName || !userData.lastName || !userData.habit || !userData.profilePhotoUrl) {
+                if (!userData.firstName || !userData.lastName || !userData.habit || !userData.profilePhotoUrl || userData.profilePhotoUrl.startsWith('data:')) {
+                    alert('Por favor, preencha todos os campos e selecione uma foto de perfil válida. A foto deve ser selecionada no momento de avançar para garantir o upload.');
                     alert('Por favor, preencha todos os campos e envie uma foto.');
                     return;
                 }
@@ -204,10 +206,25 @@
                     persistenceManager.saveState();
                     
                     // ✅ Salva no Supabase
+                    // 1. Faz upload da imagem e obtém a URL pública
+                    const file = fileInput.files[0];
+                    let avatarUrl = userData.profilePhotoUrl;
+                    
+                    if (file) {
+                        avatarUrl = await window.UserService.uploadAvatar(file);
+                    } else if (avatarUrl && avatarUrl.startsWith('data:')) {
+                        // Se o usuário carregou uma imagem mas não a salvou no Supabase (apenas Data URL no localStorage),
+                        // e não há um novo arquivo, precisamos de uma forma de salvar o Data URL ou forçar o upload.
+                        // Como o uploadAvatar só aceita File, vamos alertar o usuário se for um Data URL.
+                        alert('Por favor, selecione a foto novamente para garantir o upload correto.');
+                        return;
+                    }
+
+                    // 2. Atualiza o perfil com os dados e a URL do avatar
                     await window.UserService.updateUserProfile({
                         first_name: userData.firstName,
                         last_name: userData.lastName,
-                        avatar_url: userData.profilePhotoUrl,
+                        avatar_url: avatarUrl,
                         habit: userData.habit.id
                     });
                     

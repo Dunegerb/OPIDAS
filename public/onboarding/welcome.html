@@ -112,12 +112,8 @@
                 try {
                     console.log('🎉 Finalizando onboarding...');
                     
-                    // ✅ Marca o onboarding como completo
-                    await window.UserService.updateUserProfile({
-                        onboarding_status: 'completed'
-                    });
-                    
-                    console.log('✅ Onboarding finalizado com sucesso');
+                    // ✅ O status de onboarding já deve ter sido marcado como 'completed' no habit-tracking.html
+                    console.log('✅ Onboarding finalizado (redirecionando)...');
                     
                     // ✅ Limpa o localStorage após finalizar
                     localStorage.removeItem('onboardingData');

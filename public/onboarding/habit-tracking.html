@@ -272,6 +272,19 @@
             // --- Inicialização ---
             const init = async () => {
                 const loaded = await loadState();
+
+                // Se o usuário está voltando do Stripe, o status pode ter mudado
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has('session_id')) {
+                    console.log('Retornando do Stripe, forçando atualização de dados do Supabase...');
+                    localStorage.removeItem('onboardingData'); // Limpa dados locais para forçar recarga
+                    const reloaded = await loadState(); // Recarrega do Supabase
+                    if (!reloaded) {
+                        alert('Não foi possível verificar os dados atualizados após o pagamento. Por favor, tente novamente.');
+                        window.location.href = 'identification.html';
+                        return;
+                    }
+                }
                 
                 if (!loaded || !userData.firstName) {
                     alert('Dados do onboarding não encontrados. Redirecionando...');
@@ -312,6 +325,34 @@
             });
 
             btnGoToNextStep.addEventListener('click', async () => {
+                console.log('Finalizando onboarding...');
+                
+                try {
+                    // Salva os dados finais no Supabase
+                    const { data: { user } } = await window.supabase.auth.getUser();
+                    if (!user) throw new Error('Usuário não autenticado');
+
+                    const updates = {
+                        id: user.id,
+                        last_habit_date: userData.lastHabitDate.toISOString(),
+                        rank: userData.rank,
+                        retention_days: userData.retentionDays,
+                        onboarding_status: 'completed', // Marca como completo
+                        updated_at: new Date(),
+                    };
+
+                    const { error } = await window.supabase.from('profiles').upsert(updates);
+                    if (error) throw error;
+
+                    console.log('✅ Dados de onboarding salvos no Supabase');
+                    localStorage.removeItem('onboardingData'); // Limpa o cache local
+                    window.location.href = 'welcome.html';
+
+                } catch (error) {
+                    console.error('❌ Erro ao finalizar onboarding:', error);
+                    alert(`Erro ao salvar seus dados: ${error.message}`);
+                }
+            });
                 if (!userData.lastHabitDate) {
                     alert('Por favor, selecione uma data no calendário.');
                     return;
