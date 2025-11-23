@@ -40,11 +40,17 @@ const ChatService = {
                         console.log('📨 Nova mensagem recebida:', payload.new);
                         
                         // Busca informações do usuário que enviou a mensagem
-                        const { data: profile } = await window.supabase
+                        const { data: profile, error } = await window.supabase
                             .from('profiles')
                             .select('first_name, last_name, avatar_url, rank')
                             .eq('id', payload.new.user_id)
                             .single();
+
+                        if (error || !profile) {
+                            console.error('❌ Erro ao buscar perfil do usuário:', error);
+                            console.warn('⚠️ Mensagem recebida mas perfil não encontrado. Verifique as políticas RLS.');
+                            return;
+                        }
 
                         // Chama o callback com a mensagem e perfil do usuário
                         onNewMessageCallback(payload.new, profile);

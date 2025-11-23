@@ -215,6 +215,13 @@
             }
             
             function renderMessage(message, userProfile) {
+                // Validação de segurança
+                if (!userProfile) {
+                    console.error('❌ userProfile é null ou undefined. Mensagem:', message);
+                    console.warn('⚠️ Isso pode indicar um problema com políticas RLS no Supabase.');
+                    return;
+                }
+                
                 const messageEl = document.createElement('div');
                 messageEl.className = 'message';
                 
