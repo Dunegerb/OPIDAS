@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="assets/styles/base.css">
     <link rel="stylesheet" href="assets/styles/campo.css">
     <link rel="stylesheet" href="assets/styles/loading-screen.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 </head>
 <body>
 
@@ -109,13 +111,11 @@
     </div>
 
     <!-- Scripts do Projeto -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/lib/supabase-config.js"></script>
     <script src="js/components/loading-screen.js"></script>
+    <script src="js/lib/supabase-config.js"></script>
     <script src="js/services/auth.js"></script>
     <script src="js/services/user.js"></script>
     <script src="js/services/chat.js"></script>
-    <script src="js/app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
@@ -154,14 +154,7 @@
             function updateUI() {
                 if (!state.currentUser) return;
 
-                // ✅ CORRIGIDO: state.currentUser já é um objeto flat com rankData dentro
-                const profile = state.currentUser;
-                const rankData = profile.rankData;
-                
-                if (!rankData) {
-                    console.error('❌ rankData não encontrado em state.currentUser');
-                    return;
-                }
+                const { profile, rankData } = state.currentUser;
                 
                 // Header
                 welcomeUsernameEl.textContent = `${rankData.name} ${profile.last_name}`;
@@ -237,70 +230,35 @@
             async function switchChannel(channelId) {
                 if (!channelId || channelId === state.activeChannel) return;
 
-                try {
-                    state.activeChannel = channelId;
-                    messagesContainerEl.innerHTML = '<h3>Carregando mensagens...</h3>';
-                    updateUI(); // Atualiza a seleção visual
+                state.activeChannel = channelId;
+                messagesContainerEl.innerHTML = '<h3>Carregando mensagens...</h3>';
+                updateUI(); // Atualiza a seleção visual
 
-                    console.log(`🔄 Mudando para o canal: ${channelId}`);
-
-                    // Cancela inscrição do canal anterior
-                    await window.ChatService.unsubscribeFromChannel();
-                    
-                    // Busca mensagens antigas do canal
-                    const messages = await window.ChatService.getMessages(channelId, 50);
-                    
-                    // Renderiza mensagens
-                    messagesContainerEl.innerHTML = '';
-                    if (messages.length === 0) {
-                        messagesContainerEl.innerHTML = '<div class="system-message">Seja o primeiro a conversar neste canal.</div>';
-                    } else {
-                        messages.forEach(msg => {
-                            // msg.profiles contém os dados do usuário (retornado pelo join)
-                            const userProfile = msg.profiles;
-                            renderMessage(msg, userProfile);
-                        });
+                // TODO: Chamar `unsubscribeFromChannel` do chat.js se houver uma inscrição anterior
+                
+                // TODO: Chamar `getMessages(channelId)` do chat.js
+                // Por enquanto, mock:
+                const messages = []; // await getMessages(channelId);
+                messagesContainerEl.innerHTML = '';
+                if (messages.length === 0) {
+                    messagesContainerEl.innerHTML = '<div class="system-message">Seja o primeiro a conversar neste canal.</div>';
+                } else {
+                    for(const msg of messages) {
+                        // let user = await getUserProfile(msg.user_id);
+                        // renderMessage(msg, user);
                     }
-                    
-                    // Inscreve-se no canal para receber novas mensagens em tempo real
-                    await window.ChatService.subscribeToChannel(channelId, (message, profile) => {
-                        renderMessage(message, profile);
-                    });
-                    
-                    console.log(`✅ Canal ${channelId} carregado com sucesso`);
-                    
-                } catch (error) {
-                    console.error('❌ Erro ao trocar de canal:', error);
-                    messagesContainerEl.innerHTML = '<div class="system-message">Erro ao carregar mensagens. Tente novamente.</div>';
                 }
+                
+                // TODO: Chamar `subscribeToChannel(channelId, newMessageHandler)` do chat.js
             }
 
             async function handleSendMessage(event) {
                 event.preventDefault();
                 const content = chatInputFieldEl.value.trim();
-                
-                if (!content) return;
-                if (!state.activeChannel) {
-                    alert('Nenhum canal selecionado');
-                    return;
-                }
-                
-                try {
-                    console.log(`📤 Enviando "${content}" para o canal ${state.activeChannel}`);
-                    
-                    // Limpa o campo imediatamente para melhor UX
+                if (content && state.activeChannel) {
+                    // TODO: Chamar `sendMessage(state.activeChannel, content)` do chat.js
+                    console.log(`Enviando "${content}" para o canal ${state.activeChannel}`);
                     chatInputFieldEl.value = '';
-                    
-                    // Envia mensagem via ChatService
-                    await window.ChatService.sendMessage(state.activeChannel, content);
-                    
-                    console.log('✅ Mensagem enviada com sucesso');
-                    
-                } catch (error) {
-                    console.error('❌ Erro ao enviar mensagem:', error);
-                    alert('Erro ao enviar mensagem. Tente novamente.');
-                    // Restaura o texto se houver erro
-                    chatInputFieldEl.value = content;
                 }
             }
             
@@ -316,17 +274,22 @@
 
             // --- INICIALIZAÇÃO ---
             async function init() {
-                try {
-                    // Carrega os dados reais do usuário do Supabase
-                    state.currentUser = await window.loadTopBar();
-                    
-                    console.log('✅ Perfil do usuário carregado:', state.currentUser);
-                } catch (error) {
-                    console.error('❌ Erro ao carregar perfil do usuário:', error);
-                    // Redireciona para login se houver erro
-                    window.location.href = 'index.html';
-                    return;
-                }
+                // TODO: Chamar protectRoute() do auth.js
+                
+                // TODO: Chamar `getCurrentUserProfile()` do user.js para obter os dados do usuário logado
+                // Por enquanto, mock:
+                state.currentUser = {
+                    profile: {
+                        id: 'uuid-123-abc',
+                        last_name: 'Stravelli',
+                        habit: 'Masturbação',
+                        avatar_url: 'https://c.animaapp.com/wYjpt5p0/img/profile-photo-5@2x.png',
+                        retention_days: 7,
+                        remaining_resets: 5,
+                        rank: 'recruta',
+                    },
+                    rankData: state.channels.find(c => c.id === 'recruta')
+                };
 
                 if (!state.currentUser) {
                     window.location.href = 'index.html'; // Redireciona se não houver dados
@@ -334,7 +297,7 @@
                 }
                 
                 // Define o canal inicial baseado na patente do usuário
-                const initialChannelId = state.currentUser.rank;
+                const initialChannelId = state.currentUser.profile.rank;
                 await switchChannel(initialChannelId);
 
                 // Adiciona Event Listeners

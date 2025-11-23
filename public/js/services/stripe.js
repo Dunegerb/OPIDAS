@@ -1,7 +1,6 @@
-/**
- * Serviço de integração com Stripe
- * Gerencia checkout, assinaturas e portal do cliente
- */
+// Stripe Service - OPIDAS
+// Gerencia integração com Stripe para assinaturas recorrentes
+
 const StripeService = {
     /**
      * Cria uma sessão de checkout do Stripe
@@ -15,9 +14,8 @@ const StripeService = {
                 body: {
                     userId: userId,
                     email: email,
-                    // ✅ URL CORRIGIDA: Redireciona para habit-tracking.html após pagamento
-                    successUrl: `${window.location.origin}/onboarding/habit-tracking.html?session_id={CHECKOUT_SESSION_ID}`,
-                    cancelUrl: `${window.location.origin}/onboarding/investment.html`
+                    successUrl: `${window.location.origin}/campo.html?session_id={CHECKOUT_SESSION_ID}`,
+                    cancelUrl: `${window.location.origin}/onboarding.html`
                 }
             });
 
@@ -31,9 +29,39 @@ const StripeService = {
     },
 
     /**
-     * Cria um portal do cliente para gerenciar assinatura
+     * Verifica o status da assinatura do usuário
+     * @param {string} userId - ID do usuário
+     * @returns {Promise<Object>} - Status da assinatura
+     */
+    async checkSubscriptionStatus(userId) {
+        try {
+            const { data: profile, error } = await window.supabase
+                .from('profiles')
+                .select('subscription_status, stripe_subscription_id, is_blocked, block_end_date')
+                .eq('id', userId)
+                .single();
+
+            if (error) throw error;
+
+            return {
+                status: profile.subscription_status,
+                subscriptionId: profile.stripe_subscription_id,
+                isBlocked: profile.is_blocked,
+                blockEndDate: profile.block_end_date,
+                isActive: profile.subscription_status === 'active' || profile.subscription_status === 'trialing',
+                isPastDue: profile.subscription_status === 'past_due',
+                isCanceled: profile.subscription_status === 'canceled'
+            };
+        } catch (error) {
+            console.error('Erro ao verificar status da assinatura:', error);
+            throw error;
+        }
+    },
+
+    /**
+     * Cria um portal de gerenciamento de assinatura
      * @param {string} customerId - ID do cliente no Stripe
-     * @returns {Promise<string>} - URL do portal do cliente
+     * @returns {Promise<string>} - URL do portal
      */
     async createCustomerPortal(customerId) {
         try {
@@ -49,54 +77,47 @@ const StripeService = {
             return data.url;
         } catch (error) {
             console.error('Erro ao criar portal do cliente:', error);
-            throw new Error('Não foi possível abrir o portal do cliente. Tente novamente.');
+            throw new Error('Não foi possível acessar o gerenciamento de assinatura.');
         }
     },
 
     /**
-     * Verifica o status da assinatura do usuário
+     * Verifica se o usuário tem acesso ao conteúdo premium
      * @param {string} userId - ID do usuário
-     * @returns {Promise<Object>} - Status da assinatura
+     * @returns {Promise<boolean>} - True se tem acesso
      */
-    async checkSubscriptionStatus(userId) {
+    async hasAccess(userId) {
         try {
-            const { data: profile, error } = await window.supabase
-                .from('profiles')
-                .select('subscription_status, subscription_end_date')
-                .eq('id', userId)
-                .single();
+            const status = await this.checkSubscriptionStatus(userId);
+            
+            // Usuário tem acesso se:
+            // 1. A assinatura está ativa ou em trial
+            // 2. Não está bloqueado
+            // 3. Se estiver bloqueado, a data de bloqueio já passou
+            
+            if (status.isBlocked && status.blockEndDate) {
+                const blockEndDate = new Date(status.blockEndDate);
+                const now = new Date();
+                
+                if (now < blockEndDate) {
+                    return false; // Ainda está bloqueado
+                }
+            }
 
-            if (error) throw error;
-
-            return {
-                isActive: profile.subscription_status === 'active' || profile.subscription_status === 'trialing',
-                status: profile.subscription_status,
-                endDate: profile.subscription_end_date,
-                isTrialing: profile.subscription_status === 'trialing',
-                isPastDue: profile.subscription_status === 'past_due',
-                isCanceled: profile.subscription_status === 'canceled'
-            };
+            return status.isActive;
         } catch (error) {
-            console.error('Erro ao verificar status da assinatura:', error);
-            return {
-                isActive: false,
-                status: 'unknown',
-                endDate: null,
-                isTrialing: false,
-                isPastDue: false,
-                isCanceled: false
-            };
+            console.error('Erro ao verificar acesso:', error);
+            return false;
         }
     },
 
     /**
-     * Mostra notificação de status da assinatura
+     * Exibe notificação de pagamento pendente
      * @param {Object} status - Status da assinatura
      */
-    showSubscriptionNotification(status) {
-        if (status.isActive && !status.isPastDue) return;
-
+    showPaymentNotification(status) {
         const notification = document.createElement('div');
+        notification.className = 'payment-notification';
         notification.style.cssText = `
             position: fixed;
             top: 20px;
@@ -105,14 +126,16 @@ const StripeService = {
             color: white;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             z-index: 10000;
             max-width: 400px;
+            font-family: 'Inter', sans-serif;
             animation: slideIn 0.3s ease-out;
         `;
 
         let message = '';
         let actionButton = '';
+
         if (status.isPastDue) {
             message = `
                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
