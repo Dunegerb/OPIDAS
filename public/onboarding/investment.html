@@ -15,7 +15,6 @@
         <img alt="OPIDAS Brand Logos" src="https://c.animaapp.com/rDKbXW1a/img/group-37@2x.png" />
     </header>
 
-    <!-- Adicionamos a classe 'investment-step-active' diretamente aqui -->
     <div class="onboarding-card investment-step-active">
         <main class="main-content">
             <div class="form-steps-container">
@@ -73,11 +72,9 @@
                     
                     console.log('👤 Usuário:', user.email);
                     
-                    // Cria a sessão de checkout do Stripe
-                    const checkoutUrl = await window.StripeService.createCheckoutSession(
-                        user.id,
-                        user.email
-                    );
+                    // ✅ CORREÇÃO DE SEGURANÇA: Não passa mais userId nem email
+                    // O backend extrai essas informações do token JWT
+                    const checkoutUrl = await window.StripeService.createCheckoutSession();
                     
                     console.log('✅ Sessão de checkout criada');
                     console.log('🔗 Redirecionando para:', checkoutUrl);

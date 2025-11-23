@@ -1,6 +1,7 @@
 // Edge Function: Create Checkout Session
 // Cria uma sessão de checkout do Stripe para assinatura recorrente
 // Assinatura: R$ 3,00 por semana com 7 dias de trial gratuito
+// ✅ CORRIGIDO: Vulnerabilidade IDOR removida - usa user.id do token JWT
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
@@ -18,9 +19,8 @@ serve(async (req) => {
   }
 
   try {
-    // Inicializa Stripe com a chave secreta de teste
+    // Inicializa Stripe com a chave secreta
     const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
-
       apiVersion: '2023-10-16',
     })
 
@@ -35,7 +35,7 @@ serve(async (req) => {
       }
     )
 
-    // Verifica autenticação
+    // ✅ CORREÇÃO DE SEGURANÇA: Verifica autenticação e extrai user do token
     const {
       data: { user },
     } = await supabaseClient.auth.getUser()
@@ -44,8 +44,15 @@ serve(async (req) => {
       throw new Error('Usuário não autenticado')
     }
 
-    // Pega dados do body
-    const { userId, email, successUrl, cancelUrl } = await req.json()
+    // ✅ CORREÇÃO DE SEGURANÇA: Usa user.id do token, NÃO do body
+    // Isso previne ataques IDOR (Insecure Direct Object Reference)
+    const userId = user.id
+    const email = user.email || ''
+
+    // Pega apenas URLs do body (dados não sensíveis)
+    const { successUrl, cancelUrl } = await req.json()
+
+    console.log(`✅ Usuário autenticado: ${email} (${userId})`)
 
     // Busca ou cria customer no Stripe
     const { data: profile } = await supabaseClient
@@ -58,6 +65,7 @@ serve(async (req) => {
 
     // Se não existe customer, cria um novo
     if (!customerId) {
+      console.log('📝 Criando novo customer no Stripe')
       const customer = await stripe.customers.create({
         email: email,
         metadata: {
@@ -71,6 +79,10 @@ serve(async (req) => {
         .from('profiles')
         .update({ stripe_customer_id: customerId })
         .eq('id', userId)
+
+      console.log(`✅ Customer criado: ${customerId}`)
+    } else {
+      console.log(`✅ Customer existente: ${customerId}`)
     }
 
     // Cria a sessão de checkout
@@ -85,8 +97,8 @@ serve(async (req) => {
         },
       ],
       mode: 'subscription',
-      success_url: successUrl || `${Deno.env.get('SITE_URL')}/campo.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancelUrl || `${Deno.env.get('SITE_URL')}/onboarding.html`,
+      success_url: successUrl || `${Deno.env.get('SITE_URL')}/onboarding/habit-tracking.html?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: cancelUrl || `${Deno.env.get('SITE_URL')}/onboarding/investment.html`,
       subscription_data: {
         metadata: {
           supabase_user_id: userId,
@@ -99,7 +111,7 @@ serve(async (req) => {
       allow_promotion_codes: true, // Permite códigos promocionais
     })
 
-    // Atualiza status para trialing
+    // Atualiza status para trialing (mitigação parcial da race condition)
     await supabaseClient
       .from('profiles')
       .update({ 
@@ -110,7 +122,11 @@ serve(async (req) => {
     console.log(`✅ Checkout session created for user ${userId}: ${session.id}`)
 
     return new Response(
-      JSON.stringify({ url: session.url, sessionId: session.id }),
+      JSON.stringify({ 
+        url: session.url, 
+        sessionId: session.id,
+        customerId: customerId 
+      }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200,

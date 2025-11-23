@@ -50,6 +50,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/lib/supabase-config.js"></script>
     <script src="../js/services/user.js"></script>
+    <script src="../js/services/stripe.js"></script>
 
 
     <script>
@@ -77,6 +78,61 @@
             
             let userData = {};
             let calendarDate = new Date();
+
+
+            // ✅ NOVO: Verifica se veio do Stripe e aguarda confirmação
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get('session_id');
+
+            if (sessionId) {
+                console.log('💳 Detectado retorno do Stripe. Session ID:', sessionId);
+                
+                // Mostra mensagem de carregamento
+                const loadingOverlay = document.createElement('div');
+                loadingOverlay.id = 'payment-loading';
+                loadingOverlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.8);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                `;
+                loadingOverlay.innerHTML = `
+                    <div style="background: white; padding: 40px; border-radius: 16px; text-align: center; max-width: 400px;">
+                        <div style="width: 60px; height: 60px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+                        <h2 style="margin: 0 0 10px 0; color: #333;">Confirmando Pagamento</h2>
+                        <p style="margin: 0; color: #666;">Aguarde enquanto processamos sua assinatura...</p>
+                    </div>
+                    <style>
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    </style>
+                `;
+                document.body.appendChild(loadingOverlay);
+
+                // Aguarda confirmação da assinatura
+                try {
+                    const { data: { user } } = await window.supabase.auth.getUser();
+                    if (user) {
+                        await window.StripeService.waitForSubscriptionActivation(user.id);
+                        console.log('✅ Assinatura confirmada com sucesso');
+                    }
+                } catch (error) {
+                    console.error('⚠️ Erro ao verificar assinatura:', error);
+                } finally {
+                    // Remove overlay de loading
+                    if (loadingOverlay.parentElement) {
+                        loadingOverlay.remove();
+                    }
+                }
+            }
 
 
             // --- Seletores de DOM ---

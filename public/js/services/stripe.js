@@ -1,23 +1,25 @@
 /**
  * Serviço de integração com Stripe
  * Gerencia checkout, assinaturas e portal do cliente
+ * ✅ CORRIGIDO: Não envia mais userId do frontend (segurança IDOR)
  */
 const StripeService = {
     /**
      * Cria uma sessão de checkout do Stripe
-     * @param {string} userId - ID do usuário
-     * @param {string} email - Email do usuário
+     * ✅ CORREÇÃO: Removido parâmetro userId - será extraído do token no backend
+     * @param {string} successUrl - URL de sucesso (opcional)
+     * @param {string} cancelUrl - URL de cancelamento (opcional)
      * @returns {Promise<string>} - URL da sessão de checkout
      */
-    async createCheckoutSession(userId, email) {
+    async createCheckoutSession(successUrl = null, cancelUrl = null) {
         try {
+            // ✅ CORREÇÃO DE SEGURANÇA: Não enviamos mais userId nem email
+            // O backend extrai essas informações do token JWT autenticado
             const { data, error } = await window.supabase.functions.invoke('create-checkout-session', {
                 body: {
-                    userId: userId,
-                    email: email,
-                    // ✅ URL CORRIGIDA: Redireciona para habit-tracking.html após pagamento
-                    successUrl: `${window.location.origin}/onboarding/habit-tracking.html?session_id={CHECKOUT_SESSION_ID}`,
-                    cancelUrl: `${window.location.origin}/onboarding/investment.html`
+                    // ✅ URLs são dados não sensíveis, podem vir do frontend
+                    successUrl: successUrl || `${window.location.origin}/onboarding/habit-tracking.html?session_id={CHECKOUT_SESSION_ID}`,
+                    cancelUrl: cancelUrl || `${window.location.origin}/onboarding/investment.html`
                 }
             });
 
@@ -37,7 +39,7 @@ const StripeService = {
      */
     async createCustomerPortal(customerId) {
         try {
-            const { data, error } = await window.supabase.functions.invoke('create-customer-portal', {
+            const { data, error } = await window.supabase.functions.invoke('create-portal-session', {
                 body: {
                     customerId: customerId,
                     returnUrl: `${window.location.origin}/campo.html`
@@ -87,6 +89,36 @@ const StripeService = {
                 isCanceled: false
             };
         }
+    },
+
+    /**
+     * ✅ NOVO: Aguarda confirmação da assinatura após pagamento
+     * Implementa polling para resolver race condition com webhook
+     * @param {string} userId - ID do usuário
+     * @param {number} maxAttempts - Número máximo de tentativas
+     * @param {number} interval - Intervalo entre tentativas (ms)
+     * @returns {Promise<Object>} - Status da assinatura
+     */
+    async waitForSubscriptionActivation(userId, maxAttempts = 5, interval = 2000) {
+        console.log('⏳ Aguardando confirmação da assinatura...');
+        
+        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+            console.log(`🔄 Tentativa ${attempt}/${maxAttempts}`);
+            
+            const status = await this.checkSubscriptionStatus(userId);
+            
+            if (status.isActive || status.isTrialing) {
+                console.log('✅ Assinatura confirmada!');
+                return status;
+            }
+            
+            if (attempt < maxAttempts) {
+                await new Promise(resolve => setTimeout(resolve, interval));
+            }
+        }
+        
+        console.warn('⚠️ Timeout aguardando confirmação. Webhook pode estar atrasado.');
+        return await this.checkSubscriptionStatus(userId);
     },
 
     /**
@@ -210,10 +242,8 @@ const StripeService = {
             const user = await window.supabase.auth.getUser();
             if (!user.data.user) throw new Error('Usuário não autenticado');
 
-            const checkoutUrl = await this.createCheckoutSession(
-                user.data.user.id,
-                user.data.user.email
-            );
+            // ✅ CORREÇÃO: Não passa mais userId
+            const checkoutUrl = await this.createCheckoutSession();
 
             window.location.href = checkoutUrl;
         } catch (error) {
