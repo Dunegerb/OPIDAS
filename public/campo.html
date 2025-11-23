@@ -7,8 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/styles/profile-widget.css">
-    <link rel="stylesheet" href="assets/styles/identity-modal.css">
+    
     <link rel="stylesheet" href="assets/styles/base.css">
     <link rel="stylesheet" href="assets/styles/campo.css">
     <link rel="stylesheet" href="assets/styles/loading-screen.css">
@@ -117,8 +116,6 @@
     <script src="js/services/user.js"></script>
     <script src="js/services/chat.js"></script>
     <script src="js/app.js"></script>
-    <script src="js/components/identity-modal.js"></script>
-    <script src="js/components/profile-widget.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
@@ -306,10 +303,6 @@
                     chatInputFieldEl.value = content;
                 }
             }
-
-                document.getElementById('user-avatar').addEventListener('click', () => {
-                    window.ProfileWidget.open();
-                });
             
             async function handleResetClick() {
                 const confirmed = confirm(`Você tem certeza que quer resetar sua contagem? Isso usará uma de suas chances.`);
@@ -364,9 +357,9 @@
             init();
         });
     </script>
-    
 </body>
 </html>
+
 
 
 

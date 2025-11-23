@@ -14,7 +14,7 @@
 .user-welcome { display: flex; align-items: center; gap: 1rem; }
 .user-welcome img { width: 34px; height: 34px; border-radius: 50%; }
 .user-welcome-text .greeting { font-size: 10px; }
-.user-welcome-text .username { font-size: 16px; font-weight: 500; }
+.user-welcome-text .username { font-size: 21px; font-weight: 500; }
 
 .status-bar { display: flex; align-items: center; gap: 0.5rem; background-color: var(--bg-panel); padding: 0.5rem; border-radius: 8px; }
 .status-bar .rank-icon { background-color: var(--bg-main); border-radius: 5px; width: 41px; height: 41px; display: flex; justify-content: center; align-items: center; }
@@ -97,7 +97,6 @@
     .panel { border-radius: 0; border-left: none; border-right: none; }
 
 }
-
 
 
 

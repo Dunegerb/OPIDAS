@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" href="assets/styles/base.css">
     <link rel="stylesheet" href="assets/styles/login.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </head>
 <body>
@@ -98,8 +98,10 @@
     <script src="js/lib/supabase-config.js"></script>
     <script src="js/services/auth.js"></script>
     <script>
-        // A função initAuthPage é chamada automaticamente pelo auth.js
-        // após a verificação de existência do formulário.
+        // Inicializador da página de login
+        document.addEventListener('DOMContentLoaded', () => {
+            initAuthPage();
+        });
     </script>
 
 </body>
