@@ -1,6 +1,6 @@
 /* ================================================= */
 /* === PROFILE WIDGET - DYNAMIC ISLAND STYLE     === */
-/* === OPIDAS - VERSÃO FINAL CORRIGIDA           === */
+/* === OPIDAS - Substituição Completa            === */
 /* ================================================= */
 
 :root {
@@ -31,7 +31,7 @@
     height: 50px;
     border-radius: 50px;
     transition: all 0.6s cubic-bezier(0.6, 0, 0.2, 1);
-    transform-origin: top left; /* Expande a partir do canto superior esquerdo */
+    transform-origin: top left;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
@@ -54,7 +54,7 @@
 #profile-island-container.expanded .island-content-wrapper {
     overflow: visible;
     width: 371px;
-    /* height: 490px;*/ /*-Estavaexpandindo para cima por causa disso */
+    height: 490px;
 }
 
 /* ================================================= */
@@ -64,9 +64,7 @@
 .island-initial-content {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
     padding: 8px 12px;
-    height: 50px;
     opacity: 1;
     transition: opacity 0.4s ease-in 0.3s;
 }
@@ -81,7 +79,6 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    height: 100%;
 }
 
 .user-welcome img {
@@ -89,14 +86,10 @@
     height: 34px;
     border-radius: 50%;
     object-fit: cover;
-    flex-shrink: 0;
 }
 
 .user-welcome-text {
     color: #d9d9d9;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
 
 .greeting {
@@ -371,7 +364,7 @@ input, select, textarea, button {
     position: relative;
     width: 346px;
     height: 154px;
-    margin: 55px auto 0;
+    margin: 12.25px auto 0;
     z-index: 27;
     overflow: visible;
 }
@@ -439,9 +432,9 @@ input, select, textarea, button {
     align-items: flex-start;
     justify-content: flex-start;
     position: absolute;
-    height: 34px;
+    height: 25px;
     top: 0;
-    right: 34px;
+    right: 20px;
     color: #d9d9d9;
     font-family: Inter, var(--default-font-family);
     font-size: 34px;
@@ -556,7 +549,7 @@ input, select, textarea, button {
 }
 
 .days {
-    /* position: absolute; --Estava causando erro de alinhamento*/
+    position: absolute;
     width: 50px;
     height: 12px;
     top: 80px;
@@ -855,50 +848,6 @@ input, select, textarea, button {
     top: 50%;
     right: 0;
     margin-top: -2px;
-}
-
-/* ================================================= */
-/* === CORREÇÃO PARA STATUS-BAR (DIAS)          === */
-/* ================================================= */
-
-/* Garante que o top-bar mantenha layout correto */
-.top-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: nowrap; /* Impede quebra de linha */
-}
-
-/* Garante que o status-bar não seja afetado pela Dynamic Island */
-.status-bar {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-shrink: 0; /* Impede que o status-bar encolha */
-    min-width: fit-content; /* Mantém largura mínima */
-}
-
-/* Garante que o progress-info mantenha largura fixa */
-.progress-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 180px;
-    min-width: 180px; /* Largura mínima garantida */
-    flex-shrink: 0; /* Impede que encolha */
-}
-
-/* Garante que os dias fiquem alinhados corretamente */
-.progress-info .days {
-    font-size: 13px;
-    white-space: nowrap; /* Impede quebra de linha */
-    text-align: right; /* Alinha à direita */
-}
-
-/* Garante que o span interno dos dias também não quebre */
-.progress-info .days span {
-    white-space: nowrap;
 }
 
 /* ================================================= */

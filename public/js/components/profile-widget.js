@@ -1,7 +1,5 @@
-// ================================================= 
-// === PROFILE WIDGET - DYNAMIC ISLAND STYLE     ===
-// === OPIDAS - Substituição Completa            ===
-// ================================================= 
+// Profile Widget Component - OPIDAS
+// Widget de perfil com funcionalidades completas
 
 const ProfileWidget = {
     isOpen: false,
@@ -9,226 +7,174 @@ const ProfileWidget = {
     widgetElement: null,
 
     /**
-     * Inicializa o widget de perfil com Dynamic Island
+     * Inicializa o widget de perfil
      */
     init() {
         this.createWidget();
         this.attachEventListeners();
-        console.log('✅ Profile Widget (Dynamic Island) inicializado');
+        console.log('✅ Profile Widget inicializado');
     },
 
     /**
-     * Cria o HTML do widget com estilo Dynamic Island
+     * Cria o HTML do widget
      */
     createWidget() {
         const widgetHTML = `
-            <div id="profile-island-container">
-                <div class="island-background"></div>
-                <div class="island-content-wrapper">
-                    <!-- CONTEÚDO INICIAL (COLLAPSED) -->
-                    <div class="island-initial-content">
-                        <div class="user-welcome">
-                            <img id="user-avatar" alt="Profile photo" src="https://via.placeholder.com/34">
-                            <div class="user-welcome-text">
-                                <div class="greeting">Bem vindo(a) de volta</div>
-                                <div class="username" id="welcome-username">Carregando...</div>
+            <div id="profile-widget-overlay" class="profile-widget-overlay hidden">
+                <div class="profile-widget-container">
+                    <!-- Header do Widget -->
+                    <div class="widget-header">
+                        <div class="widget-user-info">
+                            <img id="widget-avatar" class="widget-avatar" src="" alt="Avatar">
+                            <div class="widget-user-text">
+                                <span class="widget-welcome">Bem vindo(a) de volta</span>
+                                <span id="widget-user-name" class="widget-user-name">Carregando...</span>
                             </div>
+                        </div>
+                        <button id="widget-close-btn" class="widget-close-btn">
+                            <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                                <path d="M1 1L10 10M10 1L1 10" stroke="#D9D9D9" stroke-width="1.5"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Campo Atual -->
+                    <div class="widget-current-field">
+                        <div class="field-label">Campo contra o(a)</div>
+                        <div id="widget-current-habit" class="field-value">Carregando...</div>
+                    </div>
+
+                    <!-- Tabs: Patentes / Admin -->
+                    <div class="widget-tabs">
+                        <button class="widget-tab active" data-tab="patentes">Patentes</button>
+                        <button class="widget-tab" data-tab="admin">Admin</button>
+                    </div>
+
+                    <div class="widget-divider"></div>
+
+                    <!-- Botão: Ver Identidade -->
+                    <button id="btn-ver-identidade" class="widget-button">
+                        <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+                            <path d="M1 6H15M1 1H15M1 11H15" stroke="#D9D9D9" stroke-width="1.5"/>
+                        </svg>
+                        <span>Ver Identidade</span>
+                    </button>
+
+                    <div class="widget-divider"></div>
+
+                    <!-- Botão: Trocar de Campo -->
+                    <button id="btn-trocar-campo" class="widget-button">
+                        <span>Trocar de campo</span>
+                        <div class="habit-selector">
+                            <select id="habit-select" class="habit-select">
+                                <option value="">Selecione...</option>
+                                <option value="masturbacao">Masturbação</option>
+                                <option value="pornografia">Pornografia</option>
+                                <option value="bebida">Bebida Alcoólica</option>
+                                <option value="fumar">Fumar</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                            <svg width="8" height="13" viewBox="0 0 8 13" fill="none">
+                                <path d="M1 1L6.5 6.5L1 12" stroke="#D9D9D9" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                    </button>
+
+                    <div class="widget-divider"></div>
+
+                    <!-- Seção: OPIDAS Investimento -->
+                    <div class="widget-investment-section">
+                        <div class="investment-header">
+                            <div class="investment-badge">
+                                <span>OPIDAS</span>
+                            </div>
+                            <span class="investment-label">Investimento</span>
+                        </div>
+                        
+                        <div class="investment-price">
+                            <span class="currency">R$</span>
+                            <span id="investment-price" class="price">3</span>
+                            <span class="period">/semana</span>
+                        </div>
+
+                        <div class="investment-next-payment">
+                            <span class="next-payment-label">Próximo pagamento</span>
+                            <div class="next-payment-days">
+                                <span id="days-until-payment" class="days-number">4</span>
+                                <span class="days-label">/7 dias</span>
+                            </div>
+                        </div>
+
+                        <div class="investment-progress-bar">
+                            <div id="payment-progress" class="investment-progress-fill" style="width: 57%"></div>
+                        </div>
+
+                        <div class="investment-buttons">
+                            <button id="btn-configurar-pagamento" class="investment-btn primary">
+                                Configurar Pagamentos
+                            </button>
+                            <button id="btn-desistir" class="investment-btn secondary">
+                                Desistir não quero mais
+                            </button>
                         </div>
                     </div>
 
-                    <!-- CONTEÚDO EXPANDIDO (EXPANDED) -->
-                    <div class="island-expanded-content">
-                        <div class="main-container">
-                            <div class="flex-column-ef">
-                                <div class="vector"></div>
-                                
-                                <!-- BOTÃO: VER IDENTIDADE -->
-                                <div class="group" id="btn-ver-identidade">
-                                    <div class="rectangle"></div>
-                                    <div class="vector-1"></div>
-                                    <span class="ver-identidade">Ver Identidade</span>
-                                </div>
-                                
-                                <div class="vector-2"></div>
-                                
-                                <!-- SEÇÃO DE INVESTIMENTO -->
-                                <div class="group-3">
-                                    <div class="group-4">
-                                        <div id="payment-progress" class="investment-progress-fill" style="width: 57%"></div>
-                                    </div>
-                                    <div class="rectangle-5"></div>
-                                    <div class="group-6">
-                                        <span class="semana">/semana</span>
-                                        <span id="investment-price" class="number">3</span>
-                                        <span class="currency">R$</span>
-                                    </div>
-                                    <div class="group-7">
-                                        <div class="group-8">
-                                            <span class="opidas">OPIDAS</span>
-                                            <div class="rectangle-9"></div>
-                                        </div>
-                                        <span class="investment">Investimento</span>
-                                    </div>
-                                    <span class="next-payment">Próximo pagamento</span>
-                                    <div class="days" style="position: absolute;">
-                                        <span id="days-until-payment" class="number-a">4</span><span class="days-b">/7 dias</span>
-                                    </div>
-                                    
-                                    <!-- BOTÕES DE INVESTIMENTO -->
-                                    <div class="group-c" id="btn-configurar-pagamento">
-                                        <div class="rectangle-d"></div>
-                                        <span class="configurar-pagamentos">Configurar Pagamentos</span>
-                                    </div>
-                                    <div class="group-e" id="btn-desistir">
-                                        <div class="rectangle-f"></div>
-                                        <span class="desistir-nao-quero">Desistir não quero mais</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="vector-10"></div>
-                                
-                                <!-- SEÇÃO "TROCAR DE CAMPO" -->
-                                <div class="group-16" id="change-field-container">
-                                    <div class="rectangle-17"></div>
-                                    <div class="union"></div>
-                                    <span class="change-field">Trocar de campo</span>
-                                    <div id="selected-field-value">Carregando...</div>
-                                    <ul id="field-options-list">
-                                        <li data-value="masturbacao">Masturbação</li>
-                                        <li data-value="pornografia">Pornografia</li>
-                                        <li data-value="bebida">Bebida Alcoólica</li>
-                                        <li data-value="fumar">Fumar</li>
-                                        <li data-value="outro">Outro</li>
-                                    </ul>
-                                </div>
+                    <div class="widget-divider"></div>
 
-                                <!-- BOTÃO: SAIR / DESCONECTAR -->
-                                <div class="group-11" id="btn-logout">
-                                    <div class="rectangle-12"></div>
-                                    <div class="vector-13"></div>
-                                    <span class="sair-desconectar">Sair / Desconectar</span>
-                                </div>
-                                
-                                <!-- FOTO E NOME DO USUÁRIO (EXPANDIDO) -->
-                                <div class="welcome-photo">
-                                    <div id="profile-photo-expanded" class="profile-photo"></div>
-                                    <div class="welcome-back-user">
-                                        <span class="welcome-back-message">Bem vindo(a) de volta</span>
-                                        <span id="user-patent-name" class="user-patent-name">Carregando...</span>
-                                    </div>
-                                </div>
-                                
-                                <!-- BOTÃO FECHAR -->
-                                <div class="vector-15" id="widget-close-btn"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Botão: Sair/Desconectar -->
+                    <button id="btn-logout" class="widget-button logout-btn">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path d="M4 1H2C1.44772 1 1 1.44772 1 2V10C1 10.5523 1.44772 11 2 11H4M8 9L11 6M11 6L8 3M11 6H4" stroke="#D9D9D9" stroke-width="1.5"/>
+                        </svg>
+                        <span>Sair / Desconectar</span>
+                    </button>
                 </div>
             </div>
         `;
 
-        // Substitui o user-welcome existente pelo Dynamic Island
-        const userWelcome = document.querySelector('.user-welcome');
-        if (userWelcome) {
-            userWelcome.outerHTML = widgetHTML;
-        } else {
-            // Fallback: adiciona ao body
-            document.body.insertAdjacentHTML('beforeend', widgetHTML);
-        }
-
-        this.widgetElement = document.getElementById('profile-island-container');
+        // Adiciona ao body
+        document.body.insertAdjacentHTML('beforeend', widgetHTML);
+        this.widgetElement = document.getElementById('profile-widget-overlay');
     },
 
     /**
      * Anexa event listeners aos botões
      */
     attachEventListeners() {
-        const container = this.widgetElement;
-
-        // Abrir Dynamic Island ao clicar
-        container.addEventListener('click', (e) => {
-            // Só abre se não estiver expandido e não for clique em botão interno
-            if (!container.classList.contains('expanded') && !e.target.closest('.group, .group-11, .group-16, .group-c, .group-e')) {
-                this.open();
+        // Fechar widget
+        document.getElementById('widget-close-btn').addEventListener('click', () => this.close());
+        document.getElementById('profile-widget-overlay').addEventListener('click', (e) => {
+            if (e.target.id === 'profile-widget-overlay') {
+                this.close();
             }
         });
-
-        // Fechar widget
-        const closeBtn = document.getElementById('widget-close-btn');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.close();
-            });
-        }
 
         // Ver Identidade
-        const btnVerIdentidade = document.getElementById('btn-ver-identidade');
-        if (btnVerIdentidade) {
-            btnVerIdentidade.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.handleVerIdentidade();
-            });
-        }
+        document.getElementById('btn-ver-identidade').addEventListener('click', () => this.handleVerIdentidade());
 
-        // Trocar de Campo (Dropdown)
-        this.setupFieldChanger();
+        // Trocar de Campo
+        document.getElementById('habit-select').addEventListener('change', (e) => {
+            if (e.target.value) {
+                this.handleTrocarCampo(e.target.value);
+            }
+        });
 
         // Configurar Pagamento
-        const btnConfigurarPagamento = document.getElementById('btn-configurar-pagamento');
-        if (btnConfigurarPagamento) {
-            btnConfigurarPagamento.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.handleConfigurarPagamento();
-            });
-        }
+        document.getElementById('btn-configurar-pagamento').addEventListener('click', () => this.handleConfigurarPagamento());
 
         // Desistir
-        const btnDesistir = document.getElementById('btn-desistir');
-        if (btnDesistir) {
-            btnDesistir.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.handleDesistir();
-            });
-        }
+        document.getElementById('btn-desistir').addEventListener('click', () => this.handleDesistir());
 
         // Logout
-        const btnLogout = document.getElementById('btn-logout');
-        if (btnLogout) {
-            btnLogout.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.handleLogout();
+        document.getElementById('btn-logout').addEventListener('click', () => this.handleLogout());
+
+        // Tabs
+        document.querySelectorAll('.widget-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                document.querySelectorAll('.widget-tab').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+                // TODO: Implementar troca de conteúdo entre Patentes e Admin
             });
-        }
-    },
-
-    /**
-     * Configura o dropdown "Trocar de campo"
-     */
-    setupFieldChanger() {
-        const container = document.getElementById('change-field-container');
-        const optionsList = document.getElementById('field-options-list');
-        const options = optionsList.querySelectorAll('li');
-
-        container.addEventListener('click', (event) => {
-            event.stopPropagation();
-            optionsList.classList.toggle('visible');
-        });
-
-        options.forEach(option => {
-            option.addEventListener('click', (event) => {
-                event.stopPropagation();
-                const newHabit = option.getAttribute('data-value');
-                optionsList.classList.remove('visible');
-                this.handleTrocarCampo(newHabit);
-            });
-        });
-
-        // Fecha dropdown ao clicar fora
-        document.addEventListener('click', (event) => {
-            if (!container.contains(event.target)) {
-                optionsList.classList.remove('visible');
-            }
         });
     },
 
@@ -237,7 +183,7 @@ const ProfileWidget = {
      */
     async open() {
         try {
-            console.log('📂 Abrindo Profile Widget (Dynamic Island)...');
+            console.log('📂 Abrindo Profile Widget...');
 
             // Carrega dados do usuário
             this.currentUser = await window.UserService.getCurrentUserProfile();
@@ -245,8 +191,8 @@ const ProfileWidget = {
             // Atualiza UI do widget
             this.updateWidgetUI();
 
-            // Expande Dynamic Island
-            this.widgetElement.classList.add('expanded');
+            // Mostra widget
+            this.widgetElement.classList.remove('hidden');
             this.isOpen = true;
 
             console.log('✅ Profile Widget aberto');
@@ -261,14 +207,7 @@ const ProfileWidget = {
      * Fecha o widget
      */
     close() {
-        this.widgetElement.classList.remove('expanded');
-        
-        // Fecha dropdown se estiver aberto
-        const optionsList = document.getElementById('field-options-list');
-        if (optionsList) {
-            optionsList.classList.remove('visible');
-        }
-        
+        this.widgetElement.classList.add('hidden');
         this.isOpen = false;
         console.log('✅ Profile Widget fechado');
     },
@@ -287,59 +226,26 @@ const ProfileWidget = {
             'outro': 'Outro'
         };
 
-        // Avatar (collapsed)
-        const userAvatar = document.getElementById('user-avatar');
-        if (userAvatar) {
-            userAvatar.src = this.currentUser.avatar_url || 'https://via.placeholder.com/34';
-        }
+        // Avatar
+        document.getElementById('widget-avatar').src = this.currentUser.avatar_url || 'https://via.placeholder.com/34';
 
-        // Avatar (expanded)
-        const profilePhotoExpanded = document.getElementById('profile-photo-expanded');
-        if (profilePhotoExpanded) {
-            profilePhotoExpanded.style.backgroundImage = `url(${this.currentUser.avatar_url || 'https://via.placeholder.com/34'})`;
-        }
-
-        // Nome do usuário (collapsed)
+        // Nome do usuário
         const rankData = this.currentUser.rankData;
         const rankName = rankData ? rankData.name.charAt(0).toUpperCase() + rankData.name.slice(1) : 'Recruta';
-        const fullName = `${rankName} ${this.currentUser.last_name || ''}`;
-        
-        const usernameCollapsed = document.getElementById('welcome-username');
-        if (usernameCollapsed) {
-            usernameCollapsed.textContent = fullName;
-        }
+        document.getElementById('widget-user-name').textContent = `${rankName} ${this.currentUser.last_name || ''}`;
 
-        // Nome do usuário (expanded)
-        const userPatentName = document.getElementById('user-patent-name');
-        if (userPatentName) {
-            userPatentName.textContent = fullName;
-        }
-
-        // Hábito atual no dropdown
+        // Hábito atual
         const habitLabel = habitLabels[this.currentUser.habit] || 'Não definido';
-        const selectedFieldValue = document.getElementById('selected-field-value');
-        if (selectedFieldValue) {
-            selectedFieldValue.textContent = habitLabel;
-        }
+        document.getElementById('widget-current-habit').textContent = habitLabel;
 
         // Dados de investimento (mock - será integrado com Stripe)
         // TODO: Buscar dados reais do Stripe
-        const investmentPrice = document.getElementById('investment-price');
-        if (investmentPrice) {
-            investmentPrice.textContent = '3';
-        }
-
-        const daysUntilPayment = document.getElementById('days-until-payment');
-        if (daysUntilPayment) {
-            daysUntilPayment.textContent = '4';
-        }
+        document.getElementById('investment-price').textContent = '3';
+        document.getElementById('days-until-payment').textContent = '4';
         
         // Calcula progresso do pagamento (4/7 dias = 57%)
         const progress = (4 / 7) * 100;
-        const paymentProgress = document.getElementById('payment-progress');
-        if (paymentProgress) {
-            paymentProgress.style.width = `${progress}%`;
-        }
+        document.getElementById('payment-progress').style.width = `${progress}%`;
     },
 
     /**
@@ -384,11 +290,6 @@ const ProfileWidget = {
             const newHabitLabel = habitLabels[newHabit];
             const currentHabitLabel = habitLabels[this.currentUser.habit];
 
-            // Não faz nada se for o mesmo hábito
-            if (newHabit === this.currentUser.habit) {
-                return;
-            }
-
             // Confirmação
             const confirmed = confirm(
                 `Você quer mesmo mudar de campo?\n\n` +
@@ -399,6 +300,8 @@ const ProfileWidget = {
             );
 
             if (!confirmed) {
+                // Reseta select
+                document.getElementById('habit-select').value = '';
                 return;
             }
 
@@ -431,6 +334,7 @@ const ProfileWidget = {
         } catch (error) {
             console.error('❌ Erro ao trocar de campo:', error);
             alert('Erro ao trocar de campo. Tente novamente.');
+            document.getElementById('habit-select').value = '';
         }
     },
 
