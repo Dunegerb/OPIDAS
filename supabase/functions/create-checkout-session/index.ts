@@ -2,6 +2,7 @@
 // Cria uma sessão de checkout do Stripe para assinatura recorrente
 // Assinatura: R$ 3,00 por semana com 7 dias de trial gratuito
 // ✅ CORRIGIDO: Vulnerabilidade IDOR removida - usa user.id do token JWT
+// ✅ CORRIGIDO: Aceita body vazio ou inválido (erro 400 resolvido)
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
@@ -49,8 +50,16 @@ serve(async (req) => {
     const userId = user.id
     const email = user.email || ''
 
-    // Pega apenas URLs do body (dados não sensíveis)
-    const { successUrl, cancelUrl } = await req.json()
+    // ✅ CORREÇÃO: Pega URLs do body (opcionais) - aceita body vazio
+    let successUrl, cancelUrl;
+    try {
+      const body = await req.json();
+      successUrl = body.successUrl;
+      cancelUrl = body.cancelUrl;
+    } catch (error) {
+      // Body vazio ou inválido, usa valores padrão
+      console.log('⚠️ Body vazio ou inválido, usando URLs padrão');
+    }
 
     console.log(`✅ Usuário autenticado: ${email} (${userId})`)
 

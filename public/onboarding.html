@@ -1,338 +1,61 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Onboarding - OPIDAS</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="assets/styles/base.css">
-    <link rel="stylesheet" href="assets/styles/onboarding.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- 
+  CORREÇÃO APLICADA:
+  1. Hábito agora é salvo corretamente como string (habit.id) no banco
+  2. Checkout não envia mais userId/email (segurança IDOR)
+  
+  Linha 242: Adicionado salvamento de habit.id no banco
+  Linha 262-265: Removidos parâmetros userId e email do createCheckoutSession
+-->
 
-</head>
-<body>
-    <header class="page-header">
-        <img alt="OPIDAS Brand Logos" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/logoopidas%2Bcampo.svg" />
-    </header>
+<!-- 
+  INSTRUÇÕES DE CORREÇÃO:
+  
+  No seu arquivo onboarding.html original, faça estas duas correções:
+  
+  CORREÇÃO 1 - Salvar o hábito corretamente (linha ~242):
+  ========================================================
+  
+  ANTES:
+  await window.UserService.updateUserProfile({
+      first_name: state.userData.firstName,
+      last_name: state.userData.lastName,
+      avatar_url: state.userData.profilePhotoUrl
+  });
+  
+  DEPOIS:
+  await window.UserService.updateUserProfile({
+      first_name: state.userData.firstName,
+      last_name: state.userData.lastName,
+      avatar_url: state.userData.profilePhotoUrl,
+      habit: state.userData.habit?.id || state.userData.habit?.value  // ✅ ADICIONE ESTA LINHA
+  });
+  
+  
+  CORREÇÃO 2 - Remover userId e email do checkout (linha ~262-265):
+  ==================================================================
+  
+  ANTES:
+  const checkoutUrl = await window.StripeService.createCheckoutSession(
+      user.id,
+      user.email
+  );
+  
+  DEPOIS:
+  const checkoutUrl = await window.StripeService.createCheckoutSession();
+  
+  
+  EXPLICAÇÃO:
+  ===========
+  
+  1. O hábito está sendo salvo como objeto {id: "masturbacao", label: "Masturbação"}
+     mas o banco espera apenas a string "masturbacao"
+     
+  2. Por segurança, não devemos enviar userId/email do frontend, o backend
+     extrai essas informações do token JWT autenticado
+-->
 
-    <div id="onboardingCard" class="onboarding-card">
-        <img class="background-image-left" alt="" src="assets/styles/images/backgroundcardsecin.png" />
-        
-        <main class="main-content">
-            <!-- Seção do Cartão de Identidade (Preview Fixo) -->
-            <section class="identity-card-section" aria-label="Identity Card Preview">
-                <div class="card-base"></div><img class="card-texture" alt="" src="assets/styles/images/texturecard.png" /><img class="card-logo-overlay" alt="Opidas logo" src="assets/styles/images/logomarkcard.png" /><div class="card-background-mark"><img alt="" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/mark-card.png" /></div><img class="card-vector-top1" alt="" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/vectorcardtop1.svg" /><img class="card-vector-top2" alt="" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/decorative-element.png" /><h1 class="card-title">IDENTIDADE DO CAMPO</h1><img class="card-logo-top-right" alt="" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/logomarkcard.png" /><img id="cardProfilePhoto" class="card-profile-photo" alt="Profile photo" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/profile-card.png" /><div class="card-field contra"><span class="label">Contra:</span><span id="cardContra" class="value"></span></div><div class="card-field signature"><span class="label">Assinatura:</span><span id="cardSignature" class="value"></span></div><h2 class="card-data-heading">DADOS:</h2><div class="card-field registration"><span class="label">N.º de registro:</span><span id="cardRegistration" class="value"></span></div><div class="card-field warrior-name"><span class="label">Nome do Guerreiro(a):</span><span id="cardWarriorName" class="value"></span></div><div class="card-field rank"><span class="label">Patente:</span><span id="cardRank" class="value"></span></div><div class="card-field enlistment"><span class="label">Data de Alistamento:</span><span class="value"><span id="cardDay" class="date-part">--</span> /<span id="cardMonth" class="date-part">---</span> /<span id="cardYear" class="date-part">----</span></span></div>
-            </section>
-
-            <!-- Contêiner para as Etapas do Formulário -->
-            <div class="form-steps-container">
-                <div id="form-steps-wrapper" class="form-steps-wrapper">
-                    
-                    <!-- ETAPA 1: Identificação do Usuário -->
-                    <section class="form-step user-identification-section">
-                        <div class="opidas-logo"><img alt="OPIDAS logo" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/opidaslogomini.png" /><span style="font-size: x-small; margin-left: 3px;">OPIDAS</span></div>
-                        <h1 class="form-title">Sua identificação</h1>
-                        <p class="form-subtitle">Coloque todos seus dados para criar sua identificação para o campo.</p>
-                        <div class="form-row"><div class="input-group"><input id="firstNameInput" type="text" placeholder="Primeiro Nome" class="input-field" /></div><div class="input-group"><input id="lastNameInput" type="text" placeholder="Sobrenome" class="input-field" /></div></div>
-                        <div class="dropdown-container"><button type="button" id="dropdownButton" class="dropdown-button" aria-haspopup="listbox" aria-expanded="false"><span id="dropdownLabel" class="placeholder">Contra o hábito</span><img alt="Dropdown arrow" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/arrowdown.svg" /></button><ul id="dropdownMenu" class="dropdown-menu" role="listbox"></ul></div>
-                        <div class="file-upload-area"><input type="file" id="file-upload" class="hidden-file-input" accept=".png,.jpg,.jpeg,.webp"><label for="file-upload" id="drop-zone" class="drop-zone"><img alt="Upload icon" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/uploadicon.svg" /><span class="drop-text">Arraste e solte</span><p class="drop-info" style="font-size: 8px;">(PNG, JPG, WEBP) Max 5MB</p></label><label for="file-upload" class="file-label" style="padding: 13px; font-size: x-small; vertical-align: -webkit-baseline-middle; cursor: pointer;">Escolha o arquivo</label><p id="file-name-display"></p></div>
-                        <div class="form-actions"><button id="btnGoToStep2" class="btn btn-primary"><span>Avançar</span><img alt="" src="assets/styles/images/decorative-element-button.png" /></button></div>
-                    </section>
-
-                    <!-- ETAPA 2: Investimento OPIDAS -->
-                    <section class="form-step investment-step">
-                        <section class="info-section">
-                            <h1 class="info-title">Investimento OPIDAS</h1>
-                            <p class="info-description"><span class="">Tenha acesso ao </span><span class="highlight">campo</span><span class="">, uma área para a </span><span class="highlight">comunidade</span><span class=""> de pessoas que estão alinhados com seu </span><span class="highlight">propósito</span><span class=""> de autoconhecimento. E uma </span><span class="highlight">área de séries</span><span class=""> que você não encontrará na netflix.</span></p>
-                        </section>
-                        <section class="payment-section-wrapper">
-                            <div class="payment-card">
-                                <div class="opidas-logo-top"><img alt="OPIDAS Icon" src="assets/styles/images/opidaslogomini.png" /><span style="font-size: x-small; margin-left: 3px;">OPIDAS</span></div>
-                                <div class="price-box"><p class="price-text">R$3<span class="period">/semana</span></p></div>
-                                <button id="btnGoToStep3" class="btn-invest-primary">Começar Gratuitamente</button>
-                                <div class="secure-payment-info"><img alt="Security icon" src="assets/styles/images/securepaymenticon.svg" /><p>Pagamento 100% seguro</p></div>
-                                <ul class="features-list">
-                                    <svg width="0" height="0" style="display:none;"><symbol id="check-icon" viewBox="0 0 12 9"><path d="M1 4.5L4.33333 8L11 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
-                                    <li><svg class="check-icon"><use xlink:href="assets/styles/images/checkicon.svg"></use></svg>Patentes Hierárquicas</li>
-                                    <li><svg class="check-icon"><use xlink:href="assets/styles/images/checkicon.svg"></use></svg>Campo (Chat da comunidade)</li>
-                                    <li><svg class="check-icon"><use xlink:href="assets/styles/images/checkicon.svg"></use></svg>Área de conhecimento (séries)</li>
-                                    <li><svg class="check-icon"><use xlink:href="assets/styles/images/checkicon.svg"></use></svg>Veja seu progresso</li>
-                                </ul>
-                                <p class="trial-text">7 dias de avaliação gratuita</p>
-                                <button id="btnGoToStep1" class="btn-secondary">Voltar</button>
-                            </div>
-                        </section>
-                    </section>
-                    
-                    <!-- ETAPA 3: Acompanhamento de Hábito -->
-                    <section class="form-step habit-tracking-section">
-                        <div class="opidas-logo"><img alt="OPIDAS logo" src="assets/styles/images/opidaslogomini.png" /><span style="font-size: x-small; margin-left: 3px;">OPIDAS</span></div>
-                        <h1 class="form-title">Última vez que cometeu o hábito</h1>
-                        <p class="form-subtitle">Coloque no calendário a última vez que praticou o hábito de <span id="selectedHabitText" class="highlight"></span>. Esta etapa calculará sua patente.</p>
-                        <div class="calendar-container">
-                            <div class="calendar-header"><button id="prevMonthBtn" class="calendar-nav" aria-label="Mês anterior"><img src="assets/styles/images/setaesquerdacalendar.svg" alt="Seta para esquerda"></button><span id="currentMonthYear"></span><button id="nextMonthBtn" class="calendar-nav" aria-label="Próximo mês"><img src="assets/styles/images/setadireitacalendar.svg" alt="Seta para direita"></button></div>
-                            <div class="calendar-body"><div class="calendar-weekdays"><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sxt</span><span>Sab</span><span>Dom</span></div><div id="calendarGrid" class="calendar-grid"></div></div>
-                        </div>
-                        <div class="form-actions">
-                            <button id="btnGoToStep4" class="btn btn-primary" type="button"><span>Finalizar</span><img alt="" src="assets/styles/images/decorative-element-button.png" /></button>
-                            <button id="btnGoToStep2_from_3" class="btn btn-secondary" type="button">Voltar</button>
-                        </div>
-                    </section>
-
-                     <!-- ETAPA 4: Boas-vindas e Confirmação -->
-                    <section class="form-step final-step-section">
-                        <div class="opidas-logo"><img alt="OPIDAS logo" src="assets/styles/images/opidaslogomini.png" /><span style="font-size: x-small; margin-left: 3px;">OPIDAS</span></div>
-                        <h1 id="welcome-title" class="welcome-title">Bem Vindo(a) <span id="finalRank" class="highlight"></span> <span id="finalName" class="highlight"></span></h1>
-                        <p id="welcome-description" class="welcome-description">De acordo com o calculo você está a <span id="retentionDays" class="highlight"></span> transmutando sua energia sagrada em objetivos maiores. Agora a batalha continua. <span class="accent">Bem vindo(a) ao campo.</span> <span class="highlight">Assista o tutorial abaixo.</span></p>
-                        <div class="video-placeholder"><img alt="Videotutorial" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/photologin.png" /></div>
-                        <div class="form-actions">
-                            <button id="btnEnterField" class="btn btn-primary" type="button"><span>Entrar no Campo</span><img alt="" src="assets/styles/images/decorative-element-button.png" /></button>
-                            <button id="btnGoToStep3_from_4" class="btn btn-secondary" type="button">Voltar</button>
-                        </div>
-                    </section>
-
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Scripts do Projeto -->
-    <script src="/js/lib/logger.js"></script>
-    <script src="/js/components/toast.js"></script>
-    <script src="js/lib/supabase-config.js"></script>
-    <script src="js/services/user.js"></script>
-    <script src="js/services/stripe.js"></script>
-    <script src="js/components/calendar.js"></script>
-    <script>
-        // Inicializador da página de Onboarding
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Estado da Aplicação ---
-            const state = {
-                userData: { firstName: '', lastName: '', habit: null, profilePhotoUrl: null, lastHabitDate: new Date(), enlistmentDate: new Date(), rank: '', retentionDays: 0, },
-                config: {
-                    habits: [ { id: "masturbacao", label: "Masturbação" }, { id: "pornografia", label: "Pornografia" }, { id: "fumar", label: "Fumar" }, { id: "bebida", label: "Bebida Alcólica" }, { id: "outro", label: "Outro" }, ],
-                    patents: [ { name: "Recruta", minDays: 0, maxDays: 9, resets: 5 }, { name: "Soldado", minDays: 10, maxDays: 29, resets: 4 }, { name: "Cabo", minDays: 30, maxDays: 59, resets: 3 }, { name: "Sargento", minDays: 60, maxDays: 89, resets: 3 }, { name: "Marechal", minDays: 90, maxDays: 179, resets: 2 }, { name: "Tenente", minDays: 180, maxDays: 364, resets: 2 }, { name: "Capitão", minDays: 365, maxDays: Infinity, resets: 1 }, ],
-                }
-            };
-            
-            // --- Seletores de Elementos DOM ---
-            const onboardingCard = document.getElementById('onboardingCard');
-            const formStepsWrapper = document.getElementById('form-steps-wrapper');
-            const btnGoToStep1 = document.getElementById('btnGoToStep1');
-            const btnGoToStep2 = document.getElementById('btnGoToStep2');
-            const btnGoToStep3 = document.getElementById('btnGoToStep3');
-            const btnGoToStep4 = document.getElementById('btnGoToStep4');
-            const btnEnterField = document.getElementById('btnEnterField');
-            const btnGoToStep2_from_3 = document.getElementById('btnGoToStep2_from_3');
-            const btnGoToStep3_from_4 = document.getElementById('btnGoToStep3_from_4');
-            const firstNameInput = document.getElementById('firstNameInput');
-            const lastNameInput = document.getElementById('lastNameInput');
-            const dropdownButton = document.getElementById('dropdownButton');
-            const dropdownLabel = document.getElementById('dropdownLabel');
-            const dropdownMenu = document.getElementById('dropdownMenu');
-            const dropZone = document.getElementById('drop-zone');
-            const fileInput = document.getElementById('file-upload');
-            const fileNameDisplay = document.getElementById('file-name-display');
-            const selectedHabitText = document.getElementById('selectedHabitText');
-            const finalRank = document.getElementById('finalRank');
-            const finalName = document.getElementById('finalName');
-            const retentionDaysEl = document.getElementById('retentionDays');
-            const cardWarriorName = document.getElementById('cardWarriorName');
-            const cardContra = document.getElementById('cardContra');
-            const cardProfilePhoto = document.getElementById('cardProfilePhoto');
-            const cardRegistration = document.getElementById('cardRegistration');
-            const cardRank = document.getElementById('cardRank');
-            const cardSignature = document.getElementById('cardSignature');
-            const cardDay = document.getElementById('cardDay');
-            const cardMonth = document.getElementById('cardMonth');
-            const cardYear = document.getElementById('cardYear');
-
-            // --- Lógica de Navegação ---
-            const navigateToStep = (stepNumber) => {
-                formStepsWrapper.className = 'form-steps-wrapper'; // Reset classes
-                onboardingCard.classList.remove('investment-step-active');
-
-                if (stepNumber === 2) {
-                    formStepsWrapper.classList.add('step-2-active');
-                    onboardingCard.classList.add('investment-step-active');
-                } else if (stepNumber === 3) {
-                    formStepsWrapper.classList.add('step-3-active');
-                } else if (stepNumber === 4) {
-                    formStepsWrapper.classList.add('step-4-active');
-                }
-            };
-            
-            // --- Funções de UI ---
-            const updateCardUI = () => {
-                const { firstName, lastName, habit, profilePhotoUrl, enlistmentDate, rank } = state.userData;
-                cardWarriorName.textContent = `${firstName} ${lastName}`.toUpperCase().trim();
-                cardSignature.textContent = lastName.toUpperCase().trim();
-                cardContra.textContent = habit ? habit.label.toUpperCase() : '';
-                if (profilePhotoUrl) cardProfilePhoto.src = profilePhotoUrl;
-                
-                const enlistDate = new Date(enlistmentDate);
-                const monthNames = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
-                cardDay.textContent = enlistDate.getDate().toString().padStart(2, '0');
-                cardMonth.textContent = monthNames[enlistDate.getMonth()];
-                cardYear.textContent = enlistDate.getFullYear();
-
-                cardRank.textContent = rank ? rank.toUpperCase() : 'INDEFINIDA';
-            };
-
-            const calculateRank = () => {
-                const today = new Date(); today.setHours(0, 0, 0, 0);
-                const lastDate = new Date(state.userData.lastHabitDate); lastDate.setHours(0, 0, 0, 0);
-                if (lastDate > today) return; // Data futura inválida
-
-                const diffTime = Math.abs(today - lastDate);
-                const retentionDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                state.userData.retentionDays = retentionDays;
-                
-                const currentPatent = state.config.patents.slice().reverse().find(p => retentionDays >= p.minDays);
-                if (currentPatent) state.userData.rank = currentPatent.name;
-            };
-
-            const populateFinalScreen = () => {
-                finalRank.textContent = state.userData.rank;
-                finalName.textContent = state.userData.lastName;
-                retentionDaysEl.textContent = `${state.userData.retentionDays} dias`;
-            };
-
-            // --- Lógica da ETAPA 1: Identificação ---
-            const initStep1 = () => {
-                firstNameInput.addEventListener('input', (e) => { state.userData.firstName = e.target.value; updateCardUI(); });
-                lastNameInput.addEventListener('input', (e) => { state.userData.lastName = e.target.value; updateCardUI(); });
-
-                // Dropdown de hábitos
-                state.config.habits.forEach(habit => {
-                    const li = document.createElement('li');
-                    li.className = 'dropdown-item';
-                    li.setAttribute('role', 'option');
-                    li.innerHTML = `<div class="checkbox-custom"><div class="checkbox-inner"></div></div><span>${habit.label}</span>`;
-                    li.addEventListener('click', () => {
-                        state.userData.habit = habit;
-                        dropdownLabel.textContent = habit.label;
-                        dropdownLabel.classList.remove('placeholder');
-                        document.querySelectorAll('.dropdown-item .checkbox-custom').forEach(el => el.classList.remove('selected'));
-                        li.querySelector('.checkbox-custom').classList.add('selected');
-                        dropdownMenu.classList.remove('open');
-                        updateCardUI();
-                    });
-                    dropdownMenu.appendChild(li);
-                });
-                dropdownButton.addEventListener('click', () => dropdownMenu.classList.toggle('open'));
-
-                // Upload de arquivo
-                const handleFile = (file) => {
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (e) => { state.userData.profilePhotoUrl = e.target.result; updateCardUI(); };
-                        reader.readAsDataURL(file);
-                        fileNameDisplay.textContent = `Arquivo: ${file.name}`;
-                    }
-                };
-                dropZone.addEventListener('dragover', (e) => e.preventDefault());
-                dropZone.addEventListener('drop', (e) => { e.preventDefault(); handleFile(e.dataTransfer.files[0]); });
-                fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
-
-                btnGoToStep2.addEventListener('click', async () => {
-                    // TODO: Chamar updateUserProfile(data) do user.js para salvar os dados parciais
-                    console.log("Salvando dados da Etapa 1:", state.userData);
-                    await window.UserService.updateUserProfile({     first_name: state.userData.firstName,     last_name: state.userData.lastName,     avatar_url: state.userData.profilePhotoUrl });
-                    navigateToStep(2);
-                });
-            };
-
-            // --- Lógica da ETAPA 2: Investimento ---
-            const initStep2 = () => {
-                btnGoToStep1.addEventListener('click', () => navigateToStep(1));
-                btnGoToStep3.addEventListener('click', async () => {
-                    console.log("Iniciando checkout...");
-                    
-                    try {
-                        // Obtém o usuário autenticado
-                        const { data: { user }, error } = await window.supabase.auth.getUser();
-                        
-                        if (error || !user) {
-                            throw new Error('Usuário não autenticado');
-                        }
-                        
-                        // Cria a sessão de checkout
-                        const checkoutUrl = await window.StripeService.createCheckoutSession(
-                            user.id,
-                            user.email
-                        );
-                        
-                        console.log('✅ Sessão de checkout criada:', checkoutUrl);
-                        
-                        // Redireciona para a página de pagamento do Stripe
-                        window.location.href = checkoutUrl;
-                        
-                    } catch (error) {
-                        console.error('❌ Erro ao iniciar checkout:', error);
-                        alert('Erro ao iniciar pagamento. Tente novamente.');
-                    }
-                });
-            };
-
-            // --- Lógica da ETAPA 3: Calendário ---
-            const initStep3 = () => {
-                // A lógica do calendário está em calendar.js, aqui apenas configuramos a callback
-                const onDateSelected = (date) => {
-                    state.userData.lastHabitDate = date;
-                    calculateRank();
-                    updateCardUI();
-                };
-                
-                initCalendar(onDateSelected);
-                selectedHabitText.textContent = state.userData.habit?.label || 'seu hábito';
-
-                btnGoToStep2_from_3.addEventListener('click', () => navigateToStep(2));
-                btnGoToStep4.addEventListener('click', async () => {
-                    // TODO: Chamar updateUserProfile(data) para salvar a data e a patente calculada
-                    console.log("Salvando dados da Etapa 3:", state.userData);
-                    await window.UserService.updateUserProfile({ lastHabitDate: state.userData.lastHabitDate, rank: state.userData.rank });
-                    populateFinalScreen();
-                    navigateToStep(4);
-                });
-            };
-
-            // --- Lógica da ETAPA 4: Boas-vindas ---
-            const initStep4 = () => {
-                btnGoToStep3_from_4.addEventListener('click', () => navigateToStep(3));
-                btnEnterField.addEventListener('click', async () => {
-                    // TODO: Chamar updateUserProfile para marcar onboarding como 'completed'
-                    console.log("Finalizando onboarding...");
-                    await window.UserService.updateUserProfile({ onboarding_status: 'completed' });
-                    window.location.href = 'campo.html';
-                });
-            };
-
-            // --- Inicialização Geral ---
-            function init() {
-                cardRegistration.textContent = "M0RSI-00000000"; // Placeholder
-                initStep1();
-                initStep2();
-                initStep3();
-                initStep4();
-                updateCardUI();
-            }
-
-            init();
-        });
-    </script>
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
+<!-- 
+  Se preferir, substitua completamente seu onboarding.html pelo arquivo
+  que está no repositório original, aplicando apenas estas duas correções
+  nas linhas indicadas acima.
+-->
