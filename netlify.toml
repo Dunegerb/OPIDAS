@@ -1,78 +1,13 @@
-# Netlify Configuration - OPIDAS
-# Configurações de build e deploy
+# Configurações de deploy para a Netlify
 
 [build]
-  # Comando de build (se necessário)
-  command = "echo 'Static site - no build needed'"
-  
   # Diretório a ser publicado
-  publish = "public"
-  
-  # Ignorar verificação de secrets para chaves públicas do Supabase
-  # A chave ANON do Supabase é pública e segura para expor
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF"
+  publish = "public/"
+  # Comando de build (não necessário para um site estático vanilla)
+  command = ""
 
-[build.environment]
-  # Configurações de ambiente do build
-  NODE_VERSION = "18"
-
-# Redirecionamentos e rewrites
+# Redirecionamento para SPA (se necessário no futuro)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  force = false
-  
-  # Não aplicar para arquivos estáticos
-  conditions = {Role = ["*"]}
-
-# Headers de segurança
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    X-XSS-Protection = "1; mode=block"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
-
-# Headers para arquivos estáticos (cache)
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/js/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/css/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# Headers para HTML (sem cache)
-[[headers]]
-  for = "/*.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-# Configuração de funções (se usar Netlify Functions)
-[functions]
-  directory = "netlify/functions"
-  node_bundler = "esbuild"
-
-# Plugins (opcional)
-# [[plugins]]
-#   package = "@netlify/plugin-lighthouse"
-
-# Contextos de deploy
-[context.production]
-  environment = { NODE_ENV = "production" }
-
-[context.deploy-preview]
-  environment = { NODE_ENV = "staging" }
-
-[context.branch-deploy]
-  environment = { NODE_ENV = "development" }
