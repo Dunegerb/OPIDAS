@@ -1,27 +1,16 @@
 // Configuração do Cliente Supabase - OPIDAS
 // Este arquivo inicializa e configura o cliente Supabase
-// ✅ SEGURO: Não contém secrets hardcoded
 
 (function() {
     'use strict';
 
-    // ✅ CORREÇÃO: Secrets agora vêm de variáveis de ambiente do Netlify
-    // Configure em: Netlify Dashboard → Site Settings → Environment Variables
+    // ⚠️ IMPORTANTE: Substitua estas variáveis pelas suas credenciais do Supabase
+    // Você pode encontrar essas informações em: https://app.supabase.com/project/_/settings/api
     
-    // Opção 1: Variáveis injetadas pelo Netlify durante o build
-    const SUPABASE_URL = window.ENV?.SUPABASE_URL || 'https://vkdywsawrftrpxjaxejs.supabase.co';
-    const SUPABASE_ANON_KEY = window.ENV?.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrZHl3c2F3cmZ0cnB4amF4ZWpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4NTc1OTMsImV4cCI6MjA3ODQzMzU5M30.5ro31_G_sIGJ1lz_rHmVNRK5XnjTbMocfkjwDJqaees';
+    const SUPABASE_URL = 'https://vkdywsawrftrpxjaxejs.supabase.co'; // Ex: https://xyzcompany.supabase.co
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrZHl3c2F3cmZ0cnB4amF4ZWpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4NTc1OTMsImV4cCI6MjA3ODQzMzU5M30.5ro31_G_sIGJ1lz_rHmVNRK5XnjTbMocfkjwDJqaees'; // Chave pública (anon/public)
 
-    // ⚠️ NOTA IMPORTANTE SOBRE SUPABASE_ANON_KEY:
-    // =============================================
-    // A chave ANON do Supabase é PÚBLICA e SEGURA para expor no frontend.
-    // Ela é protegida por Row Level Security (RLS) no banco de dados.
-    // 
-    // O Netlify está detectando como "secret" porque parece um JWT,
-    // mas na verdade é uma chave pública que DEVE estar no frontend.
-    //
-    // SOLUÇÃO: Adicionar exceção no Netlify ou usar variáveis de ambiente
-    // para evitar o alerta, mas tecnicamente não é um problema de segurança.
+    // ✅ VALIDAÇÃO REMOVIDA - O código agora vai direto para a inicialização
 
     // Verifica se o script do Supabase foi carregado
     if (typeof window.supabase === 'undefined' || typeof window.supabase.createClient !== 'function') {
