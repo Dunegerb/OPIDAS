@@ -15,7 +15,7 @@ async function signUp(email, password) {
             email: email,
             password: password,
             options: {
-                emailRedirectTo: `${window.location.origin}/onboarding.html`,
+                emailRedirectTo: `${window.location.origin}/onboarding/identification.html`,
                 data: {
                     onboarding_status: 'pending'
                 }
@@ -41,7 +41,7 @@ async function signUp(email, password) {
             await new Promise(resolve => setTimeout(resolve, 500));
             
             alert("Conta criada com sucesso! Você será redirecionado para completar seu perfil.");
-            window.location.href = 'onboarding.html';
+            window.location.href = 'onboarding/identification.html';
         }
 
     } catch (error) {
@@ -78,7 +78,7 @@ async function signIn(email, password) {
 
         if (profileError) {
             console.warn('⚠️ Perfil não encontrado, redirecionando para onboarding');
-            window.location.href = 'onboarding.html';
+            window.location.href = 'onboarding/identification.html';
             return;
         }
 
@@ -88,7 +88,7 @@ async function signIn(email, password) {
             window.location.href = 'campo.html';
         } else {
             console.log('⚠️ Onboarding pendente, redirecionando para onboarding');
-            window.location.href = 'onboarding.html';
+            window.location.href = 'onboarding/identification.html';
         }
 
     } catch (error) {
@@ -154,7 +154,7 @@ async function signInWithProvider(provider) {
         const { data, error } = await window.supabase.auth.signInWithOAuth({
             provider: provider,
             options: {
-                redirectTo: `${window.location.origin}/onboarding.html`
+                redirectTo: `${window.location.origin}/onboarding/identification.html`
             }
         });
 
@@ -225,3 +225,4 @@ function initAuthPage() {
         });
     });
 }
+
