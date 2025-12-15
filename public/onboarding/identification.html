@@ -105,25 +105,39 @@
                 localStorage.setItem('onboardingData', JSON.stringify(userData));
             };
 
-            const loadState = () => {
-                const savedData = localStorage.getItem('onboardingData');
-                if (savedData) {
-                    const parsedData = JSON.parse(savedData);
-                    userData = { ...userData, ...parsedData };
-                    
-                    firstNameInput.value = userData.firstName || '';
-                    lastNameInput.value = userData.lastName || '';
-                    if (userData.habit) {
-                        dropdownLabel.textContent = userData.habit.label;
-                        dropdownLabel.classList.remove('placeholder');
-                    }
-                    if (userData.profilePhotoUrl) {
-                        cardProfilePhoto.src = userData.profilePhotoUrl;
-                    }
-                    updateCardName();
-                    updateCardContra();
-                }
-            };
+const loadState = async () => {
+	                // ⚠️ CORREÇÃO: Limpar o localStorage se o usuário já tiver completado o onboarding
+	                // ou se a sessão for nova para evitar dados de teste persistentes.
+	                const { data: { session } } = await window.supabase.auth.getSession();
+	                
+	                if (!session) {
+	                    // Se não há sessão, é um novo usuário, limpa qualquer lixo de teste
+	                    localStorage.removeItem('onboardingData');
+	                }
+	
+	                const savedData = localStorage.getItem('onboardingData');
+	                if (savedData) {
+	                    const parsedData = JSON.parse(savedData);
+	                    userData = { ...userData, ...parsedData };
+	                    
+	                    firstNameInput.value = userData.firstName || '';
+	                    lastNameInput.value = userData.lastName || '';
+	                    if (userData.habit) {
+	                        // Encontra o objeto completo do hábito para garantir que o label está correto
+	                        const habitObject = habits.find(h => h.id === userData.habit.id);
+	                        if (habitObject) {
+	                            userData.habit = habitObject; // Atualiza o objeto completo
+	                            dropdownLabel.textContent = habitObject.label;
+	                            dropdownLabel.classList.remove('placeholder');
+	                        }
+	                    }
+	                    if (userData.profilePhotoUrl) {
+	                        cardProfilePhoto.src = userData.profilePhotoUrl;
+	                    }
+	                    updateCardName();
+	                    updateCardContra();
+	                }
+	            };
 
             // --- Lógica de Eventos ---
             firstNameInput.addEventListener('input', updateCardName);
@@ -204,13 +218,13 @@
             });
             
             // --- Inicialização ---
-            const initialize = () => {
-                loadState();
-                cardRegistration.textContent = "M0RSI-00000000";
-                populateDropdown();
-                setEnlistmentDate(new Date(userData.enlistmentDate));
-            };
-            initialize();
+const initialize = async () => {
+	                await loadState(); // Agora é assíncrono
+	                cardRegistration.textContent = "M0RSI-00000000";
+	                populateDropdown();
+	                setEnlistmentDate(new Date(userData.enlistmentDate));
+	            };
+	            initialize();
         });
     </script>
 </body>
