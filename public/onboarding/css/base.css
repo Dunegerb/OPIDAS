@@ -58,16 +58,16 @@ body {
     border-radius: 13px; overflow: hidden;
 }
 .background-image-left { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; border-radius: 13px; mix-blend-mode: luminosity; opacity: 0.15; }
-.card-base, .card-texture, .card-logo-overlay, .card-background-mark, .card-vector-top1, .card-vector-top2 { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 13px; }
+.card-base, .card-texture, .card-logo-overlay, .card-background-mark, .card-vector-top1, .card-vector-top2 { position: absolute; top: 0; left: 0; width: 100%; height: 100%; /*border-radius: 13px;*/ }
 .card-base { background-color: var(--bg-card); }
-.card-texture, .card-logo-overlay { mix-blend-mode: overlay; }
-.card-logo-overlay { top: 28px; left: 73%; transform: translateX(-50%); width: 227px; height: 273px; }
+.card-texture, .card-logo-overlay { /*mix-blend-mode: overlay;*/ }
+.card-logo-overlay { top: 28px; left: 73%; transform: translateX(-50%); width: 227px; height: 273px; mix-blend-mode: soft-light;}
 .card-background-mark { left: 13px; width: 59px; height: 301px; background-image: url('https://c.animaapp.com/rDKbXW1a/img/backgroundmark@2x.png'); background-size: cover; background-position: center; display: flex; }
-.card-background-mark img { mix-blend-mode: multiply; width: 100%; height: 100%; object-fit: cover; }
+.card-background-mark img { mix-blend-mode: luminosity; width: 100%; height: 100%; object-fit: cover; }
 .card-vector-top1, .card-vector-top2 { top: 14px; left: 82px; width: 260px; height: 20px; }
 .card-vector-top2 { mix-blend-mode: hard-light; object-fit: cover; }
 .card-title { position: absolute; top: 19px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 500; text-align: center; white-space: nowrap; z-index: 2; }
-.card-logo-top-right { position: absolute; width: 50px; height: 20px; top: 13px; right: 13px; mix-blend-mode: exclusion; z-index: 2; }
+.card-logo-top-right { position: absolute; width: 55px; /*height: 20px;*/ top: 13px; right: 13px; mix-blend-mode: exclusion; z-index: 2; }
 .card-profile-photo { position: absolute; top: 44px; left: 85px; width: 100px; height: 100px; object-fit: cover; border-radius: 50%; z-index: 2; }
 .card-data-heading { position: absolute; top: 157px; left: 85px; color: var(--accent-color); font-size: 10px; font-weight: 500; z-index: 2; }
 .card-field { position: absolute; height: 14px; font-size: 10px; display: flex; align-items: center; gap: 8px; white-space: nowrap; z-index: 2; }
@@ -137,4 +137,5 @@ body {
 @media (max-height: 780px) and (min-width: 1201px) {
     .onboarding-card { transform: scale(0.85); }
     .page-header { margin-bottom: 0; transform: scale(0.9); }
+
 }
