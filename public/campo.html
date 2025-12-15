@@ -381,9 +381,9 @@
 
                 chatFormEl.addEventListener('submit', handleSendMessage);
                 resetButtonEl.addEventListener('click', handleResetClick);
-                logoutButton.addEventListener('click', () => {
+                logoutButton.addEventListener('click', async () => {
                     try {
-                        await window.signOut();
+                        window.signOut();
                         // O redirecionamento para 'index.html' já está dentro de signOut()
                     } catch (error) {
                         console.error("Erro durante o logout:", error);
@@ -398,3 +398,9 @@
     
 </body>
 </html>
+
+
+
+
+
+
