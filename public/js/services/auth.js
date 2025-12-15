@@ -1,5 +1,6 @@
 // --- MÓDULO DE AUTENTICAÇÃO (auth.js) ---
 // Responsável por login, logout, registro e proteção de rotas.
+// Responsável por login, logout, registro e proteção de rotas.
 
 /**
  * Registra um novo usuário
@@ -167,6 +168,13 @@ async function signInWithProvider(provider) {
         alert(`Erro ao fazer login com ${provider}: ${error.message}`);
     }
 }
+
+// Exporta as funções para uso global
+window.signUp = signUp;
+window.signIn = signIn;
+window.signOut = signOut;
+window.protectRoute = protectRoute;
+window.signInWithProvider = signInWithProvider;
 
 // --- Lógica de UI para a página de login ---
 function initAuthPage() {
