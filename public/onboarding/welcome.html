@@ -12,27 +12,62 @@
 </head>
 <body>
     <header class="page-header">
-        <img alt="OPIDAS Brand Logos" src="https://c.animaapp.com/rDKbXW1a/img/group-37@2x.png" />
+        <!-- Corrigido: Logo do Header -->
+        <img alt="OPIDAS Brand Logos" src="/assets/styles/images/logoopidas+campo.svg" />
     </header>
 
     <div class="onboarding-card">
-        <img class="background-image-left" alt="" src="https://c.animaapp.com/rDKbXW1a/img/rectangle-30.png" />
+        <!-- Corrigido: Background Esquerdo -->
+        <img class="background-image-left" alt="" src="/assets/styles/images/backgroundcardsecin.png" />
         
         <main class="main-content">
             <!-- Seção do Cartão de Identidade (Preview Fixo) -->
             <section class="identity-card-section" aria-label="Identity Card Preview">
-                <div class="card-base"></div><img class="card-texture" alt="" src="https://c.animaapp.com/rDKbXW1a/img/texturecard@2x.png" /><img class="card-logo-overlay" alt="Opidas logo" src="https://c.animaapp.com/rDKbXW1a/img/opidas-logo@4x.png" /><div class="card-background-mark"><img alt="" src="https://c.animaapp.com/rDKbXW1a/img/mark@2x.png" /></div><img class="card-vector-top1" alt="" src="https://c.animaapp.com/rDKbXW1a/img/vector-79.svg" /><img class="card-vector-top2" alt="" src="https://c.animaapp.com/rDKbXW1a/img/vector-80@2x.png" /><h1 class="card-title">IDENTIDADE DO CAMPO</h1><img class="card-logo-top-right" alt="" src="https://c.animaapp.com/rDKbXW1a/img/group-55@2x.png" /><img id="cardProfilePhoto" class="card-profile-photo" alt="Profile photo" src="https://c.animaapp.com/rDKbXW1a/img/rectangle-40@2x.png" /><div class="card-field contra"><span class="label">Contra:</span><span id="cardContra" class="value"></span></div><div class="card-field signature"><span class="label">Assinatura:</span><span id="cardSignature" class="value"></span></div><h2 class="card-data-heading">DADOS:</h2><div class="card-field registration"><span class="label">N.º de registro:</span><span id="cardRegistration" class="value"></span></div><div class="card-field warrior-name"><span class="label">Nome do Guerreiro(a):</span><span id="cardWarriorName" class="value"></span></div><div class="card-field rank"><span class="label">Patente:</span><span id="cardRank" class="value"></span></div><div class="card-field enlistment"><span class="label">Data de Alistamento:</span><span class="value"><span id="cardDay" class="date-part">--</span> /<span id="cardMonth" class="date-part">---</span> /<span id="cardYear" class="date-part">----</span></span></div>
+                <div class="card-base"></div>
+                <!-- Corrigido: Textura -->
+                <img class="card-texture" alt="" src="/assets/styles/images/texturecard.png" />
+                <!-- Corrigido: Logo Overlay -->
+                <img class="card-logo-overlay" alt="Opidas logo" src="/assets/styles/images/logomarkcard.png" />
+                <div class="card-background-mark">
+                    <!-- Corrigido: Marca d'água -->
+                    <img alt="" src="/assets/styles/images/mark-card.png" />
+                </div>
+                <!-- Corrigido: Vetor Top 1 -->
+                <img class="card-vector-top1" alt="" src="/assets/styles/images/vectorcardtop1.svg" />
+                <!-- Corrigido: Vetor Top 2 -->
+                <img class="card-vector-top2" alt="" src="/assets/styles/images/identidadedocampobackground.png" />
+                
+                <h1 class="card-title">IDENTIDADE DO CAMPO</h1>
+                
+                <!-- Corrigido: Logo Topo Direito -->
+                <img class="card-logo-top-right" alt="" src="/assets/styles/images/logosopidas+campo-card.png" />
+                
+                <!-- Corrigido: Foto de Perfil (Vazio, preenchido via JS) -->
+                <img id="cardProfilePhoto" class="card-profile-photo" alt="Profile photo" src="" />
+                
+                <div class="card-field contra"><span class="label">Contra:</span><span id="cardContra" class="value"></span></div><div class="card-field signature"><span class="label">Assinatura:</span><span id="cardSignature" class="value"></span></div><h2 class="card-data-heading">DADOS:</h2><div class="card-field registration"><span class="label">N.º de registro:</span><span id="cardRegistration" class="value"></span></div><div class="card-field warrior-name"><span class="label">Nome do Guerreiro(a):</span><span id="cardWarriorName" class="value"></span></div><div class="card-field rank"><span class="label">Patente:</span><span id="cardRank" class="value"></span></div><div class="card-field enlistment"><span class="label">Data de Alistamento:</span><span class="value"><span id="cardDay" class="date-part">--</span> /<span id="cardMonth" class="date-part">---</span> /<span id="cardYear" class="date-part">----</span></span></div>
             </section>
 
             <!-- Contêiner para a Etapa do Formulário -->
             <div class="form-steps-container">
                 <section class="form-step final-step-section">
-                    <div class="opidas-logo"><img alt="OPIDAS logo" src="https://c.animaapp.com/YigEEBTG/img/add-a-heading--4--2@2x.png" /><span>OPIDAS</span></div>
+                    <div class="opidas-logo">
+                        <!-- Corrigido: Logo Mini -->
+                        <img alt="OPIDAS logo" src="/assets/styles/images/opidaslogomini.png" />
+                        <span>OPIDAS</span>
+                    </div>
                     <h1 id="welcome-title" class="welcome-title">Bem Vindo(a) <span id="finalRank" class="highlight"></span> <span id="finalName" class="highlight"></span></h1>
                     <p id="welcome-description" class="welcome-description">De acordo com o calculo você está a <span id="retentionDays" class="highlight"></span> transmutando sua energia sagrada em objetivos maiores. Agora a batalha continua. <span class="accent">Bem vindo(a) ao campo.</span> <span class="highlight">Assista o tutorial abaixo.</span></p>
-                    <div class="video-placeholder"><img alt="Videotutorial" src="https://c.animaapp.com/YigEEBTG/img/videotutorial@2x.png" onclick="alert('Tocando vídeo tutorial...')"/></div>
+                    <div class="video-placeholder">
+                        <!-- Corrigido: Video Tutorial Thumbnail -->
+                        <img alt="Videotutorial" src="/assets/styles/images/videotutorial.png" onclick="alert('Tocando vídeo tutorial...')"/>
+                    </div>
                     <div class="form-actions">
-                        <button id="btnEnterField" class="btn btn-primary" type="button"><span>Entrar no Campo</span><img alt="" src="https://c.animaapp.com/YigEEBTG/img/group-54@2x.png" /></button>
+                        <button id="btnEnterField" class="btn btn-primary" type="button">
+                            <span>Entrar no Campo</span>
+                            <!-- Corrigido: Elemento Decorativo do Botão -->
+                            <img alt="" src="/assets/styles/images/decorative-element-button.png" />
+                        </button>
                         <button id="btnGoToPrevStep" class="btn btn-secondary" type="button">Voltar</button>
                     </div>
                 </section>
@@ -63,8 +98,13 @@
                 document.getElementById('cardWarriorName').textContent = `${userData.firstName} ${userData.lastName}`.toUpperCase();
                 document.getElementById('cardSignature').textContent = userData.lastName.toUpperCase();
                 document.getElementById('cardContra').textContent = userData.habit.label.toUpperCase();
-                document.getElementById('cardProfilePhoto').src = userData.profilePhotoUrl;
-                document.getElementById('cardRegistration').textContent = "M0RSI-00000000";
+                
+                // Preenche a foto se existir URL
+                if(userData.profilePhotoUrl) {
+                    document.getElementById('cardProfilePhoto').src = userData.profilePhotoUrl;
+                }
+
+                document.getElementById('cardRegistration').textContent = userData.registrationNumber || "M0RSI-00000000";
                 document.getElementById('cardRank').textContent = userData.rank.toUpperCase();
                 
                 const enlistment = new Date(userData.enlistmentDate);
