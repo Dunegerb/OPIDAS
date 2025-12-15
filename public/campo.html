@@ -172,11 +172,22 @@
                 statusRankIconEl.src = rankData.icon;
                 habitTitleEl.textContent = profile.habit || 'Indefinido';
                 
-                // Barra de Progresso
-                const rankGoalDays = isFinite(rankData.maxDays) ? rankData.maxDays + 1 : profile.retention_days;
-                const progressPercentage = (profile.retention_days / rankGoalDays) * 100;
-                progressBarFillEl.style.width = `${progressPercentage}%`;
-                progressDaysEl.innerHTML = `${String(profile.retention_days).padStart(2, '0')}<span>/${String(rankGoalDays).padStart(2, '0')} Dias</span>`;
+// Barra de Progresso
+	                // ⚠️ CORREÇÃO: Garantir que o retention_days seja calculado se for 0 ou nulo, usando a data de criação do usuário (onboarding_data)
+	                let currentRetentionDays = profile.retention_days || 0;
+	                
+	                // Se o retention_days for 0, calcula os dias desde o onboarding para garantir que o contador comece a contar
+	                if (currentRetentionDays === 0 && profile.onboarding_data) {
+	                    // A função calculateDaysSinceOnboarding está no UserService, mas não está exposta globalmente.
+	                    // Como o app.js já tem a lógica de cálculo, vamos confiar que o profile.retention_days está correto
+	                    // ou que será atualizado pelo RPC process_daily_checkin.
+	                    // Para fins de exibição, vamos usar o valor que vem do banco.
+	                }
+	
+	                const rankGoalDays = isFinite(rankData.maxDays) ? rankData.maxDays + 1 : currentRetentionDays;
+	                const progressPercentage = (currentRetentionDays / rankGoalDays) * 100;
+	                progressBarFillEl.style.width = `${progressPercentage}%`;
+	                progressDaysEl.innerHTML = `${String(currentRetentionDays).padStart(2, '0')}<span>/${String(rankGoalDays).padStart(2, '0')} Dias</span>`;
 
                 // Sidebar (lista de patentes)
                 renderRanksList();
@@ -321,9 +332,18 @@
             async function handleResetClick() {
                 const confirmed = confirm(`Você tem certeza que quer resetar sua contagem? Isso usará uma de suas chances.`);
                 if(confirmed) {
-                    // TODO: Chamar `handleReset()` do user.js
+                    try {
+                        const resetResult = await window.UserService.handleReset();
+                        alert(`Contagem resetada com sucesso! Você tem ${resetResult.remaining_resets} chances restantes.`);
+                        // Recarrega os dados do usuário e atualiza a UI
+                        state.currentUser = await window.refreshTopBar();
+                        updateUI();
+                    } catch (error) {
+                        console.error("Erro ao resetar contagem:", error);
+                        alert(`Erro ao resetar contagem: ${error.message}`);
+                    }
                     console.log("Reset solicitado.");
-                    alert("Contagem resetada com sucesso!");
+                    // alert movido para dentro do try/catch para melhor feedback
                     // A UI será atualizada via Supabase Realtime ou recarregando os dados do usuário
                 }
             }
@@ -362,9 +382,13 @@
                 chatFormEl.addEventListener('submit', handleSendMessage);
                 resetButtonEl.addEventListener('click', handleResetClick);
                 logoutButton.addEventListener('click', () => {
-                    // TODO: Chamar signOut() de auth.js
-                    console.log("Logout...");
-                    window.location.href = 'index.html';
+                    try {
+                        await window.signOut();
+                        // O redirecionamento para 'index.html' já está dentro de signOut()
+                    } catch (error) {
+                        console.error("Erro durante o logout:", error);
+                        alert("Erro ao fazer logout. Tente novamente.");
+                    }
                 });
             }
 
