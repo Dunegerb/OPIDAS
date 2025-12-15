@@ -12,32 +12,74 @@
 </head>
 <body>
     <header class="page-header">
-        <img alt="OPIDAS Brand Logos" src="https://c.animaapp.com/rDKbXW1a/img/group-37@2x.png" />
+        <!-- Corrigido: Logo do Header -->
+        <img alt="OPIDAS Brand Logos" src="/assets/styles/images/logoopidas+campo.svg" />
     </header>
 
 
     <div class="onboarding-card">
-        <img class="background-image-left" alt="" src="https://c.animaapp.com/rDKbXW1a/img/rectangle-30.png" />
+        <!-- Corrigido: Background Esquerdo -->
+        <img class="background-image-left" alt="" src="/assets/styles/images/backgroundcardsecin.png" />
         
         <main class="main-content">
             <!-- Seção do Cartão de Identidade (Preview Fixo) -->
             <section class="identity-card-section" aria-label="Identity Card Preview">
-                <div class="card-base"></div><img class="card-texture" alt="" src="https://c.animaapp.com/rDKbXW1a/img/texturecard@2x.png" /><img class="card-logo-overlay" alt="Opidas logo" src="https://c.animaapp.com/rDKbXW1a/img/opidas-logo@4x.png" /><div class="card-background-mark"><img alt="" src="https://c.animaapp.com/rDKbXW1a/img/mark@2x.png" /></div><img class="card-vector-top1" alt="" src="https://c.animaapp.com/rDKbXW1a/img/vector-79.svg" /><img class="card-vector-top2" alt="" src="https://c.animaapp.com/rDKbXW1a/img/vector-80@2x.png" /><h1 class="card-title">IDENTIDADE DO CAMPO</h1><img class="card-logo-top-right" alt="" src="https://c.animaapp.com/rDKbXW1a/img/group-55@2x.png" /><img id="cardProfilePhoto" class="card-profile-photo" alt="Profile photo" src="https://c.animaapp.com/rDKbXW1a/img/rectangle-40@2x.png" /><div class="card-field contra"><span class="label">Contra:</span><span id="cardContra" class="value"></span></div><div class="card-field signature"><span class="label">Assinatura:</span><span id="cardSignature" class="value"></span></div><h2 class="card-data-heading">DADOS:</h2><div class="card-field registration"><span class="label">N.º de registro:</span><span id="cardRegistration" class="value"></span></div><div class="card-field warrior-name"><span class="label">Nome do Guerreiro(a):</span><span id="cardWarriorName" class="value"></span></div><div class="card-field rank"><span class="label">Patente:</span><span id="cardRank" class="value"></span></div><div class="card-field enlistment"><span class="label">Data de Alistamento:</span><span class="value"><span id="cardDay" class="date-part">--</span> /<span id="cardMonth" class="date-part">---</span> /<span id="cardYear" class="date-part">----</span></span></div>
+                <div class="card-base"></div>
+                <!-- Corrigido: Textura do Card -->
+                <img class="card-texture" alt="" src="/assets/styles/images/texturecard.png" />
+                <!-- Corrigido: Logo Overlay do Card -->
+                <img class="card-logo-overlay" alt="Opidas logo" src="/assets/styles/images/logomarkcard.png" />
+                <div class="card-background-mark">
+                    <!-- Corrigido: Marca d'água do Card -->
+                    <img alt="" src="/assets/styles/images/mark-card.png" />
+                </div>
+                <!-- Corrigido: Vetor Top 1 -->
+                <img class="card-vector-top1" alt="" src="/assets/styles/images/vectorcardtop1.svg" />
+                <!-- Corrigido: Vetor Top 2 / Identidade Background -->
+                <img class="card-vector-top2" alt="" src="/assets/styles/images/identidadedocampobackground.png" />
+                
+                <h1 class="card-title">IDENTIDADE DO CAMPO</h1>
+                
+                <!-- Corrigido: Logo Topo Direito -->
+                <img class="card-logo-top-right" alt="" src="/assets/styles/images/logosopidas+campo-card.png" />
+                
+                <!-- Corrigido: Foto de Perfil (Link externo removido, será preenchido pelo JS) -->
+                <img id="cardProfilePhoto" class="card-profile-photo" alt="Profile photo" src="" />
+                
+                <div class="card-field contra"><span class="label">Contra:</span><span id="cardContra" class="value"></span></div><div class="card-field signature"><span class="label">Assinatura:</span><span id="cardSignature" class="value"></span></div><h2 class="card-data-heading">DADOS:</h2><div class="card-field registration"><span class="label">N.º de registro:</span><span id="cardRegistration" class="value"></span></div><div class="card-field warrior-name"><span class="label">Nome do Guerreiro(a):</span><span id="cardWarriorName" class="value"></span></div><div class="card-field rank"><span class="label">Patente:</span><span id="cardRank" class="value"></span></div><div class="card-field enlistment"><span class="label">Data de Alistamento:</span><span class="value"><span id="cardDay" class="date-part">--</span> /<span id="cardMonth" class="date-part">---</span> /<span id="cardYear" class="date-part">----</span></span></div>
             </section>
 
 
             <!-- Contêiner para a Etapa do Formulário -->
             <div class="form-steps-container">
                 <section class="form-step habit-tracking-section">
-                    <div class="opidas-logo"><img alt="OPIDAS logo" src="https://c.animaapp.com/rDKbXW1a/img/add-a-heading--4--2@2x.png" /><span>OPIDAS</span></div>
+                    <div class="opidas-logo">
+                        <!-- Corrigido: Logo Mini do Formulário -->
+                        <img alt="OPIDAS logo" src="/assets/styles/images/opidaslogomini.png" />
+                        <span>OPIDAS</span>
+                    </div>
                     <h1 class="form-title">Última vez que cometeu o hábito</h1>
                     <p class="form-subtitle">Coloque no calendário a última vez que praticou o hábito de <span id="selectedHabitText" class="highlight"></span>. Esta etapa calculará sua patente.</p>
                     <div class="calendar-container">
-                        <div class="calendar-header"><button id="prevMonthBtn" class="calendar-nav" aria-label="Mês anterior"><img src="https://c.animaapp.com/ScVkXsrq/img/vector-1.svg" alt="Seta para esquerda"></button><span id="currentMonthYear"></span><button id="nextMonthBtn" class="calendar-nav" aria-label="Próximo mês"><img src="https://c.animaapp.com/ScVkXsrq/img/vector.svg" alt="Seta para direita"></button></div>
+                        <div class="calendar-header">
+                            <button id="prevMonthBtn" class="calendar-nav" aria-label="Mês anterior">
+                                <!-- Corrigido: Seta Esquerda -->
+                                <img src="/assets/styles/images/setaesquerdacalendar.svg" alt="Seta para esquerda">
+                            </button>
+                            <span id="currentMonthYear"></span>
+                            <button id="nextMonthBtn" class="calendar-nav" aria-label="Próximo mês">
+                                <!-- Corrigido: Seta Direita -->
+                                <img src="/assets/styles/images/setadireitacalendar.svg" alt="Seta para direita">
+                            </button>
+                        </div>
                         <div class="calendar-body"><div class="calendar-weekdays"><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sxt</span><span>Sab</span><span>Dom</span></div><div id="calendarGrid" class="calendar-grid"></div></div>
                     </div>
                     <div class="form-actions">
-                        <button id="btnGoToNextStep" class="btn btn-primary" type="button"><span>Finalizar</span><img alt="" src="https://c.animaapp.com/rDKbXW1a/img/group-54@2x.png" /></button>
+                        <button id="btnGoToNextStep" class="btn btn-primary" type="button">
+                            <span>Finalizar</span>
+                            <!-- Corrigido: Elemento Decorativo do Botão -->
+                            <img alt="" src="/assets/styles/images/decorative-element-button.png" />
+                        </button>
                         <button id="btnGoToPrevStep" class="btn btn-secondary" type="button">Voltar</button>
                     </div>
                 </section>
