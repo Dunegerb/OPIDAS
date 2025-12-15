@@ -66,25 +66,35 @@ async function loadTopBar(options = {}) {
             console.log(`✅ Ícone de patente atualizado: ${userProfile.rankData.name}`);
         }
 
-        // Atualiza a barra de progresso e contagem de dias
-        if (includeProgressBar && topBarElements.progressBar && topBarElements.progressDays) {
-            const rankData = userProfile.rankData;
-            const retentionDays = userProfile.retention_days || 0;
-
-            // Calcula o objetivo de dias para a patente atual
-            const goalDays = isFinite(rankData.maxDays) ? rankData.maxDays + 1 : retentionDays;
-            const progressPercentage = Math.min((retentionDays / goalDays) * 100, 100);
-
-            // Atualiza a largura da barra de progresso
-            topBarElements.progressBar.style.width = `${progressPercentage}%`;
-
-            // Atualiza o texto de dias (com padding de zeros)
-            const currentDaysFormatted = String(retentionDays).padStart(2, '0');
-            const totalDaysFormatted = String(goalDays).padStart(2, '0');
-            topBarElements.progressDays.innerHTML = `${currentDaysFormatted}<span>/${totalDaysFormatted} Dias</span>`;
-
-            console.log(`✅ Barra de progresso atualizada: ${retentionDays}/${goalDays} dias (${progressPercentage.toFixed(1)}%)`);
-        }
+// Atualiza a barra de progresso e contagem de dias
+	        if (includeProgressBar && topBarElements.progressBar && topBarElements.progressDays) {
+	            const rankData = userProfile.rankData;
+	            let retentionDays = userProfile.retention_days || 0;
+	
+	            // ⚠️ CORREÇÃO: Se retention_days for 0, calcula os dias desde o onboarding para garantir que o contador comece a contar
+	            // Isso é necessário caso o RPC de check-in diário não tenha sido executado ou o campo 'retention_days' esteja nulo/zero
+	            if (retentionDays === 0 && userProfile.onboarding_data) {
+	                retentionDays = window.UserService.calculateDaysSinceOnboarding(userProfile.onboarding_data);
+	                // O rankData precisa ser recalculado com os novos dias, caso a patente tenha mudado
+	                userProfile.rankData = window.UserService.calculateRankData(retentionDays);
+	                rankData = userProfile.rankData;
+	                console.log(`⚠️ retention_days era 0. Recalculado para ${retentionDays} dias.`);
+	            }
+	
+	            // Calcula o objetivo de dias para a patente atual
+	            const goalDays = isFinite(rankData.maxDays) ? rankData.maxDays + 1 : retentionDays;
+	            const progressPercentage = Math.min((retentionDays / goalDays) * 100, 100);
+	
+	            // Atualiza a largura da barra de progresso
+	            topBarElements.progressBar.style.width = `${progressPercentage}%`;
+	
+	            // Atualiza o texto de dias (com padding de zeros)
+	            const currentDaysFormatted = String(retentionDays).padStart(2, '0');
+	            const totalDaysFormatted = String(goalDays).padStart(2, '0');
+	            topBarElements.progressDays.innerHTML = `${currentDaysFormatted}<span>/${totalDaysFormatted} Dias</span>`;
+	
+	            console.log(`✅ Barra de progresso atualizada: ${retentionDays}/${goalDays} dias (${progressPercentage.toFixed(1)}%)`);
+	        }
 
         console.log('✅ Top-Bar carregado e atualizado com sucesso!');
         return userProfile;
