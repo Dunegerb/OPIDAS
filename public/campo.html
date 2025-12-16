@@ -381,14 +381,14 @@
 
                 chatFormEl.addEventListener('submit', handleSendMessage);
                 resetButtonEl.addEventListener('click', handleResetClick);
-                logoutButton.addEventListener('click', async () => {
-                    try {
-                        window.signOut();
-                        // O redirecionamento para 'index.html' já está dentro de signOut()
-                    } catch (error) {
-                        console.error("Erro durante o logout:", error);
-                        alert("Erro ao fazer logout. Tente novamente.");
-                    }
+               // logoutButton.addEventListener('click', async () => {
+               //     try {
+               //         window.signOut();
+               //         // O redirecionamento para 'index.html' já está dentro de signOut()
+               //     } catch (error) {
+               //         console.error("Erro durante o logout:", error);
+               //         alert("Erro ao fazer logout. Tente novamente.");
+               //     }
                 });
             }
 
