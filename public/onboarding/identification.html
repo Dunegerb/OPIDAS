@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head>
+<html lang="pt-BR">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Onboarding: Identificação - OPIDAS</title>
@@ -18,7 +19,7 @@
         <img class="background-image-left" alt="" src="/assets/styles/images/backgroundcardsecin.png">
         
         <main class="main-content">
-            <!-- Seção do Cartão de Identidade (Preview Fixo) -->
+            <!-- Seção do Cartão de Identidade (Preview Fixo ) -->
             <section class="identity-card-section" aria-label="Identity Card Preview">
                 <div class="card-base"></div><img class="card-texture" alt="" src="/assets/styles/images/texturecard.png"><img class="card-logo-overlay" alt="Opidas logo" src="/assets/styles/images/logomarkcard.png"><div class="card-background-mark"><img alt="" src="/assets/styles/images/mark-card.png"></div><img class="card-vector-top1" alt="" src="/assets/styles/images/vectorcardtop1.svg"><img class="card-vector-top2" alt="" src="/assets/styles/images/identidadedocampobackground.png"><h1 class="card-title">IDENTIDADE DO CAMPO</h1><img class="card-logo-top-right" alt="" src="/assets/styles/images/logosopidas+campo-card.png"><img id="cardProfilePhoto" class="card-profile-photo" alt="Profile photo" src="/assets/styles/images/profile-card.png"><div class="card-field contra"><span class="label">Contra:</span><span id="cardContra" class="value">PORNOGRAFIA</span></div><div class="card-field signature"><span class="label">Assinatura:</span><span id="cardSignature" class="value"></span></div><h2 class="card-data-heading">DADOS:</h2><div class="card-field registration"><span class="label">N.º de registro:</span><span id="cardRegistration" class="value">M0RSI-00000000</span></div><div class="card-field warrior-name"><span class="label">Nome do Guerreiro(a):</span><span id="cardWarriorName" class="value"></span></div><div class="card-field rank"><span class="label">Patente:</span><span id="cardRank" class="value"></span></div><div class="card-field enlistment"><span class="label">Data de Alistamento:</span><span class="value"><span id="cardDay" class="date-part">16</span> /<span id="cardMonth" class="date-part">DEZ</span> /<span id="cardYear" class="date-part">2025</span></span></div>
             </section>
@@ -30,7 +31,7 @@
                     <h1 class="form-title">Sua identificação</h1>
                     <p class="form-subtitle">Coloque todos seus dados para criar sua identificação para o campo.</p>
                     <div class="form-row"><div class="input-group"><input id="firstNameInput" type="text" placeholder="Primeiro Nome" class="input-field"></div><div class="input-group"><input id="lastNameInput" type="text" placeholder="Sobrenome" class="input-field"></div></div>
-                    <div class="dropdown-container"><button type="button" id="dropdownButton" class="dropdown-button" aria-haspopup="listbox" aria-expanded="false"><span id="dropdownLabel" class="placeholder">Contra o hábito</span><img alt="Dropdown arrow" src="/assets/styles/images/arrowdown.svg"></button><ul id="dropdownMenu" class="dropdown-menu" role="listbox"><li class="dropdown-item" role="option"><div class="checkbox-custom"><div class="checkbox-inner"></div></div><span>Masturbação</span></li><li class="dropdown-item" role="option"><div class="checkbox-custom"><div class="checkbox-inner"></div></div><span>Pornografia</span></li><li class="dropdown-item" role="option"><div class="checkbox-custom"><div class="checkbox-inner"></div></div><span>Fumar</span></li><li class="dropdown-item" role="option"><div class="checkbox-custom"><div class="checkbox-inner"></div></div><span>Bebida Alcólica</span></li><li class="dropdown-item" role="option"><div class="checkbox-custom"><div class="checkbox-inner"></div></div><span>Outro</span></li></ul></div>
+                    <div class="dropdown-container"><button type="button" id="dropdownButton" class="dropdown-button" aria-haspopup="listbox" aria-expanded="false"><span id="dropdownLabel" class="placeholder">Contra o hábito</span><img alt="Dropdown arrow" src="/assets/styles/images/arrowdown.svg"></button><ul id="dropdownMenu" class="dropdown-menu" role="listbox"></ul></div>
                     <div class="file-upload-area"><input type="file" id="file-upload" class="hidden-file-input" accept=".png,.jpg,.jpeg,.webp"><label for="file-upload" id="drop-zone" class="drop-zone"><img alt="Upload icon" src="/assets/styles/images/uploadicon.svg"><span class="drop-text">Arraste e solte</span><p class="drop-info">(PNG, JPG, WEBP) Max 5MB</p></label><label for="file-upload" class="file-label">Escolha o arquivo</label><p id="file-name-display"></p></div>
                     <div class="form-actions"><button id="btnGoToNextStep" class="btn btn-primary"><span>Avançar</span><img alt="" src="/assets/styles/images/decorative-element-button.png"></button></div>
                 </section>
@@ -44,7 +45,7 @@
     <script src="../js/services/user.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', ( ) => {
             // --- Estado e Constantes da Página ---
             const habits = [ { id: "masturbacao", label: "Masturbação" }, { id: "pornografia", label: "Pornografia" }, { id: "fumar", label: "Fumar" }, { id: "bebida", label: "Bebida Alcólica" }, { id: "outro", label: "Outro" }, ];
             const monthNames = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
@@ -104,39 +105,39 @@
                 localStorage.setItem('onboardingData', JSON.stringify(userData));
             };
 
-const loadState = async () => {
-	                // ⚠️ CORREÇÃO: Limpar o localStorage se o usuário já tiver completado o onboarding
-	                // ou se a sessão for nova para evitar dados de teste persistentes.
-	                const { data: { session } } = await window.supabase.auth.getSession();
-	                
-	                if (!session) {
-	                    // Se não há sessão, é um novo usuário, limpa qualquer lixo de teste
-	                    localStorage.removeItem('onboardingData');
-	                }
-	
-	                const savedData = localStorage.getItem('onboardingData');
-	                if (savedData) {
-	                    const parsedData = JSON.parse(savedData);
-	                    userData = { ...userData, ...parsedData };
-	                    
-	                    firstNameInput.value = userData.firstName || '';
-	                    lastNameInput.value = userData.lastName || '';
-	                    if (userData.habit) {
-	                        // Encontra o objeto completo do hábito para garantir que o label está correto
-	                        const habitObject = habits.find(h => h.id === userData.habit.id);
-	                        if (habitObject) {
-	                            userData.habit = habitObject; // Atualiza o objeto completo
-	                            dropdownLabel.textContent = habitObject.label;
-	                            dropdownLabel.classList.remove('placeholder');
-	                        }
-	                    }
-	                    if (userData.profilePhotoUrl) {
-	                        cardProfilePhoto.src = userData.profilePhotoUrl;
-	                    }
-	                    updateCardName();
-	                    updateCardContra();
-	                }
-	            };
+            const loadState = async () => {
+                // ⚠️ CORREÇÃO: Limpar o localStorage se o usuário já tiver completado o onboarding
+                // ou se a sessão for nova para evitar dados de teste persistentes.
+                const { data: { session } } = await window.supabase.auth.getSession();
+                
+                if (!session) {
+                    // Se não há sessão, é um novo usuário, limpa qualquer lixo de teste
+                    localStorage.removeItem('onboardingData');
+                }
+
+                const savedData = localStorage.getItem('onboardingData');
+                if (savedData) {
+                    const parsedData = JSON.parse(savedData);
+                    userData = { ...userData, ...parsedData };
+                    
+                    firstNameInput.value = userData.firstName || '';
+                    lastNameInput.value = userData.lastName || '';
+                    if (userData.habit) {
+                        // Encontra o objeto completo do hábito para garantir que o label está correto
+                        const habitObject = habits.find(h => h.id === userData.habit.id);
+                        if (habitObject) {
+                            userData.habit = habitObject; // Atualiza o objeto completo
+                            dropdownLabel.textContent = habitObject.label;
+                            dropdownLabel.classList.remove('placeholder');
+                        }
+                    }
+                    if (userData.profilePhotoUrl) {
+                        cardProfilePhoto.src = userData.profilePhotoUrl;
+                    }
+                    updateCardName();
+                    updateCardContra();
+                }
+            };
 
             // --- Lógica de Eventos ---
             firstNameInput.addEventListener('input', updateCardName);
@@ -167,10 +168,14 @@ const loadState = async () => {
                 });
             };
 
-            dropdownButton.addEventListener('click', () => dropdownMenu.classList.toggle('open'));
+            dropdownButton.addEventListener('click', () => {
+                dropdownMenu.classList.toggle('open');
+                dropdownButton.setAttribute('aria-expanded', dropdownMenu.classList.contains('open'));
+            });
             document.addEventListener('click', (e) => {
                 if (!dropdownButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
                     dropdownMenu.classList.remove('open');
+                    dropdownButton.setAttribute('aria-expanded', 'false');
                 }
             });
 
@@ -217,13 +222,13 @@ const loadState = async () => {
             });
             
             // --- Inicialização ---
-const initialize = async () => {
-	                await loadState(); // Agora é assíncrono
-	                cardRegistration.textContent = "M0RSI-00000000";
-	                populateDropdown();
-	                setEnlistmentDate(new Date(userData.enlistmentDate));
-	            };
-	            initialize();
+            const initialize = async () => {
+                await loadState(); // Agora é assíncrono
+                cardRegistration.textContent = "M0RSI-00000000";
+                populateDropdown();
+                setEnlistmentDate(new Date(userData.enlistmentDate));
+            };
+            initialize();
         });
     </script>
 </body>
