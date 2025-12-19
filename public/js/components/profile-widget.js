@@ -28,7 +28,7 @@ const ProfileWidget = {
                     <!-- CONTEÚDO INICIAL (COLLAPSED) -->
                     <div class="island-initial-content">
                         <div class="user-welcome">
-                            <img id="user-avatar" alt="Profile photo" src="https://via.placeholder.com/34">
+                            <img id="user-avatar" alt="Profile photo" src="https://placehold.co/34x34">
                             <div class="user-welcome-text">
                                 <div class="greeting">Bem vindo(a) de volta</div>
                                 <div class="username" id="welcome-username">Carregando...</div>
@@ -290,13 +290,13 @@ const ProfileWidget = {
         // Avatar (collapsed)
         const userAvatar = document.getElementById('user-avatar');
         if (userAvatar) {
-            userAvatar.src = this.currentUser.avatar_url || 'https://via.placeholder.com/34';
+            userAvatar.src = this.currentUser.avatar_url || 'https://placehold.co/34x34';
         }
 
         // Avatar (expanded)
         const profilePhotoExpanded = document.getElementById('profile-photo-expanded');
         if (profilePhotoExpanded) {
-            profilePhotoExpanded.style.backgroundImage = `url(${this.currentUser.avatar_url || 'https://via.placeholder.com/34'})`;
+            profilePhotoExpanded.style.backgroundImage = `url(${this.currentUser.avatar_url || 'https://placehold.co/34x34'})`;
         }
 
         // Nome do usuário (collapsed)
