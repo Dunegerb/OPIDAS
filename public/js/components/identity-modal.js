@@ -181,7 +181,7 @@ const IdentityModal = {
         };
 
         // Avatar
-        document.getElementById('identity-avatar').src = this.currentUser.avatar_url || 'https://via.placeholder.com/120';
+        document.getElementById('identity-avatar').src = this.currentUser.avatar_url || 'https://placehold.co/120x120';
 
         // Nome
         const fullName = `${this.currentUser.first_name || ''} ${this.currentUser.last_name || ''}`.trim().toUpperCase();
