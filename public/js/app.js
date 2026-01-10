@@ -46,6 +46,25 @@ async function loadTopBar(options = {}) {
             progressDays: document.getElementById('progress-days')
         };
 
+        // 🚀 NOVO: Processa o check-in diário automaticamente ao carregar o Top-Bar
+        // Isso garante que a contagem de dias seja incrementada se o usuário entrar em um novo dia
+        try {
+            console.log('📅 Processando check-in diário automático...');
+            const checkinResult = await window.UserService.processDailyCheckin();
+            if (checkinResult && checkinResult.success) {
+                console.log('✅ Check-in diário realizado com sucesso:', checkinResult);
+                // Atualiza os dados do perfil com os novos valores do check-in
+                userProfile.retention_days = checkinResult.retention_days;
+                userProfile.rank = checkinResult.rank;
+                userProfile.rankData = window.UserService.calculateRankData(userProfile.retention_days);
+            } else {
+                console.log('ℹ️ Check-in diário já realizado ou não necessário:', checkinResult?.message);
+            }
+        } catch (checkinError) {
+            console.warn('⚠️ Erro ao processar check-in automático:', checkinError);
+            // Não trava o carregamento se o check-in falhar
+        }
+
         // Atualiza o avatar do usuário
         if (includeAvatar && topBarElements.avatar) {
             topBarElements.avatar.src = userProfile.avatar_url || 'https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/profile-card.png';
