@@ -248,8 +248,8 @@
                 lastDate.setHours(0, 0, 0, 0);
                 
                 // Calcula diferença em dias
-                const diffTime = Math.abs(today - lastDate);
-                const retentionDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                const diffTime = today - lastDate;
+                const retentionDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
                 
                 userData.retentionDays = retentionDays;
                 
