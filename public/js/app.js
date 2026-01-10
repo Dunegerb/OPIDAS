@@ -111,6 +111,11 @@ async function loadTopBar(options = {}) {
 		                    userProfile.rankData = window.UserService.calculateRankData(retentionDays);
 		                    console.log(`⚠️ retention_days era 0. Recalculado para ${retentionDays} dias.`);
 		                }
+		            } else if (!userProfile.last_habit_date) {
+		                // Se last_habit_date for nulo, forçamos retention_days a 0 (caso de reset)
+		                retentionDays = 0;
+		                userProfile.rankData = window.UserService.calculateRankData(0);
+		                console.log('ℹ️ last_habit_date é nulo. Mantendo retention_days em 0.');
 		            }
 	
 	            // Calcula o objetivo de dias para a patente atual
