@@ -17,7 +17,8 @@ async function loadTopBar(options = {}) {
     const {
         includeProgressBar = true,
         includeAvatar = true,
-        includeUsername = true
+        includeUsername = true,
+        skipCheckin = false
     } = options;
 
     try {
@@ -48,21 +49,25 @@ async function loadTopBar(options = {}) {
 
         // 🚀 NOVO: Processa o check-in diário automaticamente ao carregar o Top-Bar
         // Isso garante que a contagem de dias seja incrementada se o usuário entrar em um novo dia
-        try {
-            console.log('📅 Processando check-in diário automático...');
-            const checkinResult = await window.UserService.processDailyCheckin();
-            if (checkinResult && checkinResult.success) {
-                console.log('✅ Check-in diário realizado com sucesso:', checkinResult);
-                // Atualiza os dados do perfil com os novos valores do check-in
-                userProfile.retention_days = checkinResult.retention_days;
-                userProfile.rank = checkinResult.rank;
-                userProfile.rankData = window.UserService.calculateRankData(userProfile.retention_days);
-            } else {
-                console.log('ℹ️ Check-in diário já realizado ou não necessário:', checkinResult?.message);
+        if (!skipCheckin) {
+            try {
+                console.log('📅 Processando check-in diário automático...');
+                const checkinResult = await window.UserService.processDailyCheckin();
+                if (checkinResult && checkinResult.success) {
+                    console.log('✅ Check-in diário realizado com sucesso:', checkinResult);
+                    // Atualiza os dados do perfil com os novos valores do check-in
+                    userProfile.retention_days = checkinResult.retention_days;
+                    userProfile.rank = checkinResult.rank;
+                    userProfile.rankData = window.UserService.calculateRankData(userProfile.retention_days);
+                } else {
+                    console.log('ℹ️ Check-in diário já realizado ou não necessário:', checkinResult?.message);
+                }
+            } catch (checkinError) {
+                console.warn('⚠️ Erro ao processar check-in automático:', checkinError);
+                // Não trava o carregamento se o check-in falhar
             }
-        } catch (checkinError) {
-            console.warn('⚠️ Erro ao processar check-in automático:', checkinError);
-            // Não trava o carregamento se o check-in falhar
+        } else {
+            console.log('⏭️ Check-in automático ignorado (skipCheckin=true)');
         }
 
         // Atualiza o avatar do usuário
@@ -90,15 +95,23 @@ async function loadTopBar(options = {}) {
 	            const rankData = userProfile.rankData;
 	            let retentionDays = userProfile.retention_days || 0;
 	
-	            // ⚠️ CORREÇÃO: Se retention_days for 0, calcula os dias desde o onboarding para garantir que o contador comece a contar
-	            // Isso é necessário caso o RPC de check-in diário não tenha sido executado ou o campo 'retention_days' esteja nulo/zero
-	            if (retentionDays === 0 && userProfile.onboarding_data) {
-	                retentionDays = window.UserService.calculateDaysSinceOnboarding(userProfile.onboarding_data);
-	                // O rankData precisa ser recalculado com os novos dias, caso a patente tenha mudado
-	                userProfile.rankData = window.UserService.calculateRankData(retentionDays);
-	                rankData = userProfile.rankData;
-	                console.log(`⚠️ retention_days era 0. Recalculado para ${retentionDays} dias.`);
-	            }
+		            // ⚠️ CORREÇÃO: Se retention_days for nulo ou indefinido, garante que seja 0
+		            if (retentionDays === null || retentionDays === undefined) {
+		                retentionDays = 0;
+		            }
+		            
+		            // Se retention_days for 0 e NÃO for um caso de reset recente (last_habit_date nulo),
+		            // podemos tentar calcular os dias desde o onboarding como fallback.
+		            // Mas se o usuário acabou de resetar, last_habit_date será nulo e queremos que continue 0.
+		            if (retentionDays === 0 && userProfile.onboarding_data && userProfile.last_habit_date) {
+		                const calculatedDays = window.UserService.calculateDaysSinceOnboarding(userProfile.onboarding_data);
+		                if (calculatedDays > 0) {
+		                    retentionDays = calculatedDays;
+		                    // O rankData precisa ser recalculado com os novos dias, caso a patente tenha mudado
+		                    userProfile.rankData = window.UserService.calculateRankData(retentionDays);
+		                    console.log(`⚠️ retention_days era 0. Recalculado para ${retentionDays} dias.`);
+		                }
+		            }
 	
 	            // Calcula o objetivo de dias para a patente atual
 	            const goalDays = isFinite(rankData.maxDays) ? rankData.maxDays + 1 : retentionDays;
@@ -142,9 +155,9 @@ async function loadTopBar(options = {}) {
  * Função para recarregar o Top-Bar quando há mudanças no perfil do usuário
  * Útil para atualizar a interface após o usuário fazer uma ação (upload de foto, reset, etc)
  */
-async function refreshTopBar() {
+async function refreshTopBar(options = {}) {
     console.log('🔄 Atualizando Top-Bar...');
-    return await loadTopBar();
+    return await loadTopBar(options);
 }
 
 // Exporta as funções para uso global
