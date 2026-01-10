@@ -336,7 +336,8 @@
                         const resetResult = await window.UserService.handleReset();
                         alert(`Contagem resetada com sucesso! Você tem ${resetResult.remaining_resets} chances restantes.`);
                         // Recarrega os dados do usuário e atualiza a UI
-                        state.currentUser = await window.refreshTopBar();
+                        // Passamos skipCheckin: true para evitar que o check-in automático incremente o dia logo após o reset
+                        state.currentUser = await window.refreshTopBar({ skipCheckin: true });
                         updateUI();
                     } catch (error) {
                         console.error("Erro ao resetar contagem:", error);
@@ -348,14 +349,15 @@
                 }
             }
 
-            // --- INICIALIZAÇÃO ---
-            async function init() {
-                try {
-                    // Carrega os dados reais do usuário do Supabase
-                    state.currentUser = await window.loadTopBar();
-                    
-                    console.log('✅ Perfil do usuário carregado:', state.currentUser);
-                } catch (error) {
+	            // --- INICIALIZAÇÃO ---
+	            async function init() {
+	                try {
+	                    // Carrega os dados reais do usuário do Supabase
+	                    // O loadTopBar agora processa o check-in diário automaticamente
+	                    state.currentUser = await window.loadTopBar();
+	                    
+	                    console.log('✅ Perfil do usuário carregado:', state.currentUser);
+	                } catch (error) {
                     console.error('❌ Erro ao carregar perfil do usuário:', error);
                     // Redireciona para login se houver erro
                     window.location.href = 'index.html';
@@ -398,9 +400,3 @@
     
 </body>
 </html>
-
-
-
-
-
-
