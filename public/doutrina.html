@@ -174,11 +174,26 @@
             const pauseIconSrc = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iMjkiIHZpZXdCb3g9IjAgMCAyNSAyOSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTggMEg0QzEuNzkgMCAwIDEuNzkgMCA0VjI1QzAgMjcuMjEgMS43OSAyOSA0IDI5SDhDMTAuMjEgMjkgMTIgMjcuMjEgMTIgMjVWNEMxMiAxLjc5IDEwLjIxIDAgOCAwWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTIxIDBIMTdDMTQuNzkgMCAxMyAxLjc5IDEzIDRWMjVDMTMgMjcuMjEgMTQuNzkgMjkgMTcgMjlIMjFDMjMuMjEgMjkgMjUgMjcuMjEgMjUgMjVWNEMyNSAxLjc5IDIzLjIxIDAgMjEgMFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=";
             
             // --- FUNÇÕES DE RENDERIZAÇÃO E UI ---
-            function renderHeader() {
-                if (!state.currentUser) return;
-                usernameEl.textContent = `Soldado ${state.currentUser.profile.last_name}`;
-                userAvatarEl.src = state.currentUser.profile.avatar_url;
-            }
+	            function renderHeader() {
+	                if (!state.currentUser) return;
+	                
+	                // O objeto retornado pelo loadTopBar já contém os dados do perfil na raiz
+	                const profile = state.currentUser;
+	                const rankName = profile.rankData?.name || 'Recruta';
+	                
+	                usernameEl.textContent = `${rankName} ${profile.last_name || ''}`;
+	                userAvatarEl.src = profile.avatar_url || 'https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/profile-card.png';
+	                
+	                // Atualiza também a barra de progresso se os elementos existirem
+	                if (progressDaysEl && profile.rankData) {
+	                    const retentionDays = profile.retention_days || 0;
+	                    const goalDays = isFinite(profile.rankData.maxDays) ? profile.rankData.maxDays + 1 : retentionDays;
+	                    const progressPercentage = Math.min((retentionDays / goalDays) * 100, 100);
+	                    
+	                    if (progressBarFillEl) progressBarFillEl.style.width = `${progressPercentage}%`;
+	                    progressDaysEl.innerHTML = `${String(retentionDays).padStart(2, '0')}<span>/${String(goalDays).padStart(2, '0')} Dias</span>`;
+	                }
+	            }
     
             function renderEpisodes() {
                 episodesGrid.innerHTML = '';
@@ -258,27 +273,29 @@
                 console.log(`Salvando progresso do ep ${episodeId}: ${state.userProgress[episodeId]}%`);
             }
             
-            // --- INICIALIZAÇÃO ---
-            async function init() {
-                try {
-                    // Carrega os dados reais do usuário do Supabase
-                    state.currentUser = await window.loadTopBar();
-                    
-                    // Busca o progresso dos vídeos do usuário
-                    state.userProgress = await window.UserService.getVideoProgress();
-                    
-                    console.log('✅ Estado da aplicação inicializado:', state);
-                } catch (error) {
-                    console.error('❌ Erro ao inicializar aplicação:', error);
-                    // Redireciona para login se houver erro
-                    window.location.href = 'index.html';
-                    return;
-                }
-    
-                renderHeader();
-                renderEpisodes();
-                setupPlayerControls();
-            }
+	            // --- INICIALIZAÇÃO ---
+	            async function init() {
+	                try {
+	                    // Carrega os dados reais do usuário do Supabase
+	                    // O loadTopBar agora processa o check-in diário automaticamente
+	                    state.currentUser = await window.loadTopBar();
+	                    
+	                    // Busca o progresso dos vídeos do usuário
+	                    state.userProgress = await window.UserService.getVideoProgress();
+	                    
+	                    console.log('✅ Estado da aplicação inicializado:', state);
+	                    
+	                    // Renderiza o cabeçalho e episódios após carregar os dados
+	                    renderHeader();
+	                    renderEpisodes();
+	                    setupPlayerControls();
+	                } catch (error) {
+	                    console.error('❌ Erro ao inicializar aplicação:', error);
+	                    // Redireciona para login se houver erro
+	                    window.location.href = 'index.html';
+	                    return;
+	                }
+	            }
     
             function setupPlayerControls() {
                 let inactivityTimer; // [FIX 2.1] Variável para controlar o timer de inatividade
@@ -367,10 +384,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
