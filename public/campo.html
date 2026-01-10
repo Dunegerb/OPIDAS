@@ -184,10 +184,10 @@
 	                    // Para fins de exibição, vamos usar o valor que vem do banco.
 	                }
 	
-	                const rankGoalDays = isFinite(rankData.maxDays) ? rankData.maxDays + 1 : currentRetentionDays;
-	                const progressPercentage = (currentRetentionDays / rankGoalDays) * 100;
-	                progressBarFillEl.style.width = `${progressPercentage}%`;
-	                progressDaysEl.innerHTML = `${String(currentRetentionDays).padStart(2, '0')}<span>/${String(rankGoalDays).padStart(2, '0')} Dias</span>`;
+		                const rankGoalDays = isFinite(rankData.maxDays) ? rankData.maxDays + 1 : currentRetentionDays;
+		                const progressPercentage = Math.min((currentRetentionDays / rankGoalDays) * 100, 100);
+		                progressBarFillEl.style.width = `${progressPercentage}%`;
+		                progressDaysEl.innerHTML = `${String(currentRetentionDays).padStart(2, '0')}<span>/${String(rankGoalDays).padStart(2, '0')} Dias</span>`;
 
                 // Sidebar (lista de patentes)
                 renderRanksList();
