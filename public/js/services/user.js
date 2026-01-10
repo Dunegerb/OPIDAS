@@ -298,11 +298,15 @@ const UserService = {
         if (!onboardingDate) return 0;
 
         const onboarding = new Date(onboardingDate);
+        onboarding.setHours(0, 0, 0, 0);
+        
         const today = new Date();
-        const diffTime = Math.abs(today - onboarding);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        today.setHours(0, 0, 0, 0);
+        
+        const diffTime = today - onboarding;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-        return diffDays;
+        return Math.max(0, diffDays);
     },
 
     /**
