@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página com Preloader de Vídeo</title>
+    <style>
+        /* Estilos Globais e do Conteúdo (Apenas para demonstração) */
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .main-content {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .main-content h1 {
+            font-size: 3rem;
+        }
+
+        /* --- ESTILOS DO PRELOADER --- */
+
+        /* 1. O contêiner do preloader */
+        #preloader {
+            position: fixed; /* Fica fixo na tela, sobrepondo todo o conteúdo */
+            inset: 0; /* Ocupa a tela inteira (top: 0, right: 0, bottom: 0, left: 0) */
+            z-index: 9999; /* Garante que fique na camada mais alta */
+            background-color: #111; /* Fundo escuro para o preloader */
+            
+            /* Usamos Flexbox para centralizar o vídeo perfeitamente */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            /* Efeitos para a saída suave */
+            transition: opacity 0.7s ease, visibility 0.7s ease;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* 2. O elemento de vídeo */
+        #preloader video {
+            height: auto; /* A altura se ajusta para manter a proporção */
+            object-fit: contain; /* Garante que o vídeo nunca seja cortado */
+
+            /* --- ESTILOS RESPONSIVOS PARA O VÍDEO --- */
+            
+            /* Estilo para Celular (Mobile-First) */
+            /* O vídeo ocupa 80% da largura da tela, com um limite máximo. */
+            width: 80vw; /* 80% da largura da viewport (tela) */
+            max-width: 400px; /* Um limite para não ficar gigante em tablets */
+        }
+        
+        /* Estilo para PC / Telas Maiores (a partir de 768px de largura) */
+        @media (min-width: 768px) {
+            #preloader video {
+                /* No PC, definimos um tamanho máximo fixo e menor, como solicitado. */
+                /* Ele permanecerá centralizado graças ao Flexbox no contêiner. */
+                width: 100%; /* Ocupa 100% do tamanho máximo definido abaixo */
+                max-width: 350px; 
+            }
+        }
+
+        /* 3. Classe para esconder o preloader com fade-out */
+        .preloader-hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- ====================================================== -->
+    <!-- ===============   HTML DO PRELOADER   ================ -->
+    <!-- ====================================================== -->
+    <div id="preloader">
+        <video autoplay muted loop playsinline poster="assets/motiondesigns/teladecarregamento/preloader_poster.jpg">
+            <!-- Formato WebM (preferencial para Chrome, Firefox, etc.) -->
+            <source src="assets/motiondesigns/teladecarregamento/preloader_web.webm" type="video/webm">
+            <!-- Formato MP4 (fallback para Safari e outros navegadores) -->
+            <source src="assets/motiondesigns/teladecarregamento/preloader_webmp4.mp4" type="video/mp4">
+            Seu navegador não suporta vídeos.
+        </video>
+    </div>
+
+
+    <!-- ====================================================== -->
+    <!-- ========   SEU CONTEÚDO PRINCIPAL VAI AQUI   ========= -->
+    <!-- ====================================================== -->
+    <div class="main-content">
+        <h1>Bem-vindo ao seu Site!</h1>
+        <p>Este conteúdo só aparece após o preloader sumir.</p>
+        <img src="https://via.placeholder.com/800x400" alt="Imagem de exemplo" style="max-width: 100%; height: auto;">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.</p>
+    </div>
+
+
+    <!-- ====================================================== -->
+    <!-- ============   JAVASCRIPT DO PRELOADER   ============= -->
+    <!-- ====================================================== -->
+    <script>
+        // Aguarda a janela inteira carregar (incluindo imagens, scripts, etc.)
+        window.onload = function() {
+            // Seleciona o elemento do preloader
+            const preloader = document.getElementById('preloader');
+            
+            // Adiciona a classe que inicia a animação de fade-out
+            preloader.classList.add('preloader-hidden');
+
+            // Opcional: Remove o elemento do DOM após a transição para liberar recursos
+            // O tempo (700ms) deve ser o mesmo da transição no CSS
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 700);
+        };
+    </script>
+
+</body>
+</html>
