@@ -130,6 +130,7 @@
     <script src="/js/components/toast.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/lib/supabase-config.js"></script>
+    <script src="preloader.js"></script>
     <script src="js/components/loading-screen.js"></script>
     <script src="js/services/auth.js"></script>
     <script src="js/services/user.js"></script>
@@ -376,6 +377,10 @@
 	                    
 	                    console.log('✅ Perfil do usuário carregado:', state.currentUser);
 	                } catch (error) {
+                    // Oculta o preloader mesmo em caso de erro
+                    if (typeof hidePreloader === 'function') {
+                        hidePreloader();
+                    }
                     console.error('❌ Erro ao carregar perfil do usuário:', error);
                     // Redireciona para login se houver erro
                     window.location.href = 'index.html';
@@ -390,6 +395,11 @@
                 // Define o canal inicial baseado na patente do usuário
                 const initialChannelId = state.currentUser.rank;
                 await switchChannel(initialChannelId);
+
+                // Oculta o preloader após o carregamento inicial
+                if (typeof hidePreloader === 'function') {
+                    hidePreloader();
+                }
 
                 // Adiciona Event Listeners
                 ranksListEl.addEventListener('click', (e) => {
