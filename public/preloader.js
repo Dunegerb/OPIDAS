@@ -1,10 +1,3 @@
-/**
- * ========================================
- * PRELOADER MANAGER - OPIDAS
- * Gerencia a exibição e ocultação do preloader
- * ======================================== 
- */
-
 class PreloaderManager {
     constructor(options = {}) {
         // Configurações padrão
