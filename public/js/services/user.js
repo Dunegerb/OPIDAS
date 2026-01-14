@@ -200,13 +200,16 @@ const UserService = {
                 });
 
             // Reseta a contagem
+            // ✅ CORREÇÃO: Salvamos a data atual (hoje) em vez de NULL para que a contagem de dias funcione corretamente
+            const today = new Date().toISOString();
+            
             const { data: updatedProfile, error } = await window.supabase
                 .from('profiles')
                 .update({
                     retention_days: 0,
                     rank: 'recruta',
                     remaining_resets: profile.remaining_resets - 1,
-                    last_habit_date: null
+                    last_habit_date: today
                 })
                 .eq('id', user.id)
                 .select()
