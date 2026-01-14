@@ -27,6 +27,11 @@ class PreloaderManager {
             return;
         }
 
+
+        this.preloaderElement.addEventListener('contextmenu', (event) => {
+            event.preventDefault(); 
+        });
+
         this.log('Preloader inicializado');
 
         // Se autoHide estiver ativado, oculta ao carregar a página
