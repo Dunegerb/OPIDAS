@@ -142,7 +142,7 @@ async function loadTopBar(options = {}) {
 
       // Se last_habit_date for nulo, a contagem deve ficar em 0
       // (sem data de recaída definida = nada a contar).
-      if (!userProfile.last_habit_date) {
+      if (!userProfile.last_habit_date && retentionDays === 0) {
         retentionDays = 0;
         userProfile.rankData = window.UserService.calculateRankData(0);
         console.log("ℹ️ last_habit_date é nulo. Mantendo retention_days em 0.");
