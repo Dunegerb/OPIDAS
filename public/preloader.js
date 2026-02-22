@@ -1,28 +1,28 @@
 class PreloaderManager {
     constructor(options = {}) {
-        // Default settings
+        // Configurações padrão
         this.preloaderId = options.preloaderId || 'preloader';
-        this.minDuration = options.minDuration || 800; // Minimum duration in ms to ensure the video is seen
-        this.autoHide = options.autoHide !== undefined ? options.autoHide : false; // Disabled by default for manual control
+        this.minDuration = options.minDuration || 800; // Duração mínima em ms para garantir que o vídeo seja visto
+        this.autoHide = options.autoHide !== undefined ? options.autoHide : false; // Desativado por padrão para controle manual
         this.debug = options.debug || false;
 
-        // DOM Elements
+        // Elementos do DOM
         this.preloaderElement = null;
-        this.startTime = Date.now(); // Starts the counter as soon as the class is instantiated
-        this.isVisible = true; // Assumes it starts visible if it is in the HTML
+        this.startTime = Date.now(); // Inicia o contador assim que a classe é instanciada
+        this.isVisible = true; // Assume que começa visível se estiver no HTML
 
-        // Initialize
+        // Inicializar
         this.init();
     }
 
     /**
-     * Initializes the preloader manager
+     * Inicializa o gerenciador do preloader
      */
     init() {
         this.preloaderElement = document.getElementById(this.preloaderId);
 
         if (!this.preloaderElement) {
-            console.warn(`Preloader with ID "${this.preloaderId}" not found in the DOM`);
+            console.warn(`Preloader com ID "${this.preloaderId}" não encontrado no DOM`);
             this.isVisible = false;
             return;
         }
@@ -32,55 +32,55 @@ class PreloaderManager {
             event.preventDefault(); 
         });
 
-        this.log('Preloader initialized');
+        this.log('Preloader inicializado');
 
-        // If autoHide is enabled, hides when the page loads
+        // Se autoHide estiver ativado, oculta ao carregar a página
         if (this.autoHide) {
             window.addEventListener('load', () => {
-                this.log('Page loaded (autoHide)');
+                this.log('Página carregada (autoHide)');
                 this.hide();
             });
         }
 
-        // Listen for navigation events to show the preloader when leaving the page
+        // Escutar eventos de navegação para mostrar o preloader ao sair da página
         this.setupNavigationListeners();
     }
 
     /**
-     * Sets up listeners for navigation events
+     * Configura listeners para eventos de navegação
      */
     setupNavigationListeners() {
-        // Intercept clicks on internal links
+        // Interceptar cliques em links internos
         document.addEventListener('click', (event) => {
             const link = event.target.closest('a');
             if (link && this.isInternalLink(link)) {
-                // Only shows if changing the page
+                // Só mostra se for mudar de página
                 const href = link.getAttribute('href');
                 if (href && !href.startsWith('#') && href !== window.location.pathname) {
                     this.show();
-                    this.log(`Navigating to: ${link.href}`);
+                    this.log(`Navegando para: ${link.href}`);
                 }
             }
         });
     }
 
     /**
-     * Checks if a link is internal
+     * Verifica se um link é interno
      */
     isInternalLink(link) {
         const href = link.getAttribute('href');
 
-        // Ignore empty links, anchors, and external links
+        // Ignorar links vazios, âncoras, e links externos
         if (!href || href.startsWith('#') || href.startsWith('javascript:')) {
             return false;
         }
 
-        // Ignore links with data-no-preloader attribute
+        // Ignorar links com atributo data-no-preloader
         if (link.hasAttribute('data-no-preloader')) {
             return false;
         }
 
-        // Check if it is an external link
+        // Verificar se é um link externo
         const isExternal = link.hostname && link.hostname !== window.location.hostname;
         if (isExternal) {
             return false;
@@ -90,7 +90,7 @@ class PreloaderManager {
     }
 
     /**
-     * Shows the preloader
+     * Exibe o preloader
      */
     show() {
         if (this.isVisible) return;
@@ -99,22 +99,22 @@ class PreloaderManager {
             this.preloaderElement.classList.remove('hidden');
             this.isVisible = true;
             this.startTime = Date.now();
-            this.log('Preloader shown');
+            this.log('Preloader exibido');
         }
     }
 
     /**
-     * Hides the preloader
+     * Oculta o preloader
      */
     hide() {
         if (!this.isVisible) return;
 
-        // Respect minimum duration to avoid "blinking"
+        // Respeitar duração mínima para evitar "piscadas"
         const elapsed = Date.now() - this.startTime;
         const remainingTime = Math.max(0, this.minDuration - elapsed);
 
         if (remainingTime > 0) {
-            this.log(`Waiting ${remainingTime}ms to hide preloader`);
+            this.log(`Aguardando ${remainingTime}ms para ocultar preloader`);
             setTimeout(() => this.hide(), remainingTime);
             return;
         }
@@ -122,12 +122,12 @@ class PreloaderManager {
         if (this.preloaderElement) {
             this.preloaderElement.classList.add('hidden');
             this.isVisible = false;
-            this.log('Preloader hidden');
+            this.log('Preloader oculto');
         }
     }
 
     /**
-     * Log for debugging
+     * Log para debug
      */
     log(message) {
         if (this.debug) {
@@ -138,21 +138,21 @@ class PreloaderManager {
 
 /**
  * ========================================
- * GLOBAL INITIALIZATION
+ * INICIALIZAÇÃO GLOBAL
  * ======================================== 
  */
 
-// Create a global instance of the preloader
+// Criar instância global do preloader
 window.preloaderInstance = new PreloaderManager({
     preloaderId: 'preloader',
-    minDuration: 1500, // Increased to ensure the animation is smooth
-    autoHide: false,   // Manual control via hidePreloader()
+    minDuration: 1500, // Aumentado para garantir que a animação seja fluida
+    autoHide: false,   // Controle manual via hidePreloader()
     debug: false
 });
 
 /**
  * ========================================
- * GLOBAL HELPER FUNCTIONS
+ * FUNÇÕES AUXILIARES GLOBAIS
  * ======================================== 
  */
 

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctrine - OPIDAS</title>
+    <title>Doutrina - OPIDAS</title>
     <link rel="icon" href="assets/styles/images/icones/flaticon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="assets/styles/profile-widget.css">
     <link rel="stylesheet" href="assets/styles/identity-modal.css">
     <link rel="stylesheet" href="assets/styles/base.css">
-    <!-- Adding the field's CSS to reuse the header -->
+    <!-- Adicionando o CSS do campo para reutilizar o header -->
     <link rel="stylesheet" href="assets/styles/campo.css"> 
     <link rel="stylesheet" href="assets/styles/doutrina.css">
     <link rel="stylesheet" href="assets/styles/loading-screen.css">
@@ -32,7 +32,7 @@
 	        >
 	            <source src="assets/motiondesigns/teladecarregamento/preloader_web.webm" type="video/webm">
 	            <source src="assets/motiondesigns/teladecarregamento/preloader_webmp4.mp4" type="video/mp4">
-	            Your browser does not support the video element.
+	            Seu navegador não suporta o elemento de vídeo.
 	        </video>
 	    </div>
 	</div>
@@ -45,23 +45,23 @@
             <div class="user-welcome">
                 <img id="user-avatar" alt="Profile photo" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/profile-card.png" />
                 <div class="user-welcome-text">
-                    <div class="greeting">Welcome back</div>
-                    <div class="username" id="welcome-username">Loading...</div>
+                    <div class="greeting">Bem vindo(a) de volta</div>
+                    <div class="username" id="welcome-username">Carregando...</div>
                 </div>
             </div>
 
             <div class="status-bar">
                 <div class="rank-icon" id="status-rank-icon-container">
-                    <img id="status-rank-icon" alt="Rank" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/patentes/Recruta.png" />
+                    <img id="status-rank-icon" alt="Patente" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/patentes/Recruta.png" />
                 </div>
                 <div class="progress-info">
-                    <p class="days" id="progress-days" style="position: static;">10<span>/30 Days</span></p>
+                    <p class="days" id="progress-days" style="position: static;">10<span>/30 Dias</span></p>
                     <div class="progress-bar">
                         <div class="progress-bar-fill" id="progress-bar-fill"></div>
                     </div>
                 </div>
                 <button class="icon-button">
-                    <img alt="Notification button" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/notifica%C3%A7%C3%A3obutton.svg" />
+                    <img alt="Notificação button" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/notifica%C3%A7%C3%A3obutton.svg" />
                 </button>
                 <button class="icon-button" id="logout-button">
                     <img alt="Logout" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/darkmode-button.svg" />
@@ -80,7 +80,7 @@
                     </div>
                 </div>
                 <div id="episodes-grid" class="episodes-grid">
-                    <!-- Episodes are injected here by JavaScript -->
+                    <!-- Episódios são injetados aqui pelo JavaScript -->
                 </div>
             </section>
         </main>
@@ -91,28 +91,28 @@
         <div id="video-container" class="video-container paused">
             <video id="video-player" playsinline>
                 <source src="" type="video/mp4">
-                <track label="English" kind="subtitles" srclang="en" src="" default>
+                <track label="Português" kind="subtitles" srclang="pt" src="" default>
             </video>
 
             <div id="player-controls" class="player-controls">
                 <header class="top-controls">
-                    <h1 class="episode-title" id="player-episode-title">{episode name}</h1>
-                    <nav class="top-right-nav" aria-label="Video Controls">
+                    <h1 class="episode-title" id="player-episode-title">{nome do episódio}</h1>
+                    <nav class="top-right-nav" aria-label="Controles do Vídeo">
                         <button id="pip-btn" aria-label="Picture in picture"><img alt="Picture in picture" src="assets/styles/images/player/popup-bottom.svg"></button>
-                        <button id="fullscreen-btn" aria-label="Full Screen"><img alt="Full Screen" src="assets/styles/images/player/fullscreen-bottom.svg"></button>
+                        <button id="fullscreen-btn" aria-label="Tela Cheia"><img alt="Tela Cheia" src="assets/styles/images/player/fullscreen-bottom.svg"></button>
                         <div class="separator" aria-hidden="true"></div>
-                        <button id="close-player-btn" aria-label="Close Player"><img alt="Close Player" src="assets/styles/images/player/closeplayer-bottom.svg"></button>
+                        <button id="close-player-btn" aria-label="Fechar Player"><img alt="Fechar Player" src="assets/styles/images/player/closeplayer-bottom.svg"></button>
                     </nav>
                 </header>
 
                 <div class="center-controls">
-                    <button id="skip-backward-btn" class="skip-btn" aria-label="Skip backward 10 seconds"><img alt="Skip backward 10s" src="assets/styles/images/player/Rewind10sec-bottom.svg"></button>
+                    <button id="skip-backward-btn" class="skip-btn" aria-label="Voltar 10 segundos"><img alt="Voltar 10s" src="assets/styles/images/player/Rewind10sec-bottom.svg"></button>
                     <button id="play-pause-btn" aria-label="Play"><img id="play-pause-icon" alt="Play" src="assets/styles/images/player/playbottom.svg"></button>
-                    <button id="skip-forward-btn" class="skip-btn" aria-label="Skip forward 10 seconds"><img alt="Skip forward 10s" src="assets/styles/images/player/Forward10sec-bottom.svg"></button>
+                    <button id="skip-forward-btn" class="skip-btn" aria-label="Avançar 10 segundos"><img alt="Avançar 10s" src="assets/styles/images/player/Forward10sec-bottom.svg"></button>
                 </div>
 
                 <div class="bottom-controls">
-                    <div id="progress-bar-container" class="player-progress-bar-container" role="slider" aria-label="Video progress">
+                    <div id="progress-bar-container" class="player-progress-bar-container" role="slider" aria-label="Progresso do vídeo">
                         <div id="player-progress-bar-fill" class="progress-bar-fill"></div>
                     </div>
                     <div class="time-controls">
@@ -122,7 +122,7 @@
                         </div>
                         <div class="bottom-right-nav">
                             <span id="hd-indicator">HD</span>
-                            <button id="cc-btn" aria-label="Subtitles"><img alt="CC" src="assets/styles/images/player/closecaption-bottom.svg"></button>
+                            <button id="cc-btn" aria-label="Legendas"><img alt="CC" src="assets/styles/images/player/closecaption-bottom.svg"></button>
                         </div>
                     </div>
                 </div>
@@ -130,7 +130,7 @@
         </div>
     </div>
 
-    <!-- Project Scripts -->
+    <!-- Scripts do Projeto -->
     <script src="/js/lib/logger.js"></script>
     <script src="/js/components/toast.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -147,13 +147,13 @@
                 window.ProfileWidget.open();
             });
         document.addEventListener('DOMContentLoaded', () => {
-            // --- APPLICATION STATE ---
+            // --- ESTADO DA APLICAÇÃO ---
             const state = {
-                episodes: [ // This will come from Supabase
-                    { id: 1, title: "The beginning", description: "Understanding the evolution of the brain...", duration: "32 min", episodeNumber: 1, image: "assets/styles/images/thumbnails/Rectangle 35.jpg", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", trackUrl: "https://raw.githubusercontent.com/andreybleme/legendas/main/big-buck-bunny/pt-br.vtt" },
-                    { id: 2, title: "Getting a clear vision", description: "Understand how to create a clear vision...", duration: "35 min", episodeNumber: 2, image: "assets/styles/images/thumbnails/Rectangle 36.jpg", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", trackUrl: "" },
-                    { id: 3, title: "Understanding addiction", description: "How the brain builds a neural pathway...", duration: "42 min", episodeNumber: 3, image: "assets/styles/images/thumbnails/Rectangle 37.jpg", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", trackUrl: "" },
-                    { id: 4, title: "Surgery on the soul", description: "Learn how to perform surgery on the soul...", duration: "49 min", episodeNumber: 4, image: "assets/styles/images/thumbnails/Rectangle 38.jpg", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", trackUrl: "" },
+                episodes: [ // Isso virá do Supabase
+                    { id: 1, title: "Os primórdios", description: "Entendendo a evolução do cérebro...", duration: "32 min", episodeNumber: 1, image: "assets/styles/images/thumbnails/Rectangle 35.jpg", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", trackUrl: "https://raw.githubusercontent.com/andreybleme/legendas/main/big-buck-bunny/pt-br.vtt" },
+                    { id: 2, title: "Obtendo a visão clara", description: "Entenda como criar uma visão clara...", duration: "35 min", episodeNumber: 2, image: "assets/styles/images/thumbnails/Rectangle 36.jpg", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", trackUrl: "" },
+                    { id: 3, title: "Entendendo o vício", description: "Como o cérebro constroe um caminho neural...", duration: "42 min", episodeNumber: 3, image: "assets/styles/images/thumbnails/Rectangle 37.jpg", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", trackUrl: "" },
+                    { id: 4, title: "A cirurgia na alma", description: "Saiba como fazer a cirurgia na alma...", duration: "49 min", episodeNumber: 4, image: "assets/styles/images/thumbnails/Rectangle 38.jpg", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", trackUrl: "" },
                 ],
                 userProgress: {}, // Ex: { 1: 50, 2: 100 } (episodeId: percentage)
                 currentUser: null,
@@ -161,7 +161,7 @@
                 progressSaveInterval: null,
             };
     
-            // --- DOM ELEMENTS ---
+            // --- ELEMENTOS DO DOM ---
             const episodesGrid = document.getElementById('episodes-grid');
             // Header elements
             const usernameEl = document.getElementById('welcome-username');
@@ -186,29 +186,30 @@
             const skipBackwardBtn = document.getElementById('skip-backward-btn');
             const skipForwardBtn = document.getElementById('skip-forward-btn');
     
-            // [FIX 1] Correcting the Play/Pause icons. The pause icon was missing the data URI prefix.
+            // [FIX 1] Corrigindo os ícones de Play/Pause. O ícone de pause estava sem o prefixo data URI.
+            // O ícone de play foi convertido para Base64 para ser mais robusto e não depender de um link externo.
             const playIconSrc = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjgiIHZpZXdCb3g9IjAgMCAyNCAyOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIzLjEwMTUgMTIuMTEzOEMyNC40MzgxIDEyLjg5MTggMjQuNDM4MSAxNC44ODU5IDIzLjEwMTUgMTUuNjY3OUwwLjkzODMzMSAyNy45Mzk0Qy0wLjQyNTI2OSAyOC43Mzk0IC0yLjEyNSAyNy43MTg0IC0yLjEyNSAyNi4wNjA4VjEuNzE3MDVDLTIuMTI1IDAuMDU1NDQ1IC0wLjQyNTI3IC0wLjk2MTU1NCAwLjkzODMzMSAwLjgyMjM0NkwyMy4xMDE1IDEyLjExMzhaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K";
             const pauseIconSrc = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iMjkiIHZpZXdCb3g9IjAgMCAyNSAyOSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTggMEg0QzEuNzkgMCAwIDEuNzkgMCA0VjI1QzAgMjcuMjEgMS43OSAyOSA0IDI5SDhDMTAuMjEgMjkgMTIgMjcuMjEgMTIgMjVWNEMxMiAxLjc5IDEwLjIxIDAgOCAwWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTIxIDBIMTdDMTQuNzkgMCAxMyAxLjc5IDEzIDRWMjVDMTMgMjcuMjEgMTQuNzkgMjkgMTcgMjlIMjFDMjMuMjEgMjkgMjUgMjcuMjEgMjUgMjVWNEMyNSAxLjc5IDIzLjIxIDAgMjEgMFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=";
             
-            // --- RENDER AND UI FUNCTIONS ---
+            // --- FUNÇÕES DE RENDERIZAÇÃO E UI ---
 	            function renderHeader() {
 	                if (!state.currentUser) return;
 	                
-	                // The object returned by loadTopBar already contains the profile data at the root
+	                // O objeto retornado pelo loadTopBar já contém os dados do perfil na raiz
 	                const profile = state.currentUser;
-	                const rankName = profile.rankData?.name || 'Recruit';
+	                const rankName = profile.rankData?.name || 'Recruta';
 	                
 	                usernameEl.textContent = `${rankName} ${profile.last_name || ''}`;
 	                userAvatarEl.src = profile.avatar_url || 'https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/profile-card.png';
 	                
-	                // Also update the progress bar if the elements exist
+	                // Atualiza também a barra de progresso se os elementos existirem
 	                if (progressDaysEl && profile.rankData) {
 	                    const retentionDays = profile.retention_days || 0;
 	                    const goalDays = isFinite(profile.rankData.maxDays) ? profile.rankData.maxDays + 1 : retentionDays;
 	                    const progressPercentage = Math.min((retentionDays / goalDays) * 100, 100);
 	                    
 	                    if (progressBarFillEl) progressBarFillEl.style.width = `${progressPercentage}%`;
-	                    progressDaysEl.innerHTML = `${String(retentionDays).padStart(2, '0')}<span>/${String(goalDays).padStart(2, '0')} Days</span>`;
+	                    progressDaysEl.innerHTML = `${String(retentionDays).padStart(2, '0')}<span>/${String(goalDays).padStart(2, '0')} Dias</span>`;
 	                }
 	            }
     
@@ -224,11 +225,11 @@
                         <h3>${episode.title}</h3>
                         <p>${episode.description}</p>
                         <div class="thumbnail-container">
-                            <img src="${episode.image}" alt="Thumbnail for ${episode.title}">
+                            <img src="${episode.image}" alt="Thumbnail para ${episode.title}">
                             <div class="episode-info-overlay">
                                 <div class="episode-meta">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 464c-114.7 0-208-93.3-208-208S141.3 48 256 48s208 93.3 208 208S370.7 464 256 464zM328 272H256c-4.4 0-8-3.6-8-8V144c0-4.4 3.6-8 8-8s8 3.6 8 8v112h64c4.4 0 8 3.6 8 8s-3.6 8-8 8z"/></svg>
-                                    <span>${episode.duration} • Episode ${episode.episodeNumber}</span>
+                                    <span>${episode.duration} • Episódio ${episode.episodeNumber}</span>
                                 </div>
                                 <div class="episode-progress-bar">
                                     <div class="episode-progress-fill" style="width: ${progress}%"></div>
@@ -241,7 +242,7 @@
                 });
             }
     
-            // --- PLAYER LOGIC ---
+            // --- LÓGICA DO PLAYER ---
             function openPlayerForEpisode(episodeId) {
                 const episode = state.episodes.find(ep => ep.id === episodeId);
                 if (!episode) return;
@@ -264,7 +265,7 @@
                     video.play();
                     
                     clearInterval(state.progressSaveInterval);
-                    state.progressSaveInterval = setInterval(saveCurrentProgress, 5000); // Save every 5s
+                    state.progressSaveInterval = setInterval(saveCurrentProgress, 5000); // Salva a cada 5s
                 };
             }
     
@@ -274,7 +275,7 @@
                 document.body.style.overflow = 'auto';
                 
                 clearInterval(state.progressSaveInterval);
-                saveCurrentProgress(); // Save one last time on close
+                saveCurrentProgress(); // Salva uma última vez ao fechar
                 state.currentPlayingEpisodeId = null;
             }
     
@@ -286,45 +287,45 @@
                 
                 state.userProgress[episodeId] = progressPercentage > 95 ? 100 : progressPercentage;
                 
-                // TODO: Call `saveVideoProgress(episodeId, state.userProgress[episodeId])` from user.js
-                console.log(`Saving progress for ep ${episodeId}: ${state.userProgress[episodeId]}%`);
+                // TODO: Chamar `saveVideoProgress(episodeId, state.userProgress[episodeId])` do user.js
+                console.log(`Salvando progresso do ep ${episodeId}: ${state.userProgress[episodeId]}%`);
             }
             
-	            // --- INITIALIZATION ---
+	            // --- INICIALIZAÇÃO ---
 	            async function init() {
 	                try {
-	                    // Load the actual user data from Supabase
-	                    // loadTopBar now handles the daily check-in automatically
+	                    // Carrega os dados reais do usuário do Supabase
+	                    // O loadTopBar agora processa o check-in diário automaticamente
 	                    state.currentUser = await window.loadTopBar();
 	                    
-	                    // Fetch the user's video progress
+	                    // Busca o progresso dos vídeos do usuário
 	                    state.userProgress = await window.UserService.getVideoProgress();
 	                    
-	                    console.log('✅ Application state initialized:', state);
+	                    console.log('✅ Estado da aplicação inicializado:', state);
 	                    
-	                    // Render the header and episodes after loading the data
-	                    renderHeader();
-	                    renderEpisodes();
-	                    setupPlayerControls();
-	                    
-	                    // Hide the preloader after successful loading
-	                    if (typeof hidePreloader === 'function') {
-	                        hidePreloader();
-	                    }
-	                } catch (error) {
-	                    // Hide the preloader even in case of an error to not freeze the screen
-	                    if (typeof hidePreloader === 'function') {
-	                        hidePreloader();
-	                    }
-		                    console.error('❌ Error initializing application:', error);
-		                    // Redirect to login if there is an error
-		                    window.location.href = 'index.html';
-		                    return;
-		                }
-		            }
+                    // Renderiza o cabeçalho e episódios após carregar os dados
+                    renderHeader();
+                    renderEpisodes();
+                    setupPlayerControls();
+                    
+                    // Oculta o preloader após o carregamento bem-sucedido
+                    if (typeof hidePreloader === 'function') {
+                        hidePreloader();
+                    }
+                } catch (error) {
+                    // Oculta o preloader mesmo em caso de erro para não travar a tela
+                    if (typeof hidePreloader === 'function') {
+                        hidePreloader();
+                    }
+	                    console.error('❌ Erro ao inicializar aplicação:', error);
+	                    // Redireciona para login se houver erro
+	                    window.location.href = 'index.html';
+	                    return;
+	                }
+	            }
     
             function setupPlayerControls() {
-                let inactivityTimer; // [FIX 2.1] Variable to control the inactivity timer
+                let inactivityTimer; // [FIX 2.1] Variável para controlar o timer de inatividade
     
                 const formatTime = (s) => (isNaN(s) ? "00:00" : new Date(s * 1000).toISOString().substr(14, 5));
                 const togglePlay = () => video.paused ? video.play() : video.pause();
@@ -345,32 +346,32 @@
                     if (card) card.style.width = `${progress}%`;
                 };
                 
-                // [FIX 2.2] Function to show controls and start the timer to hide them
+                // [FIX 2.2] Função para mostrar os controles e iniciar o timer para escondê-los
                 const showControlsAndSetTimer = () => {
                     videoContainer.classList.add('user-active');
-                    clearTimeout(inactivityTimer); // Reset the previous timer
+                    clearTimeout(inactivityTimer); // Reseta o timer anterior
     
-                    // If the video is not paused, set a new timer to hide the controls
+                    // Se o vídeo não estiver pausado, define um novo timer para esconder os controles
                     if (!video.paused) {
                         inactivityTimer = setTimeout(() => {
                             videoContainer.classList.remove('user-active');
-                        }, 3000); // Hide after 3 seconds of inactivity
+                        }, 3000); // Esconde após 3 segundos de inatividade
                     }
                 };
     
                 video.addEventListener('play', () => {
                     updatePlayPauseIcon();
-                    showControlsAndSetTimer(); // Ensures the timer starts when the video plays
+                    showControlsAndSetTimer(); // Garante que o timer comece quando o vídeo tocar
                 });
                 video.addEventListener('pause', () => {
                     updatePlayPauseIcon();
-                    clearTimeout(inactivityTimer); // Stops the timer when the video is paused
-                    videoContainer.classList.add('user-active'); // Forces the controls to be displayed on pause
+                    clearTimeout(inactivityTimer); // Para o timer quando o vídeo é pausado
+                    videoContainer.classList.add('user-active'); // Força a exibição dos controles no pause
                 });
                 video.addEventListener('timeupdate', updateProgress);
                 video.addEventListener('loadedmetadata', () => {
                     durationEl.textContent = ` / ${formatTime(video.duration)}`;
-                    showControlsAndSetTimer(); // Show controls as soon as the video loads
+                    showControlsAndSetTimer(); // Mostra os controles assim que o vídeo carregar
                 });
                 
                 video.addEventListener('click', togglePlay);
@@ -379,7 +380,7 @@
                 skipBackwardBtn.addEventListener('click', () => video.currentTime -= 10);
                 skipForwardBtn.addEventListener('click', () => video.currentTime += 10);
     
-                // [FIX 2.3] Adds the mouse movement listener to the video container
+                // [FIX 2.3] Adiciona o listener de movimento do mouse no container do vídeo
                 videoContainer.addEventListener('mousemove', showControlsAndSetTimer);
                 
                 progressBarContainer.addEventListener('click', (e) => {
@@ -391,7 +392,7 @@
                     if (document.fullscreenElement) {
                         document.exitFullscreen();
                     } else {
-                        // Using the overlay for fullscreen ensures that the custom controls also go into fullscreen
+                        // Usar o overlay para o fullscreen garante que os controles personalizados entrem em tela cheia também
                         playerOverlay.requestFullscreen();
                     }
                 });
