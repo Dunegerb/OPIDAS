@@ -1,17 +1,16 @@
-// --- MÓDULO DE AUTENTICAÇÃO (auth.js) ---
-// Responsável por login, logout, registro e proteção de rotas.
-// Responsável por login, logout, registro e proteção de rotas.
+// --- AUTHENTICATION MODULE (auth.js) ---
+// Responsible for login, logout, registration, and route protection.
 
 /**
- * Registra um novo usuário
- * @param {string} email - Email do usuário
- * @param {string} password - Senha do usuário
+ * Registers a new user
+ * @param {string} email - User's email
+ * @param {string} password - User's password
  */
 async function signUp(email, password) {
     try {
-        console.log(`[AuthService] Tentando registrar com: ${email}`);
+        console.log(`[AuthService] Attempting to register with: ${email}`);
         
-        // Chama o Supabase para criar o usuário
+        // Calls Supabase to create the user
         const { data, error } = await window.supabase.auth.signUp({
             email: email,
             password: password,
@@ -25,42 +24,42 @@ async function signUp(email, password) {
 
         if (error) throw error;
 
-        console.log('✅ Usuário registrado com sucesso:', data);
+        console.log('✅ User registered successfully:', data);
         
-        // Verifica se o email precisa ser confirmado
+        // Checks if the email needs to be confirmed
         if (data.user && !data.session) {
-            // Email precisa ser confirmado
-            alert("Conta criada! Verifique seu email para confirmar o cadastro antes de continuar.");
+            // Email needs to be confirmed
+            alert("Account created! Please check your email to confirm your registration before continuing.");
             return;
         }
         
-        // Se a sessão foi criada, o usuário já está logado
+        // If the session was created, the user is already logged in
         if (data.session) {
-            console.log('✅ Sessão criada automaticamente');
+            console.log('✅ Session created automatically');
             
-            // Aguarda um pouco para garantir que a sessão foi persistida
+            // Waits a bit to ensure the session is persisted
             await new Promise(resolve => setTimeout(resolve, 500));
             
-            alert("Conta criada com sucesso! Você será redirecionado para completar seu perfil.");
+            alert("Account created successfully! You will be redirected to complete your profile.");
             window.location.href = 'onboarding/identification.html';
         }
 
     } catch (error) {
-        console.error('❌ Erro ao registrar:', error);
-        alert(`Erro ao criar conta: ${error.message}`);
+        console.error('❌ Error during registration:', error);
+        alert(`Error creating account: ${error.message}`);
     }
 }
 
 /**
- * Faz login do usuário
- * @param {string} email - Email do usuário
- * @param {string} password - Senha do usuário
+ * Logs the user in
+ * @param {string} email - User's email
+ * @param {string} password - User's password
  */
 async function signIn(email, password) {
     try {
-        console.log(`[AuthService] Tentando logar com: ${email}`);
+        console.log(`[AuthService] Attempting to log in with: ${email}`);
         
-        // Chama o Supabase para fazer login
+        // Calls Supabase to sign in
         const { data, error } = await window.supabase.auth.signInWithPassword({
             email: email,
             password: password
@@ -68,9 +67,9 @@ async function signIn(email, password) {
 
         if (error) throw error;
 
-        console.log('✅ Login bem-sucedido:', data);
+        console.log('✅ Login successful:', data);
 
-        // Busca o perfil do usuário para verificar o status do onboarding
+        // Fetches the user profile to check the onboarding status
         const { data: profile, error: profileError } = await window.supabase
             .from('profiles')
             .select('onboarding_status')
@@ -78,79 +77,79 @@ async function signIn(email, password) {
             .single();
 
         if (profileError) {
-            console.warn('⚠️ Perfil não encontrado, redirecionando para onboarding');
+            console.warn('⚠️ Profile not found, redirecting to onboarding');
             window.location.href = 'onboarding/identification.html';
             return;
         }
 
-        // Redireciona baseado no status do onboarding
+        // Redirects based on onboarding status
         if (profile.onboarding_status === 'completed') {
-            console.log('✅ Onboarding completo, redirecionando para campo');
+            console.log('✅ Onboarding complete, redirecting to the battlefield');
             window.location.href = 'campo.html';
         } else {
-            console.log('⚠️ Onboarding pendente, redirecionando para onboarding');
+            console.log('⚠️ Onboarding pending, redirecting to onboarding');
             window.location.href = 'onboarding/identification.html';
         }
 
     } catch (error) {
-        console.error('❌ Erro ao fazer login:', error);
-        alert(`Erro ao fazer login: ${error.message}`);
+        console.error('❌ Error during login:', error);
+        alert(`Error during login: ${error.message}`);
     }
 }
 
 /**
- * Faz logout do usuário
+ * Logs the user out
  */
 async function signOut() {
     try {
-        console.log("[AuthService] Deslogando usuário.");
+        console.log("[AuthService] Logging out user.");
         
         const { error } = await window.supabase.auth.signOut();
         
         if (error) throw error;
 
-        console.log('✅ Logout realizado com sucesso');
+        console.log('✅ Logout successful');
         window.location.href = 'index.html';
 
     } catch (error) {
-        console.error('❌ Erro ao fazer logout:', error);
-        alert(`Erro ao fazer logout: ${error.message}`);
+        console.error('❌ Error during logout:', error);
+        alert(`Error during logout: ${error.message}`);
     }
 }
 
 /**
- * Protege rotas que requerem autenticação
- * @returns {Promise<Object|null>} - Usuário autenticado ou null
+ * Protects routes that require authentication
+ * @returns {Promise<Object|null>} - Authenticated user or null
  */
 async function protectRoute() {
     try {
-        console.log("[AuthService] Verificando autenticação da rota.");
+        console.log("[AuthService] Verifying route authentication.");
         
         const { data: { user }, error } = await window.supabase.auth.getUser();
         
         if (error || !user) {
-            console.warn('⚠️ Usuário não autenticado, redirecionando para login');
+            console.warn('⚠️ User not authenticated, redirecting to login');
             window.location.href = 'index.html';
             return null;
         }
 
-        console.log('✅ Usuário autenticado:', user.email);
+        console.log('✅ User authenticated:', user.email);
         return user;
 
     } catch (error) {
-        console.error('❌ Erro ao verificar autenticação:', error);
+        console.error('❌ Error verifying authentication:', error);
         window.location.href = 'index.html';
         return null;
     }
 }
 
 /**
- * Faz login com provedor OAuth (Google, Apple, Discord, etc)
- * @param {string} provider - Nome do provedor (google, apple, discord, etc)
+ * Logs in with an OAuth provider (Google, Apple, Discord, etc)
+ * @param {string} provider - Name of the provider (google, apple, discord, etc)
  */
 async function signInWithProvider(provider) {
     try {
-        console.log(`[AuthService] Tentando login com provedor: ${provider}`);
+        console.log(`[AuthService] Attempting login with provider: ${provider}`);
         
         const { data, error } = await window.supabase.auth.signInWithOAuth({
             provider: provider,
@@ -161,22 +160,22 @@ async function signInWithProvider(provider) {
 
         if (error) throw error;
 
-        console.log('✅ Redirecionando para login OAuth:', provider);
+        console.log('✅ Redirecting to OAuth login:', provider);
 
     } catch (error) {
-        console.error(`❌ Erro ao fazer login com ${provider}:`, error);
-        alert(`Erro ao fazer login com ${provider}: ${error.message}`);
+        console.error(`❌ Error logging in with ${provider}:`, error);
+        alert(`Error logging in with ${provider}: ${error.message}`);
     }
 }
 
-// Exporta as funções para uso global
+// Exports the functions for global use
 window.signUp = signUp;
 window.signIn = signIn;
 window.signOut = signOut;
 window.protectRoute = protectRoute;
 window.signInWithProvider = signInWithProvider;
 
-// --- Lógica de UI para a página de login ---
+// --- UI logic for the login page ---
 function initAuthPage() {
     const authForm = document.getElementById('auth-form');
     const emailInput = document.getElementById('email');
@@ -191,10 +190,10 @@ function initAuthPage() {
 
     function toggleMode() {
         isLoginMode = !isLoginMode;
-        formTitle.textContent = isLoginMode ? 'Login no Campo' : 'Bem-vindo(a) ao Campo Guerreiro(a)';
-        submitButtonText.textContent = isLoginMode ? 'Entrar' : 'Fazer Alistamento';
-        toggleFormText.textContent = isLoginMode ? 'Não tem uma conta?' : 'Já tem uma conta?';
-        toggleLink.querySelector('span').textContent = isLoginMode ? 'Aliste-se' : 'Login';
+        formTitle.textContent = isLoginMode ? 'Login to the Battlefield' : 'Welcome to the Battlefield, Warrior';
+        submitButtonText.textContent = isLoginMode ? 'Enter' : 'Enlist';
+        toggleFormText.textContent = isLoginMode ? 'Don\'t have an account?' : 'Already have an account?';
+        toggleLink.querySelector('span').textContent = isLoginMode ? 'Enlist' : 'Login';
     }
 
     toggleLink.addEventListener('click', (e) => {
@@ -208,10 +207,10 @@ function initAuthPage() {
         const email = emailInput.value;
         const password = passwordInput.value;
 
-        // Desabilita o botão durante o processo
+        // Disables the button during the process
         const submitButton = authForm.querySelector('button[type="submit"]');
         submitButton.disabled = true;
-        submitButtonText.textContent = isLoginMode ? 'Entrando...' : 'Criando conta...';
+        submitButtonText.textContent = isLoginMode ? 'Entering...' : 'Creating account...';
 
         try {
             if (isLoginMode) {
@@ -220,9 +219,9 @@ function initAuthPage() {
                 await signUp(email, password);
             }
         } finally {
-            // Reabilita o botão
+            // Re-enables the button
             submitButton.disabled = false;
-            submitButtonText.textContent = isLoginMode ? 'Entrar' : 'Fazer Alistamento';
+            submitButtonText.textContent = isLoginMode ? 'Enter' : 'Enlist';
         }
     });
 
@@ -233,4 +232,3 @@ function initAuthPage() {
         });
     });
 }
-

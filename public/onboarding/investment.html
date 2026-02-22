@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en-US">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Onboarding: Investimento - OPIDAS</title>
+    <title>Onboarding: Investment - OPIDAS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -20,24 +20,24 @@
             <div class="form-steps-container">
                 <section class="form-step investment-step">
                     <section class="info-section">
-                        <h1 class="info-title">Investimento OPIDAS</h1>
-                        <p class="info-description"><span>Tenha acesso ao </span><span class="highlight">campo</span><span>, uma área para a </span><span class="highlight">comunidade</span><span> de pessoas que estão alinhados com seu </span><span class="highlight">propósito</span><span> de autoconhecimento. E uma </span><span class="highlight">área de séries</span><span> que você não encontrará na netflix.</span></p>
+                        <h1 class="info-title">OPIDAS Investment</h1>
+                        <p class="info-description"><span>Get access to the </span><span class="highlight">battlefield</span><span>, an area for the </span><span class="highlight">community</span><span> of people who are aligned with your </span><span class="highlight">purpose</span><span> of self-knowledge. And a </span><span class="highlight">series area</span><span> that you won't find on Netflix.</span></p>
                     </section>
                     <section class="payment-section-wrapper">
                         <div class="payment-card">
                             <div class="opidas-logo-top"><img alt="OPIDAS Icon" src="https://c.animaapp.com/8j0Bi7lE/img/add-a-heading--4--2@2x.png" /><span>OPIDAS</span></div>
-                            <div class="price-box"><p class="price-text">R$3<span class="period">/semana</span></p></div>
-                            <button id="btnGoToNextStep" class="btn-invest-primary">Começar Gratuitamente</button>
-                            <div class="secure-payment-info"><img alt="Security icon" src="https://c.animaapp.com/8j0Bi7lE/img/vector.svg" /><p>Pagamento 100% seguro</p></div>
+                            <div class="price-box"><p class="price-text">$3<span class="period">/week</span></p></div>
+                            <button id="btnGoToNextStep" class="btn-invest-primary">Start for Free</button>
+                            <div class="secure-payment-info"><img alt="Security icon" src="https://c.animaapp.com/8j0Bi7lE/img/vector.svg" /><p>100% secure payment</p></div>
                             <ul class="features-list">
                                 <svg width="0" height="0" style="display:none;"><symbol id="check-icon" viewBox="0 0 12 9"><path d="M1 4.5L4.33333 8L11 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
-                                <li><svg class="check-icon"><use xlink:href="/assets/styles/images/checkicon.svg"></use></svg>Patentes Hierárquicas</li>
-                                <li><svg class="check-icon"><use xlink:href="/assets/styles/images/checkicon.svg"></use></svg>Campo (Chat da comunidade)</li>
-                                <li><svg class="check-icon"><use xlink:href="/assets/styles/images/checkicon.svg"></use></svg>Área de conhecimento (séries)</li>
-                                <li><svg class="check-icon"><use xlink:href="/assets/styles/images/checkicon.svg"></use></svg>Veja seu progresso</li>
+                                <li><svg class="check-icon"><use xlink:href="/assets/styles/images/checkicon.svg"></use></svg>Hierarchical Ranks</li>
+                                <li><svg class="check-icon"><use xlink:href="/assets/styles/images/checkicon.svg"></use></svg>Battlefield (Community Chat)</li>
+                                <li><svg class="check-icon"><use xlink:href="/assets/styles/images/checkicon.svg"></use></svg>Knowledge Area (series)</li>
+                                <li><svg class="check-icon"><use xlink:href="/assets/styles/images/checkicon.svg"></use></svg>See your progress</li>
                             </ul>
-                            <p class="trial-text">7 dias de avaliação gratuita</p>
-                            <button id="btnGoToPrevStep" class="btn-secondary">Voltar</button>
+                            <p class="trial-text">7-day free trial</p>
+                            <button id="btnGoToPrevStep" class="btn-secondary">Back</button>
                         </div>
                     </section>
                 </section>
@@ -45,46 +45,46 @@
         </main>
     </div>
 
-    <!-- Scripts do Supabase e Stripe -->
+    <!-- Supabase and Stripe Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/lib/supabase-config.js"></script>
     <script src="../js/services/stripe.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Verificação para garantir que o usuário veio da etapa anterior
+            // Check to ensure the user came from the previous step
             if (!localStorage.getItem('onboardingData')) {
-                alert('Dados não encontrados. Por favor, comece o processo de identificação.');
+                alert('Data not found. Please start the identification process.');
                 window.location.href = 'identification.html';
                 return;
             }
 
             document.getElementById('btnGoToNextStep').addEventListener('click', async () => {
                 try {
-                    console.log('💳 Iniciando checkout...');
+                    console.log('💳 Starting checkout...');
                     
-                    // Obtém o usuário autenticado
+                    // Get the authenticated user
                     const { data: { user }, error } = await window.supabase.auth.getUser();
                     
                     if (error || !user) {
-                        throw new Error('Usuário não autenticado');
+                        throw new Error('User not authenticated');
                     }
                     
-                    console.log('👤 Usuário:', user.email);
+                    console.log('👤 User:', user.email);
                     
-                    // ✅ CORREÇÃO DE SEGURANÇA: Não passa mais userId nem email
-                    // O backend extrai essas informações do token JWT
+                    // ✅ SECURITY FIX: No longer passes userId or email
+                    // The backend extracts this information from the JWT token
                     const checkoutUrl = await window.StripeService.createCheckoutSession();
                     
-                    console.log('✅ Sessão de checkout criada');
-                    console.log('🔗 Redirecionando para:', checkoutUrl);
+                    console.log('✅ Checkout session created');
+                    console.log('🔗 Redirecting to:', checkoutUrl);
                     
-                    // Redireciona para a página de pagamento do Stripe
+                    // Redirects to the Stripe payment page
                     window.location.href = checkoutUrl;
                     
                 } catch (error) {
-                    console.error('❌ Erro ao iniciar checkout:', error);
-                    alert(`Erro ao iniciar pagamento: ${error.message}\n\nTente novamente.`);
+                    console.error('❌ Error starting checkout:', error);
+                    alert(`Error starting payment: ${error.message}\n\nTry again.`);
                 }
             });
 

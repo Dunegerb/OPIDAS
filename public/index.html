@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en-US">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Campo Guerreiro</title>
+    <title>Login - Warrior Field</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,13 +20,13 @@
     </header>
 
     <div class="login-card">
-        <!-- Coluna da Esquerda: Imagem Hero -->
+        <!-- Left Column: Hero Image -->
         <section class="hero-section" aria-label="Hero Image">
-            <img class="background-image" alt="Campo Guerreiro Background" src="assets/styles/images/photologin.png" />
+            <img class="background-image" alt="Warrior Field Background" src="assets/styles/images/photologin.png" />
             <img class="decorative-element" alt="Decorative Element" src="assets/styles/images/decorative-element.png" />
         </section>
 
-        <!-- Coluna da Direita: Formulário de Login -->
+        <!-- Right Column: Login Form -->
         <main class="main-content">
             
             <div class="opidas-header">
@@ -35,9 +35,9 @@
             </div>
 
             <div class="login-form-wrapper">
-                <h1 id="form-title">Bem-vindo(a) ao Campo Guerreiro(a)</h1>
+                <h1 id="form-title">Welcome to the Warrior Field</h1>
                 <p class="subtitle">
-                    Bem vindo(a) ao seu campo de batalha. Crie sua conta ou faça o login com sua conta opidas.
+                    Welcome to your battlefield. Create your account or log in with your Opida account.
                 </p>
 
                 <form id="auth-form">
@@ -46,18 +46,18 @@
                         <input id="email" type="email" placeholder="Email" required aria-required="true" />
                     </div>
                     <div class="form-group">
-                        <label for="password" class="sr-only">Senha</label>
-                        <input id="password" type="password" placeholder="Senha" required aria-required="true" />
+                        <label for="password" class="sr-only">Password</label>
+                        <input id="password" type="password" placeholder="Password" required aria-required="true" />
                     </div>
-                    <button type="submit" class="submit-button" aria-label="Fazer Alistamento">
-                        <span id="submit-button-text">Fazer Alistamento</span>
+                    <button type="submit" class="submit-button" aria-label="Enlist">
+                        <span id="submit-button-text">Enlist</span>
                         <img alt="" src="assets/styles/images/decorative-element-button.png" />
                     </button>
                 </form>
 
                 <div class="separator">
                     <div class="line"></div>
-                    <span>OU</span>
+                    <span>OR</span>
                     <div class="line"></div>
                 </div>
 
@@ -77,7 +77,7 @@
                 </div>
 
                 <div class="toggle-form-section">
-                    <span id="toggle-form-text">Já tem uma conta?</span>
+                    <span id="toggle-form-text">Already have an account?</span>
                     <a href="#" id="toggle-form-link">
                         <span>Login</span>
                         <img alt="arrow" src="assets/styles/images/arrow.svg" />
@@ -86,20 +86,20 @@
             </div>
 
             <footer class="footer">
-                <a href="#">Politica de privacidade</a>
-                <a href="#">Termos de Serviço</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
                 <p><span>©</span> 2025 OPIDAS</p>
             </footer>
         </main>
     </div>
 
-    <!-- Scripts do Projeto -->
+    <!-- Project Scripts -->
     <script src="/js/lib/logger.js"></script>
     <script src="/js/components/toast.js"></script>
     <script src="js/lib/supabase-config.js"></script>
     <script src="js/services/auth.js"></script>
     <script>
-        // Inicializador da página de login
+        // Login page initializer
         document.addEventListener('DOMContentLoaded', () => {
             initAuthPage();
         });
@@ -107,12 +107,3 @@
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-

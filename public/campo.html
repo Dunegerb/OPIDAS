@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en-US">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campo - OPIDAS</title>
+    <title>Battlefield - OPIDAS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -31,7 +31,7 @@
 	        >
 	            <source src="assets/motiondesigns/teladecarregamento/preloader_web.webm" type="video/webm">
 	            <source src="assets/motiondesigns/teladecarregamento/preloader_webmp4.mp4" type="video/mp4">
-	            Seu navegador não suporta o elemento de vídeo.
+	            Your browser does not support the video element.
 	        </video>
 	    </div>
 	</div>
@@ -43,23 +43,23 @@
             <div class="user-welcome">
                 <img id="user-avatar" alt="Profile photo" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/profile-card.png" />
                 <div class="user-welcome-text">
-                    <div class="greeting">Bem vindo(a) de volta</div>
-                    <div class="username" id="welcome-username">Carregando...</div>
+                    <div class="greeting">Welcome back</div>
+                    <div class="username" id="welcome-username">Loading...</div>
                 </div>
             </div>
 
             <div class="status-bar">
                 <div class="rank-icon" id="status-rank-icon-container">
-                    <img id="status-rank-icon" alt="Patente" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/patentes/Recruta.png" />
+                    <img id="status-rank-icon" alt="Rank" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/patentes/Recruta.png" />
                 </div>
                 <div class="progress-info">
-                    <p class="days" id="progress-days" style="position: static;">07<span>/10 Dias</span></p>
+                    <p class="days" id="progress-days" style="position: static;">07<span>/10 Days</span></p>
                     <div class="progress-bar">
                         <div class="progress-bar-fill" id="progress-bar-fill"></div>
                     </div>
                 </div>
                 <button class="icon-button">
-                    <img alt="Notificação button" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/notifica%C3%A7%C3%A3obutton.svg" />
+                    <img alt="Notification button" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/notifica%C3%A7%C3%A3obutton.svg" />
                 </button>
                 <button class="icon-button" id="logout-button">
                     <img alt="Logout" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/darkmode-button.svg" />
@@ -71,55 +71,55 @@
             <aside class="panel sidebar">
                 <div class="sidebar-header">
                     <div class="title">
-                        <div class="subtitle">Campo contra o(a)</div>
-                        <div class="main-title" id="habit-title">Carregando...</div>
+                        <div class="subtitle">Battlefield against</div>
+                        <div class="main-title" id="habit-title">Loading...</div>
                     </div>
-                    <img class="settings-icon" alt="Configuração do campo" src="assets/styles/images/icones/configcampo.svg" />
+                    <img class="settings-icon" alt="Battlefield settings" src="assets/styles/images/icones/configcampo.svg" />
                 </div>
 
                 <nav class="sidebar-tabs">
-                    <button class="tab-button active">Patentes</button>
+                    <button class="tab-button active">Ranks</button>
                     <button class="tab-button">Admin</button>
                 </nav>
                 
                 <ul class="ranks-list" id="ranks-list">
-                    <!-- Lista de patentes será renderizada pelo JS -->
+                    <!-- Ranks list will be rendered by JS -->
                 </ul>
 
                 <div class="sidebar-footer">
-                    <p class="reset-info" id="reset-info">Chances de reset <span>...</span></p>
-                    <button class="reset-button" id="reset-button">Resetar contagem</button>
+                    <p class="reset-info" id="reset-info">Reset chances <span>...</span></p>
+                    <button class="reset-button" id="reset-button">Reset count</button>
                 </div>
             </aside>
             
             <main class="panel chat-area">
                 <header class="chat-header">
-                    <img alt="Logo Chat Opidas" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/icones/logochatopidas.svg" style="width: 34px; height: 34px;">
+                    <img alt="Opidas Chat Logo" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/icones/logochatopidas.svg" style="width: 34px; height: 34px;">
                     <button class="icon-button">
-                        <img alt="Membros do grupo" src="assets/styles/images/icones/pessoasdogrupobotão.svg">
+                        <img alt="Group members" src="assets/styles/images/icones/pessoasdogrupobotão.svg">
                     </button>
                     <div class="search-bar">
-                        <input type="search" placeholder="Pesquisar">
+                        <input type="search" placeholder="Search">
                         <img class="search-icon" alt="Search" src="assets/styles/images/icones/search-vector.svg">
                     </div>
                     <button class="icon-button">
-                        <img alt="Tela cheia" src="assets/styles/images/icones/botãofullscreenchat.svg">
+                        <img alt="Fullscreen" src="assets/styles/images/icones/botãofullscreenchat.svg">
                     </button>
                 </header>
 
                 <div class="messages-container" id="messages-container">
-                    <!-- Mensagens serão carregadas dinamicamente -->
+                    <!-- Messages will be loaded dynamically -->
                 </div>
 
                 <div class="chat-input-wrapper">
                     <form class="chat-input" id="chat-form">
                         <div class="input-field-container">
                             <button type="button"><img src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/icones/uploadbutton.svg" alt="Upload"></button>
-                            <input type="text" id="chat-input-field" placeholder="Conversar com o campo">
+                            <input type="text" id="chat-input-field" placeholder="Chat with the battlefield">
                             <button type="button"><img src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/icones/sendemojibutton.svg" alt="Emoji"></button>
                         </div>
                         <button class="mic-button" type="button">
-                            <img alt="Gravar voz" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/icones/voicebutton.svg">
+                            <img alt="Record voice" src="https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/icones/voicebutton.svg">
                         </button>
                     </form>
                 </div>
@@ -127,7 +127,7 @@
         </div>
     </div>
 
-    <!-- Scripts do Projeto -->
+    <!-- Project Scripts -->
     <script src="/js/lib/logger.js"></script>
     <script src="/js/components/toast.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -142,23 +142,23 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- ESTADO DA APLICAÇÃO ---
+            // --- APPLICATION STATE ---
             const state = {
                 currentUser: null,
                 activeChannel: null,
-                allUsers: [], // Cache de usuários para evitar buscas repetidas
-                channels: [ // Isso virá do Supabase, mas por enquanto é mockado
-                    { id: 'recruta', level: 0, name: 'Recruta', minDays: 0, maxDays: 9, icon: 'assets/styles/images/patentes/Recruta.png' },
-                    { id: 'soldado', level: 1, name: 'Soldado', minDays: 10, maxDays: 29, icon: 'assets/styles/images/patentes/Soldado.png' },
-                    { id: 'cabo',    level: 2, name: 'Cabo',    minDays: 30, maxDays: 59, icon: 'assets/styles/images/patentes/Cabo.png' },
-                    { id: 'sargento',level: 3, name: 'Sargento',minDays: 60, maxDays: 89, icon: 'assets/styles/images/patentes/Sargento.png' },
-                    { id: 'marechal',level: 4, name: 'Marechal',minDays: 90, maxDays: 179, icon: 'assets/styles/images/patentes/Marechal.png' },
-                    { id: 'tenente', level: 5, name: 'Tenente', minDays: 180, maxDays: 364, icon: 'assets/styles/images/patentes/Tenente.png' },
-                    { id: 'capitao', level: 6, name: 'Capitão', minDays: 365, maxDays: Infinity, icon: 'assets/styles/images/patentes/Capitão.png' }
+                allUsers: [], // User cache to avoid repeated searches
+                channels: [ // This will come from Supabase, but is mocked for now
+                    { id: 'recruta', level: 0, name: 'Recruit', minDays: 0, maxDays: 9, icon: 'assets/styles/images/patentes/Recruta.png' },
+                    { id: 'soldado', level: 1, name: 'Soldier', minDays: 10, maxDays: 29, icon: 'assets/styles/images/patentes/Soldado.png' },
+                    { id: 'cabo',    level: 2, name: 'Corporal',    minDays: 30, maxDays: 59, icon: 'assets/styles/images/patentes/Cabo.png' },
+                    { id: 'sargento',level: 3, name: 'Sergeant',minDays: 60, maxDays: 89, icon: 'assets/styles/images/patentes/Sargento.png' },
+                    { id: 'marechal',level: 4, name: 'Marshal',minDays: 90, maxDays: 179, icon: 'assets/styles/images/patentes/Marechal.png' },
+                    { id: 'tenente', level: 5, name: 'Lieutenant', minDays: 180, maxDays: 364, icon: 'assets/styles/images/patentes/Tenente.png' },
+                    { id: 'capitao', level: 6, name: 'Captain', minDays: 365, maxDays: Infinity, icon: 'assets/styles/images/patentes/Capitão.png' }
                 ]
             };
 
-            // --- ELEMENTOS DO DOM ---
+            // --- DOM ELEMENTS ---
             const welcomeUsernameEl = document.getElementById('welcome-username');
             const userAvatarEl = document.getElementById('user-avatar');
             const statusRankIconEl = document.getElementById('status-rank-icon');
@@ -173,16 +173,16 @@
             const habitTitleEl = document.getElementById('habit-title');
             const logoutButton = document.getElementById('logout-button');
 
-            // --- FUNÇÕES DE RENDERIZAÇÃO ---
+            // --- RENDER FUNCTIONS ---
             function updateUI() {
                 if (!state.currentUser) return;
 
-                // ✅ CORRIGIDO: state.currentUser já é um objeto flat com rankData dentro
+                // ✅ FIXED: state.currentUser is already a flat object with rankData inside
                 const profile = state.currentUser;
                 const rankData = profile.rankData;
                 
                 if (!rankData) {
-                    console.error('❌ rankData não encontrado em state.currentUser');
+                    console.error('❌ rankData not found in state.currentUser');
                     return;
                 }
                 
@@ -190,243 +190,189 @@
                 welcomeUsernameEl.textContent = `${rankData.name} ${profile.last_name}`;
                 userAvatarEl.src = profile.avatar_url || 'https://c.animaapp.com/wYjpt5p0/img/profile-photo-5@2x.png';
                 statusRankIconEl.src = rankData.icon;
-                habitTitleEl.textContent = profile.habit || 'Indefinido';
+                habitTitleEl.textContent = profile.habit || 'Undefined';
                 
-// Barra de Progresso
-	                // ⚠️ CORREÇÃO: Garantir que o retention_days seja calculado se for 0 ou nulo, usando a data de criação do usuário (onboarding_data)
-	                let currentRetentionDays = profile.retention_days || 0;
-	                
-	                // Se o retention_days for 0, calcula os dias desde o onboarding para garantir que o contador comece a contar
-	                if (currentRetentionDays === 0 && profile.onboarding_data) {
-	                    // A função calculateDaysSinceOnboarding está no UserService, mas não está exposta globalmente.
-	                    // Como o app.js já tem a lógica de cálculo, vamos confiar que o profile.retention_days está correto
-	                    // ou que será atualizado pelo RPC process_daily_checkin.
-	                    // Para fins de exibição, vamos usar o valor que vem do banco.
-	                }
-	
-		                const rankGoalDays = isFinite(rankData.maxDays) ? rankData.maxDays + 1 : currentRetentionDays;
-		                const progressPercentage = Math.min((currentRetentionDays / rankGoalDays) * 100, 100);
-		                progressBarFillEl.style.width = `${progressPercentage}%`;
-		                progressDaysEl.innerHTML = `${String(currentRetentionDays).padStart(2, '0')}<span>/${String(rankGoalDays).padStart(2, '0')} Dias</span>`;
+// Progress Bar
+		                // ⚠️ FIX: Ensure retention_days is calculated if it is 0 or null, using the user's creation date (onboarding_data)
+		                let currentRetentionDays = profile.retention_days || 0;
+		                
+		                // If retention_days is 0, calculate the days since onboarding to ensure the counter starts counting
+                if (currentRetentionDays === 0 && profile.onboarding_data) {
+                    const onboardingDate = new Date(profile.onboarding_data);
+                    const today = new Date();
+                    // Ignore time and timezone
+                    onboardingDate.setUTCHours(0, 0, 0, 0);
+                    today.setUTCHours(0, 0, 0, 0);
 
-                // Sidebar (lista de patentes)
-                renderRanksList();
+                    const diffTime = Math.abs(today - onboardingDate);
+                    currentRetentionDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                }
 
-                // Footer da Sidebar
-                resetInfoEl.innerHTML = `Chances de reset <span>${profile.remaining_resets} restantes</span>`;
-                resetButtonEl.disabled = profile.remaining_resets <= 0;
+                const nextRank = state.channels.find(r => r.level === rankData.level + 1);
+                const daysForNextRank = nextRank ? nextRank.minDays : rankData.maxDays;
+
+                progressDaysEl.innerHTML = `${currentRetentionDays}<span>/${daysForNextRank} Days</span>`;
+
+                const progressPercentage = Math.min((currentRetentionDays / daysForNextRank) * 100, 100);
+                progressBarFillEl.style.width = `${progressPercentage}%`;
+
+                // Ranks List
+                renderRanksList(rankData.level);
+
+                // Reset Area
+                updateResetArea(profile.last_habit_date, profile.retention_days);
             }
 
-            function renderRanksList() {
-                ranksListEl.innerHTML = '';
-                const userRankLevel = state.currentUser.rankData.level;
-
-                state.channels.slice().reverse().forEach(channel => {
+            function renderRanksList(currentRankLevel) {
+                ranksListEl.innerHTML = ''; // Clear list
+                state.channels.forEach(rank => {
                     const li = document.createElement('li');
                     li.className = 'rank-item';
-                    li.dataset.channelId = channel.id;
-
-                    const isLocked = channel.level > userRankLevel;
-                    const isActive = channel.id === state.activeChannel;
-
-                    if (isLocked) li.classList.add('locked');
-                    if (isActive) li.classList.add('active-server');
-
+                    if (rank.level === currentRankLevel) {
+                        li.classList.add('active');
+                    }
                     li.innerHTML = `
-                        <div class="rank-icon"><img alt="${channel.name}" src="${channel.icon}"></div>
-                        <div class="rank-details">
-                            <div class="rank-name">${channel.name}</div>
-                            <div class="rank-days">Dias: ${channel.minDays}${channel.maxDays === Infinity ? '+' : '-' + channel.maxDays}</div>
-                        </div>
-                        <div class="status-dot"></div>
-                        ${isLocked ? '<div class="rank-overlay"></div>' : ''}
+                        <img src="${rank.icon}" alt="${rank.name}">
+                        <span>${rank.name}</span>
+                        <span class="days-range">${rank.minDays} - ${rank.maxDays === Infinity ? '∞' : rank.maxDays} days</span>
                     `;
                     ranksListEl.appendChild(li);
                 });
             }
-            
-            function renderMessage(message, userProfile) {
-                // Validação de segurança
-                if (!userProfile) {
-                    console.error('❌ userProfile é null ou undefined. Mensagem:', message);
-                    console.warn('⚠️ Isso pode indicar um problema com políticas RLS no Supabase.');
+
+            function updateResetArea(lastHabitDateStr, retentionDays) {
+                if (!lastHabitDateStr) {
+                    resetInfoEl.innerHTML = 'No resets yet';
+                    resetButtonEl.disabled = true;
                     return;
                 }
-                
-                const messageEl = document.createElement('div');
-                messageEl.className = 'message';
-                
-                const userRank = state.channels.find(c => c.id === userProfile.rank) || state.channels[0];
-                const displayName = `${userRank.name} ${userProfile.last_name}`;
-                const timestamp = new Date(message.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit'});
 
-                messageEl.innerHTML = `
-                    <img class="avatar" alt="Avatar" src="${userProfile.avatar_url}">
-                    <div class="message-content">
-                        <div class="message-header">
-                            <div class="username">${displayName}</div>
-                            <div class="timestamp">${timestamp}</div>
-                        </div>
-                        <div class="message-bubble">${message.content}</div>
-                    </div>
-                `;
-                messagesContainerEl.appendChild(messageEl);
-                messagesContainerEl.scrollTop = messagesContainerEl.scrollHeight;
+                const lastHabitDate = new Date(lastHabitDateStr);
+                const today = new Date();
+                const diffTime = Math.abs(today - lastHabitDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                const chances = Math.floor(retentionDays / 10); // 1 chance every 10 days
+                resetInfoEl.innerHTML = `Reset chances <span>${chances}</span>`;
+
+                if (chances > 0) {
+                    resetButtonEl.disabled = false;
+                    resetButtonEl.onclick = handleReset;
+                } else {
+                    resetButtonEl.disabled = true;
+                }
             }
 
-            // --- FUNÇÕES DE LÓGICA ---
-            async function switchChannel(channelId) {
-                if (!channelId || channelId === state.activeChannel) return;
+            function renderMessage(message) {
+                const isCurrentUser = message.user_id === state.currentUser.id;
+                const user = state.allUsers.find(u => u.id === message.user_id);
+                const userName = user ? `${user.rankData.name} ${user.last_name}` : 'Loading...';
+                const userAvatar = user ? user.avatar_url : 'assets/styles/images/profile-card.png';
 
-                try {
-                    state.activeChannel = channelId;
-                    messagesContainerEl.innerHTML = '<h3>Carregando mensagens...</h3>';
-                    updateUI(); // Atualiza a seleção visual
+                const messageEl = document.createElement('div');
+                messageEl.className = `message ${isCurrentUser ? 'sent' : 'received'}`;
 
-                    console.log(`🔄 Mudando para o canal: ${channelId}`);
+                const avatarImg = `<img src="${userAvatar}" alt="Avatar" class="avatar">`;
+                const messageContent = `
+                    <div class="message-content">
+                        <div class="username">${userName}</div>
+                        <div class="text">${message.content}</div>
+                        <div class="timestamp">${new Date(message.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</div>
+                    </div>
+                `;
 
-                    // Cancela inscrição do canal anterior
-                    await window.ChatService.unsubscribeFromChannel();
-                    
-                    // Busca mensagens antigas do canal
-                    const messages = await window.ChatService.getMessages(channelId, 50);
-                    
-                    // Renderiza mensagens
-                    messagesContainerEl.innerHTML = '';
-                    if (messages.length === 0) {
-                        messagesContainerEl.innerHTML = '<div class="system-message">Seja o primeiro a conversar neste canal.</div>';
-                    } else {
-                        messages.forEach(msg => {
-                            // msg.profiles contém os dados do usuário (retornado pelo join)
-                            const userProfile = msg.profiles;
-                            renderMessage(msg, userProfile);
-                        });
+                messageEl.innerHTML = isCurrentUser ? messageContent + avatarImg : avatarImg + messageContent;
+                messagesContainerEl.appendChild(messageEl);
+            }
+
+            // --- EVENT HANDLERS ---
+            async function handleReset() {
+                if (confirm('Are you sure you want to reset your count? This action cannot be undone.')) {
+                    try {
+                        await UserService.resetUserProgress(state.currentUser.id);
+                        showToast('Your progress has been reset.');
+                        // Reload data to reflect the changes
+                        await loadInitialData();
+                    } catch (error) {
+                        console.error('Error resetting progress:', error);
+                        showToast('Error resetting progress. Try again later.', 'error');
                     }
-                    
-                    // Inscreve-se no canal para receber novas mensagens em tempo real
-                    await window.ChatService.subscribeToChannel(channelId, (message, profile) => {
-                        renderMessage(message, profile);
-                    });
-                    
-                    console.log(`✅ Canal ${channelId} carregado com sucesso`);
-                    
-                } catch (error) {
-                    console.error('❌ Erro ao trocar de canal:', error);
-                    messagesContainerEl.innerHTML = '<div class="system-message">Erro ao carregar mensagens. Tente novamente.</div>';
                 }
             }
 
             async function handleSendMessage(event) {
                 event.preventDefault();
                 const content = chatInputFieldEl.value.trim();
-                
-                if (!content) return;
-                if (!state.activeChannel) {
-                    alert('Nenhum canal selecionado');
-                    return;
-                }
-                
-                try {
-                    console.log(`📤 Enviando "${content}" para o canal ${state.activeChannel}`);
-                    
-                    // Limpa o campo imediatamente para melhor UX
-                    chatInputFieldEl.value = '';
-                    
-                    // Envia mensagem via ChatService
-                    await window.ChatService.sendMessage(state.activeChannel, content);
-                    
-                    console.log('✅ Mensagem enviada com sucesso');
-                    
-                } catch (error) {
-                    console.error('❌ Erro ao enviar mensagem:', error);
-                    alert('Erro ao enviar mensagem. Tente novamente.');
-                    // Restaura o texto se houver erro
-                    chatInputFieldEl.value = content;
-                }
-            }
-
-                document.getElementById('user-avatar').addEventListener('click', () => {
-                    window.ProfileWidget.open();
-                });
-            
-            async function handleResetClick() {
-                const confirmed = confirm(`Você tem certeza que quer resetar sua contagem? Isso usará uma de suas chances.`);
-                if(confirmed) {
+                if (content && state.activeChannel) {
                     try {
-                        const resetResult = await window.UserService.handleReset();
-                        alert(`Contagem resetada com sucesso! Você tem ${resetResult.remaining_resets} chances restantes.`);
-                        // Recarrega os dados do usuário e atualiza a UI
-                        // Passamos skipCheckin: true para evitar que o check-in automático incremente o dia logo após o reset
-                        state.currentUser = await window.refreshTopBar({ skipCheckin: true });
-                        updateUI();
+                        await ChatService.sendMessage(state.activeChannel, content);
+                        chatInputFieldEl.value = '';
+                        // The message will be received via the real-time subscription
                     } catch (error) {
-                        console.error("Erro ao resetar contagem:", error);
-                        alert(`Erro ao resetar contagem: ${error.message}`);
+                        console.error('Error sending message:', error);
+                        showToast('Error sending message.', 'error');
                     }
-                    console.log("Reset solicitado.");
-                    // alert movido para dentro do try/catch para melhor feedback
-                    // A UI será atualizada via Supabase Realtime ou recarregando os dados do usuário
                 }
             }
 
-	            // --- INICIALIZAÇÃO ---
-	            async function init() {
-	                try {
-	                    // Carrega os dados reais do usuário do Supabase
-	                    // O loadTopBar agora processa o check-in diário automaticamente
-	                    state.currentUser = await window.loadTopBar();
-	                    
-	                    console.log('✅ Perfil do usuário carregado:', state.currentUser);
-	                } catch (error) {
-                    // Oculta o preloader mesmo em caso de erro
-                    if (typeof hidePreloader === 'function') {
-                        hidePreloader();
+            // --- INITIALIZATION ---
+            async function loadInitialData() {
+                try {
+                    const user = await AuthService.getCurrentUser();
+                    if (!user) {
+                        window.location.href = 'index.html';
+                        return;
                     }
-                    console.error('❌ Erro ao carregar perfil do usuário:', error);
-                    // Redireciona para login se houver erro
-                    window.location.href = 'index.html';
-                    return;
-                }
 
-                if (!state.currentUser) {
-                    window.location.href = 'index.html'; // Redireciona se não houver dados
-                    return;
-                }
-                
-                // Define o canal inicial baseado na patente do usuário
-                const initialChannelId = state.currentUser.rank;
-                await switchChannel(initialChannelId);
-
-                // Oculta o preloader após o carregamento inicial
-                if (typeof hidePreloader === 'function') {
-                    hidePreloader();
-                }
-
-                // Adiciona Event Listeners
-                ranksListEl.addEventListener('click', (e) => {
-                    const rankItem = e.target.closest('.rank-item');
-                    if (rankItem && !rankItem.classList.contains('locked')) {
-                        switchChannel(rankItem.dataset.channelId);
+                    const profile = await UserService.getUserProfile(user.id);
+                    if (!profile) {
+                        console.error("Profile not found for user:", user.id);
+                        // Maybe redirect to a profile creation page
+                        return;
                     }
-                });
 
-                chatFormEl.addEventListener('submit', handleSendMessage);
-                resetButtonEl.addEventListener('click', handleResetClick);
-               // logoutButton.addEventListener('click', async () => {
-               //     try {
-               //         window.signOut();
-               //         // O redirecionamento para 'index.html' já está dentro de signOut()
-               //     } catch (error) {
-               //         console.error("Erro durante o logout:", error);
-               //         alert("Erro ao fazer logout. Tente novamente.");
-               //     }
-               // });
+                    const rankData = UserService.getRankData(profile.retention_days, state.channels);
+                    state.currentUser = { ...profile, rankData };
+                    state.activeChannel = rankData.id; // Channel corresponds to the user's rank
+
+                    // Fetch all users for the chat
+                    const allProfiles = await UserService.getAllUsers();
+                    state.allUsers = allProfiles.map(p => ({ 
+                        ...p, 
+                        rankData: UserService.getRankData(p.retention_days, state.channels)
+                    }));
+
+                    updateUI();
+
+                    // Load chat messages
+                    const messages = await ChatService.getMessages(state.activeChannel);
+                    messagesContainerEl.innerHTML = ''; // Clear previous messages
+                    messages.forEach(renderMessage);
+                    messagesContainerEl.scrollTop = messagesContainerEl.scrollHeight; // Scroll to bottom
+
+                    // Set up real-time subscription for new messages
+                    ChatService.subscribeToChannel(state.activeChannel, (newMessage) => {
+                        renderMessage(newMessage);
+                        messagesContainerEl.scrollTop = messagesContainerEl.scrollHeight;
+                    });
+
+                } catch (error) {
+                    console.error("Initialization Error: ", error);
+                    // Handle error, maybe show a message to the user
+                }
             }
 
-            init();
+            // --- EVENT LISTENERS ---
+            logoutButton.addEventListener('click', async () => {
+                await AuthService.logout();
+                window.location.href = 'index.html';
+            });
+
+            chatFormEl.addEventListener('submit', handleSendMessage);
+
+            // --- START ---
+            loadInitialData();
         });
     </script>
-    <!-- Preloader JS -->
-    <script src="preloader.js"></script>
 </body>
 </html>

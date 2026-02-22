@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en-US">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Onboarding: Acompanhamento - OPIDAS</title>
+    <title>Onboarding: Tracking - OPIDAS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -12,75 +12,75 @@
 </head>
 <body>
     <header class="page-header">
-        <!-- Corrigido: Logo do Header -->
+        <!-- Corrected: Header Logo -->
         <img alt="OPIDAS Brand Logos" src="/assets/styles/images/logoopidas+campo.svg" />
     </header>
 
 
     <div class="onboarding-card">
-        <!-- Corrigido: Background Esquerdo -->
+        <!-- Corrected: Left Background -->
         <img class="background-image-left" alt="" src="/assets/styles/images/backgroundcardsecin.png" />
         
         <main class="main-content">
-            <!-- Seção do Cartão de Identidade (Preview Fixo) -->
+            <!-- Identity Card Section (Fixed Preview) -->
             <section class="identity-card-section" aria-label="Identity Card Preview">
                 <div class="card-base"></div>
-                <!-- Corrigido: Textura do Card -->
+                <!-- Corrected: Card Texture -->
                 <img class="card-texture" alt="" src="/assets/styles/images/texturecard.png" />
-                <!-- Corrigido: Logo Overlay do Card -->
+                <!-- Corrected: Card Logo Overlay -->
                 <img class="card-logo-overlay" alt="Opidas logo" src="/assets/styles/images/logomarkcard.png" />
                 <div class="card-background-mark">
-                    <!-- Corrigido: Marca d'água do Card -->
+                    <!-- Corrected: Card Watermark -->
                     <img alt="" src="/assets/styles/images/mark-card.png" />
                 </div>
-                <!-- Corrigido: Vetor Top 1 -->
+                <!-- Corrected: Top Vector 1 -->
                 <img class="card-vector-top1" alt="" src="/assets/styles/images/vectorcardtop1.svg" />
-                <!-- Corrigido: Vetor Top 2 / Identidade Background -->
+                <!-- Corrected: Top Vector 2 / Identity Background -->
                 <img class="card-vector-top2" alt="" src="/assets/styles/images/identidadedocampobackground.png" />
                 
-                <h1 class="card-title">IDENTIDADE DO CAMPO</h1>
+                <h1 class="card-title">BATTLEFIELD IDENTITY</h1>
                 
-                <!-- Corrigido: Logo Topo Direito -->
+                <!-- Corrected: Top Right Logo -->
                 <img class="card-logo-top-right" alt="" src="/assets/styles/images/logosopidas+campo-card.png" />
                 
-                <!-- Corrigido: Foto de Perfil (Link externo removido, será preenchido pelo JS) -->
+                <!-- Corrected: Profile Photo (External link removed, will be filled by JS) -->
                 <img id="cardProfilePhoto" class="card-profile-photo" alt="Profile photo" src="" />
                 
-                <div class="card-field contra"><span class="label">Contra:</span><span id="cardContra" class="value"></span></div><div class="card-field signature"><span class="label">Assinatura:</span><span id="cardSignature" class="value"></span></div><h2 class="card-data-heading">DADOS:</h2><div class="card-field registration"><span class="label">N.º de registro:</span><span id="cardRegistration" class="value"></span></div><div class="card-field warrior-name"><span class="label">Nome do Guerreiro(a):</span><span id="cardWarriorName" class="value"></span></div><div class="card-field rank"><span class="label">Patente:</span><span id="cardRank" class="value"></span></div><div class="card-field enlistment"><span class="label">Data de Alistamento:</span><span class="value"><span id="cardDay" class="date-part">--</span> /<span id="cardMonth" class="date-part">---</span> /<span id="cardYear" class="date-part">----</span></span></div>
+                <div class="card-field contra"><span class="label">Against:</span><span id="cardContra" class="value"></span></div><div class="card-field signature"><span class="label">Signature:</span><span id="cardSignature" class="value"></span></div><h2 class="card-data-heading">DATA:</h2><div class="card-field registration"><span class="label">Registration No.:</span><span id="cardRegistration" class="value"></span></div><div class="card-field warrior-name"><span class="label">Warrior's Name:</span><span id="cardWarriorName" class="value"></span></div><div class="card-field rank"><span class="label">Rank:</span><span id="cardRank" class="value"></span></div><div class="card-field enlistment"><span class="label">Enlistment Date:</span><span class="value"><span id="cardDay" class="date-part">--</span> /<span id="cardMonth" class="date-part">---</span> /<span id="cardYear" class="date-part">----</span></span></div>
             </section>
 
 
-            <!-- Contêiner para a Etapa do Formulário -->
+            <!-- Container for the Form Step -->
             <div class="form-steps-container">
                 <section class="form-step habit-tracking-section">
                     <div class="opidas-logo">
-                        <!-- Corrigido: Logo Mini do Formulário -->
+                        <!-- Corrected: Form Mini Logo -->
                         <img alt="OPIDAS logo" src="/assets/styles/images/opidaslogomini.png" />
                         <span>OPIDAS</span>
                     </div>
-                    <h1 class="form-title">Última vez que cometeu o hábito</h1>
-                    <p class="form-subtitle">Coloque no calendário a última vez que praticou o hábito de <span id="selectedHabitText" class="highlight"></span>. Esta etapa calculará sua patente.</p>
+                    <h1 class="form-title">Last time you committed the habit</h1>
+                    <p class="form-subtitle">Set on the calendar the last time you practiced the habit of <span id="selectedHabitText" class="highlight"></span>. This step will calculate your rank.</p>
                     <div class="calendar-container">
                         <div class="calendar-header">
-                            <button id="prevMonthBtn" class="calendar-nav" aria-label="Mês anterior">
-                                <!-- Corrigido: Seta Esquerda -->
-                                <img src="/assets/styles/images/setaesquerdacalendar.svg" alt="Seta para esquerda">
+                            <button id="prevMonthBtn" class="calendar-nav" aria-label="Previous month">
+                                <!-- Corrected: Left Arrow -->
+                                <img src="/assets/styles/images/setaesquerdacalendar.svg" alt="Left arrow">
                             </button>
                             <span id="currentMonthYear"></span>
-                            <button id="nextMonthBtn" class="calendar-nav" aria-label="Próximo mês">
-                                <!-- Corrigido: Seta Direita -->
-                                <img src="/assets/styles/images/setadireitacalendar.svg" alt="Seta para direita">
+                            <button id="nextMonthBtn" class="calendar-nav" aria-label="Next month">
+                                <!-- Corrected: Right Arrow -->
+                                <img src="/assets/styles/images/setadireitacalendar.svg" alt="Right arrow">
                             </button>
                         </div>
-                        <div class="calendar-body"><div class="calendar-weekdays"><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sxt</span><span>Sab</span><span>Dom</span></div><div id="calendarGrid" class="calendar-grid"></div></div>
+                        <div class="calendar-body"><div class="calendar-weekdays"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div id="calendarGrid" class="calendar-grid"></div></div>
                     </div>
                     <div class="form-actions">
                         <button id="btnGoToNextStep" class="btn btn-primary" type="button">
-                            <span>Finalizar</span>
-                            <!-- Corrigido: Elemento Decorativo do Botão -->
+                            <span>Finish</span>
+                            <!-- Corrected: Button Decorative Element -->
                             <img alt="" src="/assets/styles/images/decorative-element-button.png" />
                         </button>
-                        <button id="btnGoToPrevStep" class="btn btn-secondary" type="button">Voltar</button>
+                        <button id="btnGoToPrevStep" class="btn btn-secondary" type="button">Back</button>
                     </div>
                 </section>
             </div>
@@ -88,7 +88,7 @@
     </div>
 
 
-    <!-- Scripts do Supabase -->
+    <!-- Supabase Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/lib/supabase-config.js"></script>
     <script src="../js/services/user.js"></script>
@@ -97,39 +97,39 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            // --- Estado e Constantes ---
-            const patents = [ 
-                { name: "recruta", minDays: 0, maxDays: 9 },  // ✅ CORRIGIDO: lowercase
-                { name: "soldado", minDays: 10, maxDays: 29 },  // ✅ CORRIGIDO: lowercase
-                { name: "cabo", minDays: 30, maxDays: 59 },  // ✅ CORRIGIDO: lowercase
-                { name: "sargento", minDays: 60, maxDays: 89 },  // ✅ CORRIGIDO: lowercase
-                { name: "marechal", minDays: 90, maxDays: 179 },  // ✅ CORRIGIDO: lowercase
-                { name: "tenente", minDays: 180, maxDays: 364 },  // ✅ CORRIGIDO: lowercase
-                { name: "capitao", minDays: 365, maxDays: Infinity },  // ✅ CORRIGIDO: lowercase (sem acento)
+            // --- State and Constants ---
+            const ranks = [ 
+                { name: "recruit", minDays: 0, maxDays: 9 },  // ✅ CORRECTED: lowercase
+                { name: "soldier", minDays: 10, maxDays: 29 },  // ✅ CORRECTED: lowercase
+                { name: "corporal", minDays: 30, maxDays: 59 },  // ✅ CORRECTED: lowercase
+                { name: "sergeant", minDays: 60, maxDays: 89 },  // ✅ CORRECTED: lowercase
+                { name: "marshal", minDays: 90, maxDays: 179 },  // ✅ CORRECTED: lowercase
+                { name: "lieutenant", minDays: 180, maxDays: 364 },  // ✅ CORRECTED: lowercase
+                { name: "captain", minDays: 365, maxDays: Infinity },  // ✅ CORRECTED: lowercase (no accent)
             ];
-            const monthNames = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
-            const monthNamesFull = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+            const monthNamesFull = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             
             const habits = [
-                { id: "masturbacao", label: "Masturbação" },
-                { id: "pornografia", label: "Pornografia" },
-                { id: "fumar", label: "Fumar" },
-                { id: "bebida", label: "Bebida Alcólica" },
-                { id: "outro", label: "Outro" }
+                { id: "masturbation", label: "Masturbation" },
+                { id: "pornography", label: "Pornography" },
+                { id: "smoking", label: "Smoking" },
+                { id: "alcoholic_beverages", label: "Alcoholic Beverages" },
+                { id: "other", label: "Other" }
             ];
             
             let userData = {};
             let calendarDate = new Date();
 
 
-            // ✅ NOVO: Verifica se veio do Stripe e aguarda confirmação
+            // ✅ NEW: Checks if it came from Stripe and waits for confirmation
             const urlParams = new URLSearchParams(window.location.search);
             const sessionId = urlParams.get('session_id');
 
             if (sessionId) {
-                console.log('💳 Detectado retorno do Stripe. Session ID:', sessionId);
+                console.log('💳 Stripe return detected. Session ID:', sessionId);
                 
-                // Mostra mensagem de carregamento
+                // Shows loading message
                 const loadingOverlay = document.createElement('div');
                 loadingOverlay.id = 'payment-loading';
                 loadingOverlay.style.cssText = `
@@ -147,8 +147,8 @@
                 loadingOverlay.innerHTML = `
                     <div style="background: white; padding: 40px; border-radius: 16px; text-align: center; max-width: 400px;">
                         <div style="width: 60px; height: 60px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
-                        <h2 style="margin: 0 0 10px 0; color: #333;">Confirmando Pagamento</h2>
-                        <p style="margin: 0; color: #666;">Aguarde enquanto processamos sua assinatura...</p>
+                        <h2 style="margin: 0 0 10px 0; color: #333;">Confirming Payment</h2>
+                        <p style="margin: 0; color: #666;">Please wait while we process your subscription...</p>
                     </div>
                     <style>
                         @keyframes spin {
@@ -159,17 +159,17 @@
                 `;
                 document.body.appendChild(loadingOverlay);
 
-                // Aguarda confirmação da assinatura
+                // Waits for subscription confirmation
                 try {
                     const { data: { user } } = await window.supabase.auth.getUser();
                     if (user) {
                         await window.StripeService.waitForSubscriptionActivation(user.id);
-                        console.log('✅ Assinatura confirmada com sucesso');
+                        console.log('✅ Subscription confirmed successfully');
                     }
                 } catch (error) {
-                    console.error('⚠️ Erro ao verificar assinatura:', error);
+                    console.error('⚠️ Error verifying subscription:', error);
                 } finally {
-                    // Remove overlay de loading
+                    // Removes loading overlay
                     if (loadingOverlay.parentElement) {
                         loadingOverlay.remove();
                     }
@@ -177,7 +177,7 @@
             }
 
 
-            // --- Seletores de DOM ---
+            // --- DOM Selectors ---
             const cardWarriorName = document.getElementById('cardWarriorName');
             const cardContra = document.getElementById('cardContra');
             const cardProfilePhoto = document.getElementById('cardProfilePhoto');
@@ -187,7 +187,6 @@
             const cardDay = document.getElementById('cardDay');
             const cardMonth = document.getElementById('cardMonth');
             const cardYear = document.getElementById('cardYear');
-            const selectedHabitText = document.getElementById('selectedHabitText');
             const calendarGrid = document.getElementById('calendarGrid');
             const currentMonthYearEl = document.getElementById('currentMonthYear');
             const prevMonthBtn = document.getElementById('prevMonthBtn');
@@ -196,50 +195,50 @@
             const btnGoToPrevStep = document.getElementById('btnGoToPrevStep');
 
 
-            // --- Funções ---
+            // --- Functions ---
             
-            // ✅ FUNÇÃO 1: Salvar estado no localStorage
+            // ✅ FUNCTION 1: Save state to localStorage
             const saveState = () => {
                 localStorage.setItem('onboardingData', JSON.stringify(userData));
-                console.log('💾 Estado salvo no localStorage');
+                console.log('💾 State saved to localStorage');
             };
 
-            // ✅ FUNÇÃO 2: Preencher o cartão de identificação com os dados do usuário
+            // ✅ FUNCTION 2: Populate the identity card with user data
             const populateCard = () => {
-                console.log('🎨 Preenchendo cartão de identificação...');
+                console.log('🎨 Populating identity card...');
                 
-                // Preenche nome e sobrenome
+                // Populate first and last name
                 cardWarriorName.textContent = `${userData.firstName} ${userData.lastName}`.toUpperCase().trim();
                 cardSignature.textContent = userData.lastName.toUpperCase().trim();
                 
-                // Preenche hábito (contra)
+                // Populate habit (against)
                 cardContra.textContent = userData.habit ? userData.habit.label.toUpperCase() : '';
                 
-                // Preenche foto de perfil
+                // Populate profile photo
                 if (userData.profilePhotoUrl) {
                     cardProfilePhoto.src = userData.profilePhotoUrl;
                 }
                 
-                // Preenche data de alistamento
+                // Populate enlistment date
                 const enlistDate = new Date(userData.enlistmentDate);
                 cardDay.textContent = enlistDate.getDate().toString().padStart(2, '0');
                 cardMonth.textContent = monthNames[enlistDate.getMonth()];
                 cardYear.textContent = enlistDate.getFullYear();
                 
-                // Preenche patente (será atualizada pelo calculateAndUpdateRank)
-                cardRank.textContent = userData.rank ? userData.rank.toUpperCase() : 'INDEFINIDA';
+                // Populate rank (will be updated by calculateAndUpdateRank)
+                cardRank.textContent = userData.rank ? userData.rank.toUpperCase() : 'UNDEFINED';
                 
-                // Preenche número de registro (se disponível)
+                // Populate registration number (if available)
                 if (userData.registrationNumber) {
                     cardRegistration.textContent = userData.registrationNumber;
                 }
                 
-                console.log('✅ Cartão preenchido com sucesso');
+                console.log('✅ Card populated successfully');
             };
 
-            // ✅ FUNÇÃO 3: Calcular patente e dias de retenção
+            // ✅ FUNCTION 3: Calculate rank and retention days
             const calculateAndUpdateRank = () => {
-                console.log('📊 Calculando patente...');
+                console.log('📊 Calculating rank...');
                 
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
@@ -247,48 +246,48 @@
                 const lastDate = new Date(userData.lastHabitDate);
                 lastDate.setHours(0, 0, 0, 0);
                 
-                // Calcula diferença em dias
+                // Calculate difference in days
                 const diffTime = today - lastDate;
                 const retentionDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
                 
                 userData.retentionDays = retentionDays;
                 
-                // Encontra a patente correspondente
-                const currentPatent = patents.slice().reverse().find(p => retentionDays >= p.minDays);
-                if (currentPatent) {
-                    userData.rank = currentPatent.name; // ✅ Já vem em lowercase
-                    cardRank.textContent = currentPatent.name.toUpperCase(); // ✅ Exibe em maiúsculo no card
+                // Find the corresponding rank
+                const currentRank = ranks.slice().reverse().find(p => retentionDays >= p.minDays);
+                if (currentRank) {
+                    userData.rank = currentRank.name; // ✅ Already in lowercase
+                    cardRank.textContent = currentRank.name.toUpperCase(); // ✅ Display in uppercase on the card
                 }
                 
-                console.log(`✅ Patente calculada: ${userData.rank} (${retentionDays} dias)`);
+                console.log(`✅ Rank calculated: ${userData.rank} (${retentionDays} days)`);
             };
 
-            // ✅ FUNÇÃO 4: Carregar estado do localStorage ou Supabase
+            // ✅ FUNCTION 4: Load state from localStorage or Supabase
             const loadState = async () => {
-                console.log('🔍 Carregando dados do onboarding...');
+                console.log('🔍 Loading onboarding data...');
                 
-                // Tenta carregar do localStorage primeiro
+                // Try to load from localStorage first
                 const savedData = localStorage.getItem('onboardingData');
                 if (savedData) {
-                    console.log('✅ Dados encontrados no localStorage');
+                    console.log('✅ Data found in localStorage');
                     userData = JSON.parse(savedData);
                     userData.lastHabitDate = userData.lastHabitDate ? new Date(userData.lastHabitDate) : new Date();
                     return true;
                 }
                 
-                // Se não houver no localStorage, busca do Supabase
-                console.log('📡 Buscando dados do Supabase...');
+                // If not in localStorage, fetch from Supabase
+                console.log('📡 Fetching data from Supabase...');
                 try {
                     const { data: { user }, error: authError } = await window.supabase.auth.getUser();
                     
                     if (authError || !user) {
-                        console.error('❌ Usuário não autenticado');
-                        alert('Sessão expirada. Por favor, faça login novamente.');
+                        console.error('❌ User not authenticated');
+                        alert('Session expired. Please log in again.');
                         window.location.href = '../index.html';
                         return false;
                     }
                     
-                    console.log('👤 Usuário autenticado:', user.email);
+                    console.log('👤 User authenticated:', user.email);
                     
                     const { data: profile, error: profileError } = await window.supabase
                         .from('profiles')
@@ -297,36 +296,36 @@
                         .single();
                     
                     if (profileError) {
-                        console.error('❌ Erro ao buscar perfil:', profileError);
+                        console.error('❌ Error fetching profile:', profileError);
                         return false;
                     }
                     
-                    console.log('✅ Dados do perfil recuperados:', profile);
+                    console.log('✅ Profile data retrieved:', profile);
                     
-                    // ✅ CORREÇÃO: Buscar hábito corretamente do banco
+                    // ✅ CORRECTION: Fetch habit correctly from the database
                     userData = {
                         firstName: profile.first_name || '',
                         lastName: profile.last_name || '',
                         profilePhotoUrl: profile.avatar_url || null,
-                        habit: profile.habit ? habits.find(h => h.id === profile.habit) : null,  // ✅ CORRIGIDO
+                        habit: profile.habit ? habits.find(h => h.id === profile.habit) : null,  // ✅ CORRECTED
                         enlistmentDate: profile.created_at || new Date().toISOString(),
                         lastHabitDate: profile.last_habit_date ? new Date(profile.last_habit_date) : new Date(),
                         registrationNumber: profile.registration_number || 'M0RSI-00000000',
-                        rank: profile.rank ? profile.rank.toLowerCase() : 'recruta',  // ✅ CORRIGIDO: normalizar para lowercase
+                        rank: profile.rank ? profile.rank.toLowerCase() : 'recruit',  // ✅ CORRECTED: normalize to lowercase
                         retentionDays: profile.retention_days || 0
                     };
                     
-                    // Salva no localStorage para uso posterior
+                    // Save to localStorage for later use
                     saveState();
                     
                     return true;
                 } catch (error) {
-                    console.error('❌ Erro ao carregar dados:', error);
+                    console.error('❌ Error loading data:', error);
                     return false;
                 }
             };
 
-            // ✅ FUNÇÃO 5: Renderizar calendário
+            // ✅ FUNCTION 5: Render calendar
             const renderCalendar = () => {
                 const year = calendarDate.getFullYear();
                 const month = calendarDate.getMonth();
@@ -382,26 +381,26 @@
                 }
             };
 
-            // --- Inicialização ---
+            // --- Initialization ---
             const init = async () => {
                 const loaded = await loadState();
                 
                 if (!loaded || !userData.firstName) {
-                    alert('Dados do onboarding não encontrados. Redirecionando...');
+                    alert('Onboarding data not found. Redirecting...');
                     window.location.href = 'identification.html';
                     return;
                 }
                 
-                // Preenche o card
+                // Populate the card
                 populateCard();
                 
-                // Calcula patente inicial
+                // Calculate initial rank
                 calculateAndUpdateRank();
                 
-                // Renderiza calendário
+                // Render calendar
                 renderCalendar();
                 
-                // Preenche texto do hábito selecionado
+                // Populate selected habit text
                 if (userData.habit) {
                     selectedHabitText.textContent = userData.habit.label;
                 }
@@ -411,7 +410,7 @@
 
             // --- Event Listeners ---
             
-            // Navegação do calendário
+            // Calendar navigation
             prevMonthBtn.addEventListener('click', () => {
                 calendarDate.setMonth(calendarDate.getMonth() - 1);
                 renderCalendar();
@@ -427,39 +426,39 @@
                 }
             });
 
-            // Botão "Voltar"
+            // "Back" button
             btnGoToPrevStep.addEventListener('click', () => {
                 window.location.href = 'investment.html';
             });
 
-            // Botão "Finalizar"
+            // "Finish" button
             btnGoToNextStep.addEventListener('click', async () => {
                 if (!userData.lastHabitDate) {
-                    alert('Por favor, selecione uma data no calendário.');
+                    alert('Please select a date on the calendar.');
                     return;
                 }
                 
                 try {
-                    console.log('📝 Salvando dados da Etapa 3...');
-                    console.log('📊 Patente:', userData.rank);
-                    console.log('📅 Dias de retenção:', userData.retentionDays);
+                    console.log('📝 Saving Step 3 data...');
+                    console.log('📊 Rank:', userData.rank);
+                    console.log('📅 Retention days:', userData.retentionDays);
                     
-                    // Salva no localStorage
+                    // Save to localStorage
                     saveState();
                     
-                    // ✅ CORRIGIDO: Salva no Supabase com rank em lowercase
+                    // ✅ CORRECTED: Save to Supabase with rank in lowercase
                     await window.UserService.updateUserProfile({
                         last_habit_date: userData.lastHabitDate.toISOString(),
-                        rank: userData.rank.toLowerCase(),  // ✅ GARANTIR lowercase
+                        rank: userData.rank.toLowerCase(),  // ✅ ENSURE lowercase
                         retention_days: userData.retentionDays
                     });
                     
-                    console.log('✅ Dados da Etapa 3 salvos com sucesso');
+                    console.log('✅ Step 3 data saved successfully');
                     window.location.href = 'welcome.html';
                     
                 } catch (error) {
-                    console.error('❌ Erro ao salvar dados:', error);
-                    alert('Erro ao salvar dados. Tente novamente.');
+                    console.error('❌ Error saving data:', error);
+                    alert('Error saving data. Please try again.');
                 }
             });
         });

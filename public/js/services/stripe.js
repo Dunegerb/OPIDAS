@@ -1,23 +1,23 @@
 /**
- * Serviço de integração com Stripe
- * Gerencia checkout, assinaturas e portal do cliente
- * ✅ CORRIGIDO: Não envia mais userId do frontend (segurança IDOR)
+ * Stripe integration service
+ * Manages checkout, subscriptions, and the customer portal
+ * ✅ FIXED: No longer sends userId from the frontend (IDOR security)
  */
 const StripeService = {
     /**
-     * Cria uma sessão de checkout do Stripe
-     * ✅ CORREÇÃO: Removido parâmetro userId - será extraído do token no backend
-     * @param {string} successUrl - URL de sucesso (opcional)
-     * @param {string} cancelUrl - URL de cancelamento (opcional)
-     * @returns {Promise<string>} - URL da sessão de checkout
+     * Creates a Stripe checkout session
+     * ✅ FIX: Removed userId parameter - it will be extracted from the token on the backend
+     * @param {string} successUrl - Success URL (optional)
+     * @param {string} cancelUrl - Cancel URL (optional)
+     * @returns {Promise<string>} - Checkout session URL
      */
     async createCheckoutSession(successUrl = null, cancelUrl = null) {
         try {
-            // ✅ CORREÇÃO DE SEGURANÇA: Não enviamos mais userId nem email
-            // O backend extrai essas informações do token JWT autenticado
+            // ✅ SECURITY FIX: We no longer send userId or email
+            // The backend extracts this information from the authenticated JWT token
             const { data, error } = await window.supabase.functions.invoke('create-checkout-session', {
                 body: {
-                    // ✅ URLs são dados não sensíveis, podem vir do frontend
+                    // ✅ URLs are non-sensitive data, can come from the frontend
                     successUrl: successUrl || `${window.location.origin}/onboarding/habit-tracking.html?session_id={CHECKOUT_SESSION_ID}`,
                     cancelUrl: cancelUrl || `${window.location.origin}/onboarding/investment.html`
                 }
@@ -27,22 +27,22 @@ const StripeService = {
 
             return data.url;
         } catch (error) {
-            console.error('Erro ao criar sessão de checkout:', error);
-            throw new Error('Não foi possível iniciar o processo de pagamento. Tente novamente.');
+            console.error('Error creating checkout session:', error);
+            throw new Error('Could not start the payment process. Please try again.');
         }
     },
 
     /**
-     * Cria um portal do cliente para gerenciar assinatura
-     * @param {string} customerId - ID do cliente no Stripe
-     * @returns {Promise<string>} - URL do portal do cliente
+     * Creates a customer portal to manage subscription
+     * @param {string} customerId - Stripe customer ID
+     * @returns {Promise<string>} - Customer portal URL
      */
     async createCustomerPortal(customerId) {
         try {
             const { data, error } = await window.supabase.functions.invoke('create-portal-session', {
                 body: {
                     customerId: customerId,
-                    returnUrl: `${window.location.origin}/campo.html`
+                    returnUrl: `${window.location.origin}/battlefield.html`
                 }
             });
 
@@ -50,15 +50,15 @@ const StripeService = {
 
             return data.url;
         } catch (error) {
-            console.error('Erro ao criar portal do cliente:', error);
-            throw new Error('Não foi possível abrir o portal do cliente. Tente novamente.');
+            console.error('Error creating customer portal:', error);
+            throw new Error('Could not open the customer portal. Please try again.');
         }
     },
 
     /**
-     * Verifica o status da assinatura do usuário
-     * @param {string} userId - ID do usuário
-     * @returns {Promise<Object>} - Status da assinatura
+     * Checks the user's subscription status
+     * @param {string} userId - User ID
+     * @returns {Promise<Object>} - Subscription status
      */
     async checkSubscriptionStatus(userId) {
         try {
@@ -79,7 +79,7 @@ const StripeService = {
                 isCanceled: profile.subscription_status === 'canceled'
             };
         } catch (error) {
-            console.error('Erro ao verificar status da assinatura:', error);
+            console.error('Error checking subscription status:', error);
             return {
                 isActive: false,
                 status: 'unknown',
@@ -92,23 +92,23 @@ const StripeService = {
     },
 
     /**
-     * ✅ NOVO: Aguarda confirmação da assinatura após pagamento
-     * Implementa polling para resolver race condition com webhook
-     * @param {string} userId - ID do usuário
-     * @param {number} maxAttempts - Número máximo de tentativas
-     * @param {number} interval - Intervalo entre tentativas (ms)
-     * @returns {Promise<Object>} - Status da assinatura
+     * ✅ NEW: Waits for subscription confirmation after payment
+     * Implements polling to resolve race condition with webhook
+     * @param {string} userId - User ID
+     * @param {number} maxAttempts - Maximum number of attempts
+     * @param {number} interval - Interval between attempts (ms)
+     * @returns {Promise<Object>} - Subscription status
      */
     async waitForSubscriptionActivation(userId, maxAttempts = 5, interval = 2000) {
-        console.log('⏳ Aguardando confirmação da assinatura...');
+        console.log('⏳ Waiting for subscription confirmation...');
         
         for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-            console.log(`🔄 Tentativa ${attempt}/${maxAttempts}`);
+            console.log(`🔄 Attempt ${attempt}/${maxAttempts}`);
             
             const status = await this.checkSubscriptionStatus(userId);
             
             if (status.isActive || status.isTrialing) {
-                console.log('✅ Assinatura confirmada!');
+                console.log('✅ Subscription confirmed!');
                 return status;
             }
             
@@ -117,13 +117,13 @@ const StripeService = {
             }
         }
         
-        console.warn('⚠️ Timeout aguardando confirmação. Webhook pode estar atrasado.');
+        console.warn('⚠️ Timeout waiting for confirmation. Webhook might be delayed.');
         return await this.checkSubscriptionStatus(userId);
     },
 
     /**
-     * Mostra notificação de status da assinatura
-     * @param {Object} status - Status da assinatura
+     * Shows subscription status notification
+     * @param {Object} status - Subscription status
      */
     showSubscriptionNotification(status) {
         if (status.isActive && !status.isPastDue) return;
@@ -153,13 +153,13 @@ const StripeService = {
                         <line x1="12" y1="8" x2="12" y2="12"></line>
                         <line x1="12" y1="16" x2="12.01" y2="16"></line>
                     </svg>
-                    <strong style="font-size: 16px;">Pagamento Pendente</strong>
+                    <strong style="font-size: 16px;">Payment Due</strong>
                 </div>
                 <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.5;">
-                    Houve um problema com seu pagamento. Atualize seus dados de pagamento para continuar acessando o Campo.
+                    There was a problem with your payment. Please update your payment details to continue accessing the Battlefield.
                 </p>
             `;
-            actionButton = '<button onclick="StripeService.openPaymentUpdate()" style="background: white; color: #667eea; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%;">Atualizar Pagamento</button>';
+            actionButton = '<button onclick="StripeService.openPaymentUpdate()" style="background: white; color: #667eea; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%;">Update Payment</button>';
         } else if (status.isCanceled) {
             message = `
                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
@@ -168,13 +168,13 @@ const StripeService = {
                         <line x1="15" y1="9" x2="9" y2="15"></line>
                         <line x1="9" y1="9" x2="15" y2="15"></line>
                     </svg>
-                    <strong style="font-size: 16px;">Assinatura Cancelada</strong>
+                    <strong style="font-size: 16px;">Subscription Canceled</strong>
                 </div>
                 <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.5;">
-                    Sua assinatura foi cancelada. Reative para continuar acessando o Campo.
+                    Your subscription has been canceled. Reactivate to continue accessing the Battlefield.
                 </p>
             `;
-            actionButton = '<button onclick="StripeService.reactivateSubscription()" style="background: white; color: #667eea; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%;">Reativar Assinatura</button>';
+            actionButton = '<button onclick="StripeService.reactivateSubscription()" style="background: white; color: #667eea; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%;">Reactivate Subscription</button>';
         }
 
         notification.innerHTML = `
@@ -183,7 +183,7 @@ const StripeService = {
             <button onclick="this.parentElement.remove()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: white; cursor: pointer; font-size: 20px; opacity: 0.7;">×</button>
         `;
 
-        // Adiciona animação CSS
+        // Add CSS animation
         const style = document.createElement('style');
         style.textContent = `
             @keyframes slideIn {
@@ -201,7 +201,7 @@ const StripeService = {
 
         document.body.appendChild(notification);
 
-        // Remove automaticamente após 10 segundos
+        // Automatically remove after 10 seconds
         setTimeout(() => {
             if (notification.parentElement) {
                 notification.style.animation = 'slideIn 0.3s ease-out reverse';
@@ -211,12 +211,12 @@ const StripeService = {
     },
 
     /**
-     * Abre página para atualizar pagamento
+     * Opens page to update payment
      */
     async openPaymentUpdate() {
         try {
             const user = await window.supabase.auth.getUser();
-            if (!user.data.user) throw new Error('Usuário não autenticado');
+            if (!user.data.user) throw new Error('User not authenticated');
 
             const { data: profile } = await window.supabase
                 .from('profiles')
@@ -229,29 +229,29 @@ const StripeService = {
                 window.location.href = portalUrl;
             }
         } catch (error) {
-            console.error('Erro ao abrir atualização de pagamento:', error);
-            alert('Não foi possível abrir a página de pagamento. Entre em contato com o suporte.');
+            console.error('Error opening payment update:', error);
+            alert('Could not open the payment page. Please contact support.');
         }
     },
 
     /**
-     * Reativa assinatura cancelada
+     * Reactivates a canceled subscription
      */
     async reactivateSubscription() {
         try {
             const user = await window.supabase.auth.getUser();
-            if (!user.data.user) throw new Error('Usuário não autenticado');
+            if (!user.data.user) throw new Error('User not authenticated');
 
-            // ✅ CORREÇÃO: Não passa mais userId
+            // ✅ FIX: No longer passes userId
             const checkoutUrl = await this.createCheckoutSession();
 
             window.location.href = checkoutUrl;
         } catch (error) {
-            console.error('Erro ao reativar assinatura:', error);
-            alert('Não foi possível reativar a assinatura. Tente novamente.');
+            console.error('Error reactivating subscription:', error);
+            alert('Could not reactivate the subscription. Please try again.');
         }
     }
 };
 
-// Exporta para uso global
+// Export for global use
 window.StripeService = StripeService;
