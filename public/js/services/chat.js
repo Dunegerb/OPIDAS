@@ -1,24 +1,24 @@
 // Chat Service - OPIDAS
-// Manages real-time messages using Supabase Realtime (WebSockets)
+// Gerencia mensagens em tempo real usando Supabase Realtime (WebSockets)
 
 const ChatService = {
     currentSubscription: null,
     currentChannel: null,
 
     /**
-     * Subscribes to a chat channel to receive real-time messages
-     * @param {string} channelId - Channel ID (e.g., 'recruit', 'soldier')
-     * @param {Function} onNewMessageCallback - Callback called when a new message arrives
+     * Inscreve-se em um canal de chat para receber mensagens em tempo real
+     * @param {string} channelId - ID do canal (ex: 'recruta', 'soldado')
+     * @param {Function} onNewMessageCallback - Callback chamado quando nova mensagem chega
      * @returns {Promise<void>}
      */
     async subscribeToChannel(channelId, onNewMessageCallback) {
         try {
-            // Unsubscribe from previous channel if it exists
+            // Cancela inscrição anterior se existir
             await this.unsubscribeFromChannel();
 
-            console.log(`📡 Subscribing to channel: ${channelId}`);
+            console.log(`📡 Inscrevendo-se no canal: ${channelId}`);
 
-            // Creates a Supabase Realtime channel
+            // Cria um canal Realtime do Supabase
             this.currentChannel = window.supabase.channel(`chat-${channelId}`, {
                 config: {
                     broadcast: { self: true },
@@ -26,7 +26,7 @@ const ChatService = {
                 }
             });
 
-            // Listen for changes in the messages table
+            // Escuta mudanças na tabela messages
             this.currentSubscription = this.currentChannel
                 .on(
                     'postgres_changes',
@@ -37,9 +37,9 @@ const ChatService = {
                         filter: `channel_id=eq.${channelId}`
                     },
                     async (payload) => {
-                        console.log('📨 New message received:', payload.new);
+                        console.log('📨 Nova mensagem recebida:', payload.new);
                         
-                        // Fetches user information who sent the message
+                        // Busca informações do usuário que enviou a mensagem
                         const { data: profile, error } = await window.supabase
                             .from('profiles')
                             .select('first_name, last_name, avatar_url, rank')
@@ -47,38 +47,38 @@ const ChatService = {
                             .single();
 
                         if (error || !profile) {
-                            console.error('❌ Error fetching user profile:', error);
-                            console.warn('⚠️ Message received but profile not found. Check RLS policies.');
+                            console.error('❌ Erro ao buscar perfil do usuário:', error);
+                            console.warn('⚠️ Mensagem recebida mas perfil não encontrado. Verifique as políticas RLS.');
                             return;
                         }
 
-                        // Calls the callback with the message and user profile
+                        // Chama o callback com a mensagem e perfil do usuário
                         onNewMessageCallback(payload.new, profile);
                     }
                 )
                 .subscribe((status) => {
                     if (status === 'SUBSCRIBED') {
-                        console.log('✅ Successfully subscribed to the channel');
+                        console.log('✅ Inscrito no canal com sucesso');
                     } else if (status === 'CHANNEL_ERROR') {
-                        console.error('❌ Error subscribing to the channel');
+                        console.error('❌ Erro ao inscrever no canal');
                     } else if (status === 'TIMED_OUT') {
-                        console.error('⏱️ Timeout subscribing to the channel');
+                        console.error('⏱️ Timeout ao inscrever no canal');
                     }
                 });
 
         } catch (error) {
-            console.error('❌ Error subscribing to channel:', error);
+            console.error('❌ Erro ao inscrever no canal:', error);
             throw error;
         }
     },
 
     /**
-     * Unsubscribes from the current channel
+     * Cancela inscrição do canal atual
      * @returns {Promise<void>}
      */
     async unsubscribeFromChannel() {
         if (this.currentChannel) {
-            console.log('🔌 Unsubscribing from the channel');
+            console.log('🔌 Cancelando inscrição do canal');
             
             await window.supabase.removeChannel(this.currentChannel);
             this.currentChannel = null;
@@ -87,28 +87,28 @@ const ChatService = {
     },
 
     /**
-     * Sends a message to a channel
-     * @param {string} channelId - Channel ID
-     * @param {string} text - Message text
-     * @returns {Promise<Object>} - Sent message
+     * Envia uma mensagem para um canal
+     * @param {string} channelId - ID do canal
+     * @param {string} text - Texto da mensagem
+     * @returns {Promise<Object>} - Mensagem enviada
      */
     async sendMessage(channelId, text) {
         try {
-            // Verify authentication
+            // Verifica autenticação
             const { data: { user }, error: authError } = await window.supabase.auth.getUser();
             
             if (authError || !user) {
-                throw new Error('User not authenticated');
+                throw new Error('Usuário não autenticado');
             }
 
-            // Validate the text
+            // Valida o texto
             if (!text || text.trim().length === 0) {
-                throw new Error('Message cannot be empty');
+                throw new Error('Mensagem não pode estar vazia');
             }
 
-            console.log(`📤 Sending message to ${channelId}:`, text);
+            console.log(`📤 Enviando mensagem para ${channelId}:`, text);
 
-            // Insert the message into the database
+            // Insere a mensagem no banco de dados
             const { data, error } = await window.supabase
                 .from('messages')
                 .insert({
@@ -121,24 +121,24 @@ const ChatService = {
 
             if (error) throw error;
 
-            console.log('✅ Message sent successfully');
+            console.log('✅ Mensagem enviada com sucesso');
             return data;
 
         } catch (error) {
-            console.error('❌ Error sending message:', error);
+            console.error('❌ Erro ao enviar mensagem:', error);
             throw error;
         }
     },
 
     /**
-     * Fetches messages from a channel
-     * @param {string} channelId - Channel ID
-     * @param {number} limit - Maximum number of messages
-     * @returns {Promise<Array>} - Array of messages
+     * Busca mensagens de um canal
+     * @param {string} channelId - ID do canal
+     * @param {number} limit - Número máximo de mensagens
+     * @returns {Promise<Array>} - Array de mensagens
      */
     async getMessages(channelId, limit = 50) {
         try {
-            console.log(`📥 Fetching messages from channel: ${channelId}`);
+            console.log(`📥 Buscando mensagens do canal: ${channelId}`);
 
             const { data, error } = await window.supabase
                 .from('messages')
@@ -157,79 +157,79 @@ const ChatService = {
 
             if (error) throw error;
 
-            // Reverse to show the oldest first
+            // Inverte para mostrar as mais antigas primeiro
             const messages = data.reverse();
             
-            console.log(`✅ ${messages.length} messages loaded`);
+            console.log(`✅ ${messages.length} mensagens carregadas`);
             return messages;
 
         } catch (error) {
-            console.error('❌ Error fetching messages:', error);
+            console.error('❌ Erro ao buscar mensagens:', error);
             throw error;
         }
     },
 
     /**
-     * Deletes a message (only the author can delete)
-     * @param {number} messageId - ID of the message
+     * Deleta uma mensagem (apenas o autor pode deletar)
+     * @param {number} messageId - ID da mensagem
      * @returns {Promise<void>}
      */
     async deleteMessage(messageId) {
         try {
             const { data: { user } } = await window.supabase.auth.getUser();
-            if (!user) throw new Error('User not authenticated');
+            if (!user) throw new Error('Usuário não autenticado');
 
-            console.log(`🗑️ Deleting message: ${messageId}`);
+            console.log(`🗑️ Deletando mensagem: ${messageId}`);
 
             const { error } = await window.supabase
                 .from('messages')
                 .delete()
                 .eq('id', messageId)
-                .eq('user_id', user.id); // Ensures only the author can delete
+                .eq('user_id', user.id); // Garante que só o autor pode deletar
 
             if (error) throw error;
 
-            console.log('✅ Message deleted successfully');
+            console.log('✅ Mensagem deletada com sucesso');
 
         } catch (error) {
-            console.error('❌ Error deleting message:', error);
+            console.error('❌ Erro ao deletar mensagem:', error);
             throw error;
         }
     },
 
     /**
-     * Fetches online users in a channel (using Presence)
-     * @param {string} channelId - Channel ID
-     * @returns {Promise<Array>} - Array of online users
+     * Busca usuários online em um canal (usando Presence)
+     * @param {string} channelId - ID do canal
+     * @returns {Promise<Array>} - Array de usuários online
      */
     async getOnlineUsers(channelId) {
         try {
             if (!this.currentChannel) {
-                console.warn('⚠️ No active channel');
+                console.warn('⚠️ Nenhum canal ativo');
                 return [];
             }
 
             const presenceState = this.currentChannel.presenceState();
             const onlineUsers = Object.values(presenceState).flat();
 
-            console.log(`👥 ${onlineUsers.length} users online in channel ${channelId}`);
+            console.log(`👥 ${onlineUsers.length} usuários online no canal ${channelId}`);
             return onlineUsers;
 
         } catch (error) {
-            console.error('❌ Error fetching online users:', error);
+            console.error('❌ Erro ao buscar usuários online:', error);
             return [];
         }
     },
 
     /**
-     * Tracks user presence in the channel
-     * @param {Object} userData - User data
+     * Marca presença do usuário no canal
+     * @param {Object} userData - Dados do usuário
      * @returns {Promise<void>}
      */
     async trackPresence(userData) {
         try {
             if (!this.currentChannel) {
-                console.warn('⚠️ No active channel to track presence');
+                console.warn('⚠️ Nenhum canal ativo para rastrear presença');
                 return;
             }
 
@@ -240,15 +240,15 @@ const ChatService = {
                 online_at: new Date().toISOString()
             });
 
-            console.log('✅ Presence tracked in the channel');
+            console.log('✅ Presença rastreada no canal');
 
         } catch (error) {
-            console.error('❌ Error tracking presence:', error);
+            console.error('❌ Erro ao rastrear presença:', error);
         }
     },
 
     /**
-     * Removes user presence from the channel
+     * Remove presença do usuário do canal
      * @returns {Promise<void>}
      */
     async untrackPresence() {
@@ -256,18 +256,18 @@ const ChatService = {
             if (!this.currentChannel) return;
 
             await this.currentChannel.untrack();
-            console.log('✅ Presence removed from the channel');
+            console.log('✅ Presença removida do canal');
 
         } catch (error) {
-            console.error('❌ Error removing presence:', error);
+            console.error('❌ Erro ao remover presença:', error);
         }
     }
 };
 
-// Export for global use
+// Exporta para uso global
 window.ChatService = ChatService;
 
-// Clean up subscriptions when the page is closed
+// Limpa inscrições quando a página é fechada
 window.addEventListener('beforeunload', () => {
     ChatService.unsubscribeFromChannel();
 });

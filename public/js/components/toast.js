@@ -1,28 +1,28 @@
 /**
- * Toast Component - Visual Notification System
- * Replaces alert() and console.error() with elegant notifications
- * ✅ NEW: UX Improvement
+ * Toast Component - Sistema de Notificações Visuais
+ * Substitui alert() e console.error() por notificações elegantes
+ * ✅ NOVO: Melhoria de UX
  */
 
 const Toast = {
     /**
-     * Shows a toast notification
-     * @param {string} message - Message to be displayed
-     * @param {string} type - Type: 'success', 'error', 'warning', 'info'
-     * @param {number} duration - Duration in ms (default: 3000)
+     * Mostra uma notificação toast
+     * @param {string} message - Mensagem a ser exibida
+     * @param {string} type - Tipo: 'success', 'error', 'warning', 'info'
+     * @param {number} duration - Duração em ms (padrão: 3000)
      */
     show(message, type = 'info', duration = 3000) {
-        // Remove previous toasts if there are too many
+        // Remove toasts anteriores se houver muitos
         const existingToasts = document.querySelectorAll('.toast-notification');
         if (existingToasts.length >= 3) {
             existingToasts[0].remove();
         }
 
-        // Creates the toast element
+        // Cria o elemento toast
         const toast = document.createElement('div');
         toast.className = `toast-notification toast-${type}`;
         
-        // Define icons for each type
+        // Define ícones para cada tipo
         const icons = {
             success: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
@@ -45,7 +45,7 @@ const Toast = {
             </svg>`
         };
 
-        // Colors for each type
+        // Cores para cada tipo
         const colors = {
             success: '#10b981',
             error: '#ef4444',
@@ -59,7 +59,7 @@ const Toast = {
             <button class="toast-close" onclick="this.parentElement.remove()">×</button>
         `;
 
-        // Add inline styles
+        // Adiciona estilos inline
         toast.style.cssText = `
             position: fixed;
             top: 20px;
@@ -80,7 +80,7 @@ const Toast = {
             margin-bottom: 10px;
         `;
 
-        // Add CSS for internal elements
+        // Adiciona CSS para os elementos internos
         const style = document.createElement('style');
         style.textContent = `
             @keyframes slideInRight {
@@ -137,10 +137,10 @@ const Toast = {
             document.head.appendChild(style);
         }
 
-        // Add to DOM
+        // Adiciona ao DOM
         document.body.appendChild(toast);
 
-        // Automatically removes after the specified duration
+        // Remove automaticamente após a duração especificada
         setTimeout(() => {
             if (toast.parentElement) {
                 toast.style.animation = 'slideOutRight 0.3s ease-out';
@@ -152,47 +152,47 @@ const Toast = {
     },
 
     /**
-     * Shows success notification
-     * @param {string} message - Message
-     * @param {number} duration - Duration in ms
+     * Mostra notificação de sucesso
+     * @param {string} message - Mensagem
+     * @param {number} duration - Duração em ms
      */
     success(message, duration = 3000) {
         return this.show(message, 'success', duration);
     },
 
     /**
-     * Shows error notification
-     * @param {string} message - Message
-     * @param {number} duration - Duration in ms
+     * Mostra notificação de erro
+     * @param {string} message - Mensagem
+     * @param {number} duration - Duração em ms
      */
     error(message, duration = 4000) {
         return this.show(message, 'error', duration);
     },
 
     /**
-     * Shows warning notification
-     * @param {string} message - Message
-     * @param {number} duration - Duration in ms
+     * Mostra notificação de aviso
+     * @param {string} message - Mensagem
+     * @param {number} duration - Duração em ms
      */
     warning(message, duration = 3500) {
         return this.show(message, 'warning', duration);
     },
 
     /**
-     * Shows info notification
-     * @param {string} message - Message
-     * @param {number} duration - Duration in ms
+     * Mostra notificação informativa
+     * @param {string} message - Mensagem
+     * @param {number} duration - Duração em ms
      */
     info(message, duration = 3000) {
         return this.show(message, 'info', duration);
     },
 
     /**
-     * Shows loading notification (does not disappear automatically)
-     * @param {string} message - Message
-     * @returns {Object} - Toast element with close() method
+     * Mostra notificação de carregamento (não desaparece automaticamente)
+     * @param {string} message - Mensagem
+     * @returns {Object} - Toast element com método close()
      */
-    loading(message = 'Loading...') {
+    loading(message = 'Carregando...') {
         const toast = document.createElement('div');
         toast.className = 'toast-notification toast-loading';
         
@@ -254,17 +254,17 @@ const Toast = {
     },
 
     /**
-     * Removes all toasts
+     * Remove todos os toasts
      */
     clearAll() {
         document.querySelectorAll('.toast-notification').forEach(toast => toast.remove());
     }
 };
 
-// Export for global use
+// Exporta para uso global
 window.Toast = Toast;
 
-// ✅ NEW: Overwrites console.error to also show a toast (optional)
+// ✅ NOVO: Sobrescreve console.error para mostrar toast também (opcional)
 if (window.OPIDAS_SHOW_ERROR_TOASTS) {
     const originalError = console.error;
     console.error = function(...args) {

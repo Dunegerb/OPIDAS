@@ -1,10 +1,10 @@
 // Access Control Service - OPIDAS
-// Manages access control based on subscriptions and blocks
+// Gerencia controle de acesso baseado em assinaturas e bloqueios
 
 const AccessControl = {
     /**
-     * Checks if the user has access to premium content (Battlefield)
-     * @returns {Promise<Object>} - Access status
+     * Verifica se o usuário tem acesso ao conteúdo premium (Campo)
+     * @returns {Promise<Object>} - Status de acesso
      */
     async checkAccess() {
         try {
@@ -13,7 +13,7 @@ const AccessControl = {
                 return {
                     hasAccess: false,
                     reason: 'not_authenticated',
-                    message: 'You need to be authenticated to access this page.'
+                    message: 'Você precisa estar autenticado para acessar esta página.'
                 };
             }
 
@@ -25,9 +25,9 @@ const AccessControl = {
 
             if (error) throw error;
 
-            // Checks if the user is blocked
+            // Verifica se está bloqueado
             if (profile.is_blocked) {
-                // Checks if the block has expired
+                // Verifica se o bloqueio expirou
                 if (profile.block_end_date) {
                     const blockEndDate = new Date(profile.block_end_date);
                     const now = new Date();
@@ -36,12 +36,12 @@ const AccessControl = {
                         return {
                             hasAccess: false,
                             reason: 'blocked',
-                            message: 'Your access is temporarily blocked due to payment issues.',
+                            message: 'Seu acesso está temporariamente bloqueado devido a problemas com o pagamento.',
                             blockEndDate: blockEndDate,
                             subscriptionStatus: profile.subscription_status
                         };
                     } else {
-                        // Block has expired, remove the block
+                        // Bloqueio expirou, remove o bloqueio
                         await window.supabase
                             .from('profiles')
                             .update({ is_blocked: false, block_end_date: null })
@@ -50,20 +50,20 @@ const AccessControl = {
                 }
             }
 
-            // Checks subscription status
+            // Verifica status da assinatura
             const activeStatuses = ['active', 'trialing'];
             const hasActiveSubscription = activeStatuses.includes(profile.subscription_status);
 
             if (!hasActiveSubscription) {
                 let reason = 'no_subscription';
-                let message = 'You need an active subscription to access the Battlefield.';
+                let message = 'Você precisa de uma assinatura ativa para acessar o Campo.';
 
                 if (profile.subscription_status === 'past_due') {
                     reason = 'payment_failed';
-                    message = 'There was a problem with your payment. Please update your payment details to continue.';
+                    message = 'Houve um problema com seu pagamento. Atualize seus dados de pagamento para continuar.';
                 } else if (profile.subscription_status === 'canceled') {
                     reason = 'subscription_canceled';
-                    message = 'Your subscription has been canceled. Reactivate it to continue accessing the Battlefield.';
+                    message = 'Sua assinatura foi cancelada. Reative para continuar acessando o Campo.';
                 }
 
                 return {
@@ -74,7 +74,7 @@ const AccessControl = {
                 };
             }
 
-            // User has access
+            // Usuário tem acesso
             return {
                 hasAccess: true,
                 subscriptionStatus: profile.subscription_status,
@@ -82,19 +82,19 @@ const AccessControl = {
             };
 
         } catch (error) {
-            console.error('❌ Error checking access:', error);
+            console.error('❌ Erro ao verificar acesso:', error);
             return {
                 hasAccess: false,
                 reason: 'error',
-                message: 'An error occurred while checking your access. Please try again.'
+                message: 'Ocorreu um erro ao verificar seu acesso. Tente novamente.'
             };
         }
     },
 
     /**
-     * Blocks user access
-     * @param {string} userId - User ID
-     * @param {number} days - Number of days to block
+     * Bloqueia o acesso do usuário
+     * @param {string} userId - ID do usuário
+     * @param {number} days - Número de dias de bloqueio
      * @returns {Promise<void>}
      */
     async blockUser(userId, days = 7) {
@@ -110,17 +110,17 @@ const AccessControl = {
                 })
                 .eq('id', userId);
 
-            console.log(`🚫 User ${userId} blocked until ${blockEndDate.toLocaleDateString('en-US')}`);
+            console.log(`🚫 Usuário ${userId} bloqueado até ${blockEndDate.toLocaleDateString()}`);
 
         } catch (error) {
-            console.error('❌ Error blocking user:', error);
+            console.error('❌ Erro ao bloquear usuário:', error);
             throw error;
         }
     },
 
     /**
-     * Unblocks user access
-     * @param {string} userId - User ID
+     * Desbloqueia o acesso do usuário
+     * @param {string} userId - ID do usuário
      * @returns {Promise<void>}
      */
     async unblockUser(userId) {
@@ -133,26 +133,26 @@ const AccessControl = {
                 })
                 .eq('id', userId);
 
-            console.log(`✅ User ${userId} unblocked`);
+            console.log(`✅ Usuário ${userId} desbloqueado`);
 
         } catch (error) {
-            console.error('❌ Error unblocking user:', error);
+            console.error('❌ Erro ao desbloquear usuário:', error);
             throw error;
         }
     },
 
     /**
-     * Displays a block/payment warning modal
-     * @param {Object} accessStatus - Access status returned by checkAccess
+     * Exibe modal de bloqueio/aviso de pagamento
+     * @param {Object} accessStatus - Status de acesso retornado por checkAccess
      */
     showAccessDeniedModal(accessStatus) {
-        // Remove existing modal if any
+        // Remove modal existente se houver
         const existingModal = document.getElementById('access-denied-modal');
         if (existingModal) {
             existingModal.remove();
         }
 
-        // Create the modal
+        // Cria o modal
         const modal = document.createElement('div');
         modal.id = 'access-denied-modal';
         modal.style.cssText = `
@@ -181,10 +181,10 @@ const AccessControl = {
                     <line x1="12" y1="16" x2="12.01" y2="16"></line>
                 </svg>
             `;
-            title = 'Access Blocked';
+            title = 'Acesso Bloqueado';
             actionButton = `
                 <button onclick="AccessControl.redirectToPayment()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; margin-right: 12px;">
-                    Update Payment
+                    Atualizar Pagamento
                 </button>
             `;
         } else if (accessStatus.reason === 'subscription_canceled') {
@@ -195,10 +195,10 @@ const AccessControl = {
                     <line x1="9" y1="9" x2="15" y2="15"></line>
                 </svg>
             `;
-            title = 'Subscription Canceled';
+            title = 'Assinatura Cancelada';
             actionButton = `
                 <button onclick="AccessControl.redirectToSubscription()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; margin-right: 12px;">
-                    Reactivate Subscription
+                    Reativar Assinatura
                 </button>
             `;
         } else {
@@ -208,10 +208,10 @@ const AccessControl = {
                     <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                 </svg>
             `;
-            title = 'Subscription Required';
+            title = 'Assinatura Necessária';
             actionButton = `
                 <button onclick="AccessControl.redirectToSubscription()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; margin-right: 12px;">
-                    Subscribe Now
+                    Assinar Agora
                 </button>
             `;
         }
@@ -228,7 +228,7 @@ const AccessControl = {
                 <div style="display: flex; justify-content: center; gap: 12px;">
                     ${actionButton}
                     <button onclick="AccessControl.redirectToDoutrina()" style="background: #f3f4f6; color: #374151; border: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px;">
-                        Go to Doctrine
+                        Ir para Doutrina
                     </button>
                 </div>
             </div>
@@ -238,7 +238,7 @@ const AccessControl = {
     },
 
     /**
-     * Redirects to the payment page
+     * Redireciona para página de pagamento
      */
     async redirectToPayment() {
         try {
@@ -256,13 +256,13 @@ const AccessControl = {
                 window.location.href = portalUrl;
             }
         } catch (error) {
-            console.error('❌ Error redirecting to payment:', error);
-            alert('Could not open the payment page. Please contact support.');
+            console.error('❌ Erro ao redirecionar para pagamento:', error);
+            alert('Não foi possível abrir a página de pagamento. Entre em contato com o suporte.');
         }
     },
 
     /**
-     * Redirects to the subscription page
+     * Redireciona para página de assinatura
      */
     async redirectToSubscription() {
         try {
@@ -276,49 +276,49 @@ const AccessControl = {
 
             window.location.href = checkoutUrl;
         } catch (error) {
-            console.error('❌ Error redirecting to subscription:', error);
-            alert('Could not start the subscription process. Please try again.');
+            console.error('❌ Erro ao redirecionar para assinatura:', error);
+            alert('Não foi possível iniciar o processo de assinatura. Tente novamente.');
         }
     },
 
     /**
-     * Redirects to the Doctrine page
+     * Redireciona para página Doutrina
      */
     redirectToDoutrina() {
         window.location.href = '/doutrina.html';
     },
 
     /**
-     * Protects a page by checking access
-     * @param {boolean} requiresSubscription - If true, requires an active subscription
-     * @returns {Promise<boolean>} - True if access is granted
+     * Protege uma página verificando o acesso
+     * @param {boolean} requiresSubscription - Se true, requer assinatura ativa
+     * @returns {Promise<boolean>} - True se tem acesso
      */
     async protectPage(requiresSubscription = true) {
         try {
-            // Check authentication
+            // Verifica autenticação
             const { data: { user } } = await window.supabase.auth.getUser();
             
             if (!user) {
-                console.warn('⚠️ User not authenticated, redirecting...');
+                console.warn('⚠️ Usuário não autenticado, redirecionando...');
                 window.location.href = '/index.html';
                 return false;
             }
 
-            // If subscription is not required (e.g., Doctrine page), allow access
+            // Se não requer assinatura (ex: página Doutrina), permite acesso
             if (!requiresSubscription) {
                 return true;
             }
 
-            // Check access to premium content
+            // Verifica acesso ao conteúdo premium
             const accessStatus = await this.checkAccess();
 
             if (!accessStatus.hasAccess) {
-                console.warn('⚠️ Access denied:', accessStatus.reason);
+                console.warn('⚠️ Acesso negado:', accessStatus.reason);
                 this.showAccessDeniedModal(accessStatus);
                 return false;
             }
 
-            // Check if a payment notification needs to be shown
+            // Verifica se precisa mostrar notificação de pagamento
             if (accessStatus.subscriptionStatus === 'past_due') {
                 window.StripeService.showPaymentNotification({
                     isPastDue: true,
@@ -329,11 +329,11 @@ const AccessControl = {
             return true;
 
         } catch (error) {
-            console.error('❌ Error protecting page:', error);
+            console.error('❌ Erro ao proteger página:', error);
             return false;
         }
     }
 };
 
-// Export for global use
+// Exporta para uso global
 window.AccessControl = AccessControl;

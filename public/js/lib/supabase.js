@@ -1,32 +1,32 @@
-// This file will be used to import and configure the Supabase client.
-// You can add the Supabase CDN script here or use a bundler like Webpack/Vite.
+// Este arquivo servirá para importar e configurar o cliente Supabase.
+// Você pode adicionar o script do Supabase CDN aqui ou usar um bundler como Webpack/Vite.
 
-// For now, it's empty. When you're ready to integrate, add the Supabase initialization code here.
-// Example:
+// Por enquanto, está vazio. Quando for integrar, adicione o código de inicialização do Supabase aqui.
+// Exemplo:
 /*
 const { createClient } = supabase;
 
-const supabaseUrl = 'YOUR_SUPABASE_URL';
-const supabaseKey = 'YOUR_SUPABASE_KEY';
+const supabaseUrl = 'SEU_URL_SUPABASE';
+const supabaseKey = 'SUA_CHAVE_SUPABASE';
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Makes the client available globally (or exports if you are using modules)
+// Disponibiliza o cliente globalmente (ou exporta se estiver usando módulos)
 window.supabase = supabase;
 */
 console.log("Supabase client placeholder loaded.");
 
 /**
- * Clears the Supabase cache.
- * Note: In the context of a standard Supabase JS client, clearing the cache
- * usually refers to ensuring that the next API calls fetch
- * fresh data, or clearing the authentication state.
- * Since the Supabase JS SDK manages the authentication cache internally,
- * this function is a placeholder for future data caching needs.
+ * Limpa o cache do Supabase.
+ * Nota: No contexto de um cliente Supabase JS padrão, a limpeza de cache
+ * geralmente se refere a garantir que as próximas chamadas de API busquem
+ * dados frescos, ou limpar o estado de autenticação.
+ * Como o Supabase JS SDK gerencia o cache de autenticação internamente,
+ * esta função é um placeholder para futuras necessidades de cache de dados.
  */
 window.clearSupabaseCache = () => {
-    console.log('[Supabase] Data cache cleared (placeholder).');
-    // If we were using a framework with caching (e.g., React Query), the invalidation logic would go here.
-    // For pure Supabase JS, the cache is minimal, but logout/login already forces an update.
-    // We leave the function for compatibility with auth.js.
+    console.log('[Supabase] Cache de dados limpo (placeholder).');
+    // Se estivéssemos usando um framework com cache (ex: React Query), a lógica de invalidação iria aqui.
+    // Para o Supabase JS puro, o cache é mínimo, mas o logout/login já força a atualização.
+    // Deixamos a função para compatibilidade com auth.js.
 };

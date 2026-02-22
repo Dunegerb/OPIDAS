@@ -1,4 +1,4 @@
-// --- CALENDAR COMPONENT LOGIC ---
+// --- LÓGICA DO COMPONENTE DE CALENDÁRIO ---
 
 function initCalendar(onDateSelectCallback) {
     const calendarGrid = document.getElementById('calendarGrid');
@@ -9,7 +9,7 @@ function initCalendar(onDateSelectCallback) {
     let currentDate = new Date();
     let selectedDate = new Date();
 
-    const monthNamesFull = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const monthNamesFull = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
     function render() {
         const year = currentDate.getFullYear();
@@ -24,7 +24,7 @@ function initCalendar(onDateSelectCallback) {
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const dayOffset = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
 
-        // Days from the previous month
+        // Dias do mês anterior
         const daysInPrevMonth = new Date(year, month, 0).getDate();
         for (let i = dayOffset; i > 0; i--) {
             const dayEl = document.createElement('button');
@@ -34,7 +34,7 @@ function initCalendar(onDateSelectCallback) {
             calendarGrid.appendChild(dayEl);
         }
 
-        // Days of the current month
+        // Dias do mês atual
         for (let i = 1; i <= daysInMonth; i++) {
             const dayEl = document.createElement('button');
             const thisDayDate = new Date(year, month, i);

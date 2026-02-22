@@ -1,26 +1,26 @@
 // Loading Screen Component - OPIDAS
-// Manages the loading screen between pages
+// Gerencia a tela de carregamento entre páginas
 
 class LoadingScreen {
     constructor() {
         this.loadingElement = null;
         this.videoElement = null;
-        this.minDisplayTime = 2000; // Minimum display time (2 seconds)
+        this.minDisplayTime = 2000; // Tempo mínimo de exibição (2 segundos)
         this.startTime = null;
     }
 
     /**
-     * Creates and displays the loading screen
+     * Cria e exibe a tela de carregamento
      */
     show() {
-        // Remove existing loading screen if any
+        // Remove tela de carregamento existente se houver
         this.hide();
 
-        // Create the loading screen element
+        // Cria o elemento da tela de carregamento
         this.loadingElement = document.createElement('div');
         this.loadingElement.className = 'loading-screen';
         
-        // Create the video element
+        // Cria o elemento de vídeo
         this.videoElement = document.createElement('video');
         this.videoElement.autoplay = true;
         this.videoElement.muted = true;
@@ -33,83 +33,83 @@ class LoadingScreen {
         
         this.videoElement.appendChild(source);
         
-        // Create a fallback in case the video doesn't load
+        // Cria fallback caso o vídeo não carregue
         const fallback = document.createElement('div');
         fallback.className = 'loading-fallback';
         fallback.innerHTML = `
             <div class="loading-spinner"></div>
-            <div class="loading-text">Loading...</div>
+            <div class="loading-text">Carregando...</div>
         `;
         
         this.loadingElement.appendChild(this.videoElement);
         this.loadingElement.appendChild(fallback);
         
-        // Add to the body
+        // Adiciona ao body
         document.body.appendChild(this.loadingElement);
         
-        // Mark the start time
+        // Marca o tempo de início
         this.startTime = Date.now();
         
-        // Try to play the video
+        // Tenta reproduzir o vídeo
         this.videoElement.play().catch(err => {
-            console.warn('Could not play the loading video:', err);
+            console.warn('Não foi possível reproduzir o vídeo de carregamento:', err);
         });
     }
 
     /**
-     * Removes the loading screen with a fade out
+     * Remove a tela de carregamento com fade out
      */
     async hide() {
         if (!this.loadingElement) return;
 
-        // Calculate the elapsed time
+        // Calcula o tempo decorrido
         const elapsed = Date.now() - this.startTime;
         const remainingTime = Math.max(0, this.minDisplayTime - elapsed);
 
-        // Wait for the minimum time if necessary
+        // Aguarda o tempo mínimo se necessário
         if (remainingTime > 0) {
             await new Promise(resolve => setTimeout(resolve, remainingTime));
         }
 
-        // Apply fade out
+        // Aplica fade out
         this.loadingElement.classList.add('fade-out');
 
-        // Remove from the DOM after the transition
+        // Remove do DOM após a transição
         setTimeout(() => {
             if (this.loadingElement && this.loadingElement.parentNode) {
                 this.loadingElement.parentNode.removeChild(this.loadingElement);
             }
             this.loadingElement = null;
             this.videoElement = null;
-        }, 500); // CSS transition time
+        }, 500); // Tempo da transição CSS
     }
 
     /**
-     * Navigates to another page with a loading screen
-     * @param {string} url - Destination URL
+     * Navega para outra página com tela de carregamento
+     * @param {string} url - URL de destino
      */
     static navigateWithLoading(url) {
         const loader = new LoadingScreen();
         loader.show();
         
-        // Wait for a frame to ensure the loading screen is rendered
+        // Aguarda um frame para garantir que a tela de carregamento seja renderizada
         requestAnimationFrame(() => {
             window.location.href = url;
         });
     }
 }
 
-// Export for global use
+// Exporta para uso global
 window.LoadingScreen = LoadingScreen;
 
-// Add listeners for links that should have a loading screen
+// Adiciona listeners para links que devem ter tela de carregamento
 document.addEventListener('DOMContentLoaded', () => {
-    // Intercept clicks on specific links
+    // Intercepta cliques em links específicos
     document.querySelectorAll('a[href*="campo.html"], a[href*="doutrina.html"]').forEach(link => {
         link.addEventListener('click', (e) => {
             const href = link.getAttribute('href');
             
-            // Ignore external links and anchors
+            // Ignora links externos e âncoras
             if (!href || href.startsWith('#') || href.startsWith('http')) {
                 return;
             }

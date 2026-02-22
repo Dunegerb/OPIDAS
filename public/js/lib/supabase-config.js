@@ -1,17 +1,17 @@
-// Supabase Client Configuration - OPIDAS (OPTIMIZED)
-// This file initializes and configures the Supabase client with caching and optimizations
+// Configuração do Cliente Supabase - OPIDAS (OTIMIZADO)
+// Este arquivo inicializa e configura o cliente Supabase com cache e otimizações
 
 (function() {
     'use strict';
 
-    // ⚠️ IMPORTANT: Replace these variables with your Supabase credentials
+    // ⚠️ IMPORTANTE: Substitua estas variáveis pelas suas credenciais do Supabase
     const SUPABASE_URL = 'https://vkdywsawrftrpxjaxejs.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrZHl3c2F3cmZ0cnB4amF4ZWpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4NTc1OTMsImV4cCI6MjA3ODQzMzU5M30.5ro31_G_sIGJ1lz_rHmVNRK5XnjTbMocfkjwDJqaees';
 
-    // ✅ CACHE SYSTEM - Improves performance
+    // ✅ CACHE SYSTEM - Melhora performance
     const CACHE_CONFIG = {
-        PROFILE_CACHE_TIME: 5 * 60 * 1000, // 5 minutes
-        USER_CACHE_TIME: 10 * 60 * 1000, // 10 minutes
+        PROFILE_CACHE_TIME: 5 * 60 * 1000, // 5 minutos
+        USER_CACHE_TIME: 10 * 60 * 1000, // 10 minutos
     };
 
     const cache = {
@@ -36,14 +36,14 @@
         cache[cacheKey] = { data: null, timestamp: 0 };
     }
 
-    // Checks if the Supabase script has been loaded
+    // Verifica se o script do Supabase foi carregado
     if (typeof window.supabase === 'undefined' || typeof window.supabase.createClient !== 'function') {
-        console.error('❌ ERROR: Supabase library not loaded');
-        console.error('📖 Add the Supabase script to your HTML: <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>');
+        console.error('❌ ERRO: Biblioteca do Supabase não foi carregada');
+        console.error('📖 Adicione o script do Supabase no HTML: <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>');
         return;
     }
 
-    // Creates the Supabase client with optimizations
+    // Cria o cliente Supabase com otimizações
     try {
         const { createClient } = window.supabase;
         
@@ -57,10 +57,10 @@
             },
             realtime: {
                 params: {
-                    eventsPerSecond: 5 // ✅ REDUCED for better performance
+                    eventsPerSecond: 5 // ✅ REDUZIDO para melhor performance
                 }
             },
-            // ✅ NEW: Reduced timeout for fast failures
+            // ✅ NOVO: Timeout reduzido para falhas rápidas
             global: {
                 headers: {
                     'X-Client-Info': 'opidas-web'
@@ -68,35 +68,35 @@
             }
         });
 
-        // Makes the client available globally
+        // Disponibiliza o cliente globalmente
         window.supabase = supabaseClient;
         
-        // ✅ NEW: Function to clear cache
+        // ✅ NOVO: Função para limpar cache
         window.clearSupabaseCache = function(cacheKey) {
             if (cacheKey) {
                 clearCache(cacheKey);
-                console.log(`✅ Cache cleared: ${cacheKey}`);
+                console.log(`✅ Cache limpo: ${cacheKey}`);
             } else {
                 cache.profile = { data: null, timestamp: 0 };
                 cache.user = { data: null, timestamp: 0 };
-                console.log('✅ All cache cleared');
+                console.log('✅ Todo cache limpo');
             }
         };
         
-        console.log('✅ Supabase client initialized successfully');
+        console.log('✅ Cliente Supabase inicializado com sucesso');
 
-        // Monitors authentication state changes
+        // Monitora mudanças no estado de autenticação
         supabaseClient.auth.onAuthStateChange((event, session) => {
             console.log('🔐 Auth event:', event);
             
             if (event === 'SIGNED_IN') {
-                console.log('✅ User authenticated:', session.user.email);
-                // ✅ NEW: Clears cache on login
+                console.log('✅ Usuário autenticado:', session.user.email);
+                // ✅ NOVO: Limpa cache ao fazer login
                 clearCache('profile');
                 clearCache('user');
             } else if (event === 'SIGNED_OUT') {
-                console.log('👋 User signed out');
-                // ✅ NEW: Clears cache on logout
+                console.log('👋 Usuário desconectado');
+                // ✅ NOVO: Limpa cache ao fazer logout
                 clearCache('profile');
                 clearCache('user');
                 if (!window.location.pathname.includes('index.html') && 
@@ -104,58 +104,58 @@
                     window.location.href = '/index.html';
                 }
             } else if (event === 'TOKEN_REFRESHED') {
-                console.log('🔄 Token refreshed');
+                console.log('🔄 Token atualizado');
             } else if (event === 'USER_UPDATED') {
-                console.log('👤 User data updated');
-                // ✅ NEW: Clears cache when user is updated
+                console.log('👤 Dados do usuário atualizados');
+                // ✅ NOVO: Limpa cache quando usuário é atualizado
                 clearCache('profile');
             }
         });
 
-        // Helper function to check authentication (with cache)
+        // Função auxiliar para verificar autenticação (com cache)
         window.checkAuth = async function() {
             try {
-                // ✅ NEW: Uses cache for auth
+                // ✅ NOVO: Usa cache para auth
                 if (isCacheValid('user')) {
-                    console.log('📦 Using user cache');
+                    console.log('📦 Usando cache de usuário');
                     return getCache('user');
                 }
 
                 const { data: { user }, error } = await supabaseClient.auth.getUser();
                 
                 if (error || !user) {
-                    console.warn('⚠️ User not authenticated');
+                    console.warn('⚠️ Usuário não autenticado');
                     return null;
                 }
 
-                // ✅ NEW: Caches user data
+                // ✅ NOVO: Cacheia dados do usuário
                 setCache('user', user);
                 return user;
             } catch (error) {
-                console.error('❌ Error checking authentication:', error);
+                console.error('❌ Erro ao verificar autenticação:', error);
                 return null;
             }
         };
 
-        // Helper function for logout
+        // Função auxiliar para logout
         window.logout = async function() {
             try {
                 const { error } = await supabaseClient.auth.signOut();
                 if (error) throw error;
                 
-                // ✅ NEW: Clears cache on logout
+                // ✅ NOVO: Limpa cache ao logout
                 clearCache('profile');
                 clearCache('user');
                 
-                console.log('✅ Logout successful');
+                console.log('✅ Logout realizado com sucesso');
                 window.location.href = '/index.html';
             } catch (error) {
-                console.error('❌ Error during logout:', error);
+                console.error('❌ Erro ao fazer logout:', error);
                 throw error;
             }
         };
 
-        // Protects pages that require authentication
+        // Protege páginas que requerem autenticação
         window.protectPage = async function() {
             const publicPages = ['index.html', '404.html', ''];
             const currentPage = window.location.pathname.split('/').pop();
@@ -167,21 +167,21 @@
             const user = await window.checkAuth();
             
             if (!user) {
-                console.warn('⚠️ Access denied: user not authenticated');
+                console.warn('⚠️ Acesso negado: usuário não autenticado');
                 window.location.href = '/index.html';
             }
         };
 
-        // ✅ NEW: Function to get profile with cache
+        // ✅ NOVO: Função para obter perfil com cache
         window.getCachedProfile = async function(userId) {
             try {
-                // Checks cache first
+                // Verifica cache primeiro
                 if (isCacheValid('profile')) {
-                    console.log('📦 Using profile cache');
+                    console.log('📦 Usando cache de perfil');
                     return getCache('profile');
                 }
 
-                // If not in cache, fetch from Supabase
+                // Se não estiver em cache, busca do Supabase
                 const { data: profile, error } = await supabaseClient
                     .from('profiles')
                     .select('*')
@@ -190,16 +190,16 @@
 
                 if (error) throw error;
 
-                // ✅ NEW: Caches the profile
+                // ✅ NOVO: Cacheia o perfil
                 setCache('profile', profile);
                 return profile;
             } catch (error) {
-                console.error('❌ Error fetching profile:', error);
+                console.error('❌ Erro ao buscar perfil:', error);
                 throw error;
             }
         };
 
-        // ✅ NEW: Function to update profile and invalidate cache
+        // ✅ NOVO: Função para atualizar perfil e invalidar cache
         window.updateProfileAndClearCache = async function(userId, data) {
             try {
                 const result = await supabaseClient
@@ -209,18 +209,18 @@
                     .select()
                     .single();
 
-                // ✅ NEW: Clears cache after update
+                // ✅ NOVO: Limpa cache após atualizar
                 clearCache('profile');
                 
                 return result;
             } catch (error) {
-                console.error('❌ Error updating profile:', error);
+                console.error('❌ Erro ao atualizar perfil:', error);
                 throw error;
             }
         };
 
     } catch (error) {
-        console.error('❌ Error initializing Supabase client:', error);
+        console.error('❌ Erro ao inicializar cliente Supabase:', error);
     }
 
 })();

@@ -1,6 +1,6 @@
 // ================================================= 
 // === PROFILE WIDGET - DYNAMIC ISLAND STYLE     ===
-// === OPIDAS - Complete Replacement            ===
+// === OPIDAS - Substituição Completa            ===
 // ================================================= 
 
 const ProfileWidget = {
@@ -9,56 +9,56 @@ const ProfileWidget = {
     widgetElement: null,
 
     /**
-     * Initializes the profile widget with Dynamic Island
+     * Inicializa o widget de perfil com Dynamic Island
      */
     init() {
         this.createWidget();
         this.attachEventListeners();
-        console.log('✅ Profile Widget (Dynamic Island) initialized');
+        console.log('✅ Profile Widget (Dynamic Island) inicializado');
     },
 
     /**
-     * Creates the HTML for the widget with Dynamic Island style
+     * Cria o HTML do widget com estilo Dynamic Island
      */
     createWidget() {
         const widgetHTML = `
             <div id="profile-island-container">
                 <div class="island-background"></div>
                 <div class="island-content-wrapper">
-                    <!-- INITIAL CONTENT (COLLAPSED) -->
+                    <!-- CONTEÚDO INICIAL (COLLAPSED) -->
                     <div class="island-initial-content">
                         <div class="user-welcome">
                             <img id="user-avatar" alt="Profile photo" src="https://placehold.co/34x34">
                             <div class="user-welcome-text">
-                                <div class="greeting">Welcome back</div>
-                                <div class="username" id="welcome-username">Loading...</div>
+                                <div class="greeting">Bem vindo(a) de volta</div>
+                                <div class="username" id="welcome-username">Carregando...</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- EXPANDED CONTENT -->
+                    <!-- CONTEÚDO EXPANDIDO (EXPANDED) -->
                     <div class="island-expanded-content">
                         <div class="main-container">
                             <div class="flex-column-ef">
                                 <div class="vector"></div>
                                 
-                                <!-- BUTTON: VIEW IDENTITY -->
-                                <div class="group" id="btn-view-identity">
+                                <!-- BOTÃO: VER IDENTIDADE -->
+                                <div class="group" id="btn-ver-identidade">
                                     <div class="rectangle"></div>
                                     <div class="vector-1"></div>
-                                    <span class="view-identity">View Identity</span>
+                                    <span class="ver-identidade">Ver Identidade</span>
                                 </div>
                                 
                                 <div class="vector-2"></div>
                                 
-                                <!-- INVESTMENT SECTION -->
+                                <!-- SEÇÃO DE INVESTIMENTO -->
                                 <div class="group-3">
                                     <div class="group-4">
                                         <div id="payment-progress" class="investment-progress-fill" style="width: 57%"></div>
                                     </div>
                                     <div class="rectangle-5"></div>
                                     <div class="group-6">
-                                        <span class="week">/week</span>
+                                        <span class="semana">/semana</span>
                                         <span id="investment-price" class="number">3</span>
                                         <span class="currency">R$</span>
                                     </div>
@@ -67,58 +67,58 @@ const ProfileWidget = {
                                             <span class="opidas">OPIDAS</span>
                                             <div class="rectangle-9"></div>
                                         </div>
-                                        <span class="investment">Investment</span>
+                                        <span class="investment">Investimento</span>
                                     </div>
-                                    <span class="next-payment">Next payment</span>
+                                    <span class="next-payment">Próximo pagamento</span>
                                     <div class="days">
-                                        <span id="days-until-payment" class="number-a">4</span><span class="days-b">/7 days</span>
+                                        <span id="days-until-payment" class="number-a">4</span><span class="days-b">/7 dias</span>
                                     </div>
                                     
-                                    <!-- INVESTMENT BUTTONS -->
-                                    <div class="group-c" id="btn-setup-payment">
+                                    <!-- BOTÕES DE INVESTIMENTO -->
+                                    <div class="group-c" id="btn-configurar-pagamento">
                                         <div class="rectangle-d"></div>
-                                        <span class="setup-payments">Set Up Payments</span>
+                                        <span class="configurar-pagamentos">Configurar Pagamentos</span>
                                     </div>
-                                    <div class="group-e" id="btn-give-up">
+                                    <div class="group-e" id="btn-desistir">
                                         <div class="rectangle-f"></div>
-                                        <span class="give-up-i-dont-want-it-anymore">I want to give up</span>
+                                        <span class="desistir-nao-quero">Desistir não quero mais</span>
                                     </div>
                                 </div>
                                 
                                 <div class="vector-10"></div>
                                 
-                                <!-- "CHANGE BATTLEFIELD" SECTION -->
+                                <!-- SEÇÃO "TROCAR DE CAMPO" -->
                                 <div class="group-16" id="change-field-container">
                                     <div class="rectangle-17"></div>
                                     <div class="union"></div>
-                                    <span class="change-field">Change Battlefield</span>
-                                    <div id="selected-field-value">Loading...</div>
+                                    <span class="change-field">Trocar de campo</span>
+                                    <div id="selected-field-value">Carregando...</div>
                                     <ul id="field-options-list">
-                                        <li data-value="masturbation">Masturbation</li>
-                                        <li data-value="pornography">Pornography</li>
-                                        <li data-value="alcoholic_beverages">Alcoholic Beverages</li>
-                                        <li data-value="smoking">Smoking</li>
-                                        <li data-value="other">Other</li>
+                                        <li data-value="masturbacao">Masturbação</li>
+                                        <li data-value="pornografia">Pornografia</li>
+                                        <li data-value="bebida">Bebida Alcoólica</li>
+                                        <li data-value="fumar">Fumar</li>
+                                        <li data-value="outro">Outro</li>
                                     </ul>
                                 </div>
 
-                                <!-- BUTTON: LOGOUT / DISCONNECT -->
+                                <!-- BOTÃO: SAIR / DESCONECTAR -->
                                 <div class="group-11" id="btn-logout">
                                     <div class="rectangle-12"></div>
                                     <div class="vector-13"></div>
-                                    <span class="logout-disconnect">Logout / Disconnect</span>
+                                    <span class="sair-desconectar">Sair / Desconectar</span>
                                 </div>
                                 
-                                <!-- USER PHOTO AND NAME (EXPANDED) -->
+                                <!-- FOTO E NOME DO USUÁRIO (EXPANDIDO) -->
                                 <div class="welcome-photo">
                                     <div id="profile-photo-expanded" class="profile-photo"></div>
                                     <div class="welcome-back-user">
-                                        <span class="welcome-back-message">Welcome back</span>
-                                        <span id="user-patent-name" class="user-patent-name">Loading...</span>
+                                        <span class="welcome-back-message">Bem vindo(a) de volta</span>
+                                        <span id="user-patent-name" class="user-patent-name">Carregando...</span>
                                     </div>
                                 </div>
                                 
-                                <!-- CLOSE BUTTON -->
+                                <!-- BOTÃO FECHAR -->
                                 <div class="vector-15" id="widget-close-btn"></div>
                             </div>
                         </div>
@@ -127,12 +127,12 @@ const ProfileWidget = {
             </div>
         `;
 
-        // Replaces the existing user-welcome with the Dynamic Island
+        // Substitui o user-welcome existente pelo Dynamic Island
         const userWelcome = document.querySelector('.user-welcome');
         if (userWelcome) {
             userWelcome.outerHTML = widgetHTML;
         } else {
-            // Fallback: adds to the body
+            // Fallback: adiciona ao body
             document.body.insertAdjacentHTML('beforeend', widgetHTML);
         }
 
@@ -140,20 +140,20 @@ const ProfileWidget = {
     },
 
     /**
-     * Attaches event listeners to the buttons
+     * Anexa event listeners aos botões
      */
     attachEventListeners() {
         const container = this.widgetElement;
 
-        // Open Dynamic Island on click
+        // Abrir Dynamic Island ao clicar
         container.addEventListener('click', (e) => {
-            // Only opens if not expanded and not an internal button click
+            // Só abre se não estiver expandido e não for clique em botão interno
             if (!container.classList.contains('expanded') && !e.target.closest('.group, .group-11, .group-16, .group-c, .group-e')) {
                 this.open();
             }
         });
 
-        // Close widget
+        // Fechar widget
         const closeBtn = document.getElementById('widget-close-btn');
         if (closeBtn) {
             closeBtn.addEventListener('click', (e) => {
@@ -162,33 +162,33 @@ const ProfileWidget = {
             });
         }
 
-        // View Identity
-        const btnViewIdentity = document.getElementById('btn-view-identity');
-        if (btnViewIdentity) {
-            btnViewIdentity.addEventListener('click', (e) => {
+        // Ver Identidade
+        const btnVerIdentidade = document.getElementById('btn-ver-identidade');
+        if (btnVerIdentidade) {
+            btnVerIdentidade.addEventListener('click', (e) => {
                 e.stopPropagation();
-                this.handleViewIdentity();
+                this.handleVerIdentidade();
             });
         }
 
-        // Change Battlefield (Dropdown)
+        // Trocar de Campo (Dropdown)
         this.setupFieldChanger();
 
-        // Set Up Payment
-        const btnSetupPayment = document.getElementById('btn-setup-payment');
-        if (btnSetupPayment) {
-            btnSetupPayment.addEventListener('click', (e) => {
+        // Configurar Pagamento
+        const btnConfigurarPagamento = document.getElementById('btn-configurar-pagamento');
+        if (btnConfigurarPagamento) {
+            btnConfigurarPagamento.addEventListener('click', (e) => {
                 e.stopPropagation();
-                this.handleSetupPayment();
+                this.handleConfigurarPagamento();
             });
         }
 
-        // Give Up
-        const btnGiveUp = document.getElementById('btn-give-up');
-        if (btnGiveUp) {
-            btnGiveUp.addEventListener('click', (e) => {
+        // Desistir
+        const btnDesistir = document.getElementById('btn-desistir');
+        if (btnDesistir) {
+            btnDesistir.addEventListener('click', (e) => {
                 e.stopPropagation();
-                this.handleGiveUp();
+                this.handleDesistir();
             });
         }
 
@@ -203,7 +203,7 @@ const ProfileWidget = {
     },
 
     /**
-     * Sets up the "Change Battlefield" dropdown
+     * Configura o dropdown "Trocar de campo"
      */
     setupFieldChanger() {
         const container = document.getElementById('change-field-container');
@@ -220,11 +220,11 @@ const ProfileWidget = {
                 event.stopPropagation();
                 const newHabit = option.getAttribute('data-value');
                 optionsList.classList.remove('visible');
-                this.handleChangeField(newHabit);
+                this.handleTrocarCampo(newHabit);
             });
         });
 
-        // Closes dropdown when clicking outside
+        // Fecha dropdown ao clicar fora
         document.addEventListener('click', (event) => {
             if (!container.contains(event.target)) {
                 optionsList.classList.remove('visible');
@@ -233,192 +233,282 @@ const ProfileWidget = {
     },
 
     /**
-     * Opens the widget and loads user data
+     * Abre o widget e carrega dados do usuário
      */
     async open() {
-        if (this.isOpen) return;
-        this.isOpen = true;
-        this.widgetElement.classList.add('expanded');
-
-        console.log('🏝️ Opening Dynamic Island');
-
         try {
-            // Gets user data from Auth and DB
-            const { data: { user } } = await window.supabase.auth.getUser();
-            if (!user) throw new Error('User not found.');
+            console.log('📂 Abrindo Profile Widget (Dynamic Island)...');
 
-            const { data: userData, error: userError } = await window.supabase
-                .from('profiles')
-                .select('*, habits(*)')
-                .eq('id', user.id)
-                .single();
+            // Carrega dados do usuário
+            this.currentUser = await window.UserService.getCurrentUserProfile();
+            
+            // Atualiza UI do widget
+            this.updateWidgetUI();
 
-            if (userError) throw userError;
+            // Expande Dynamic Island
+            this.widgetElement.classList.add('expanded');
+            this.isOpen = true;
 
-            this.currentUser = { ...user, ...userData };
-            console.log('👤 User data loaded:', this.currentUser);
-
-            // Updates UI with user data
-            this.updateUI();
+            console.log('✅ Profile Widget aberto');
 
         } catch (error) {
-            console.error('❌ Error loading user data:', error);
-            alert('Error loading your data. Please try again.');
-            this.close();
+            console.error('❌ Erro ao abrir widget:', error);
+            alert('Erro ao carregar perfil. Tente novamente.');
         }
     },
 
     /**
-     * Closes the widget
+     * Fecha o widget
      */
     close() {
-        if (!this.isOpen) return;
-        this.isOpen = false;
         this.widgetElement.classList.remove('expanded');
-        console.log('🏝️ Closing Dynamic Island');
+        
+        // Fecha dropdown se estiver aberto
+        const optionsList = document.getElementById('field-options-list');
+        if (optionsList) {
+            optionsList.classList.remove('visible');
+        }
+        
+        this.isOpen = false;
+        console.log('✅ Profile Widget fechado');
     },
 
     /**
-     * Updates the UI with the loaded user data
+     * Atualiza UI do widget com dados do usuário
      */
-    updateUI() {
+    updateWidgetUI() {
         if (!this.currentUser) return;
 
-        const user = this.currentUser;
-
-        // Collapsed state
-        document.getElementById('welcome-username').textContent = user.username || 'Warrior';
-        const avatar = document.getElementById('user-avatar');
-        if (user.avatar_url) {
-            avatar.src = user.avatar_url;
-        }
-
-        // Expanded state
-        document.getElementById('user-patent-name').textContent = `${user.patent || 'Recruit'} ${user.username || ''}`.trim();
-        const profilePhotoExpanded = document.getElementById('profile-photo-expanded');
-        if (user.avatar_url) {
-            profilePhotoExpanded.style.backgroundImage = `url(${user.avatar_url})`;
-        }
-
-        // Investment Info
-        document.getElementById('investment-price').textContent = (user.subscription_price / 100).toFixed(2).replace('.', ',');
-        
-        // Payment progress
-        const today = new Date();
-        const startDate = new Date(user.subscription_start_date);
-        const diffTime = Math.abs(today - startDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) % 7;
-        document.getElementById('days-until-payment').textContent = diffDays;
-        document.getElementById('payment-progress').style.width = `${(diffDays / 7) * 100}%`;
-
-        // Selected Battlefield
-        const currentHabit = user.habits[0]?.habit_name || 'Not defined';
-        document.getElementById('selected-field-value').textContent = this.translateHabit(currentHabit);
-    },
-
-    /**
-     * Translates habit names for display
-     * @param {string} habit - The habit name from the database
-     * @returns {string} - The translated habit name
-     */
-    translateHabit(habit) {
-        const translations = {
-            'masturbacao': 'Masturbation',
-            'pornografia': 'Pornography',
-            'bebida': 'Alcoholic Beverages',
-            'fumar': 'Smoking',
-            'outro': 'Other'
+        const habitLabels = {
+            'masturbacao': 'Masturbação',
+            'pornografia': 'Pornografia',
+            'bebida': 'Bebida Alcoólica',
+            'fumar': 'Fumar',
+            'outro': 'Outro'
         };
-        return translations[habit] || habit;
+
+        // Avatar (collapsed)
+        const userAvatar = document.getElementById('user-avatar');
+        if (userAvatar) {
+            userAvatar.src = this.currentUser.avatar_url || 'https://placehold.co/34x34';
+        }
+
+        // Avatar (expanded)
+        const profilePhotoExpanded = document.getElementById('profile-photo-expanded');
+        if (profilePhotoExpanded) {
+            profilePhotoExpanded.style.backgroundImage = `url(${this.currentUser.avatar_url || 'https://placehold.co/34x34'})`;
+        }
+
+        // Nome do usuário (collapsed)
+        const rankData = this.currentUser.rankData;
+        const rankName = rankData ? rankData.name.charAt(0).toUpperCase() + rankData.name.slice(1) : 'Recruta';
+        const fullName = `${rankName} ${this.currentUser.last_name || ''}`;
+        
+        const usernameCollapsed = document.getElementById('welcome-username');
+        if (usernameCollapsed) {
+            usernameCollapsed.textContent = fullName;
+        }
+
+        // Nome do usuário (expanded)
+        const userPatentName = document.getElementById('user-patent-name');
+        if (userPatentName) {
+            userPatentName.textContent = fullName;
+        }
+
+        // Hábito atual no dropdown
+        const habitLabel = habitLabels[this.currentUser.habit] || 'Não definido';
+        const selectedFieldValue = document.getElementById('selected-field-value');
+        if (selectedFieldValue) {
+            selectedFieldValue.textContent = habitLabel;
+        }
+
+        // Dados de investimento (mock - será integrado com Stripe)
+        // TODO: Buscar dados reais do Stripe
+        const investmentPrice = document.getElementById('investment-price');
+        if (investmentPrice) {
+            investmentPrice.textContent = '3';
+        }
+
+        const daysUntilPayment = document.getElementById('days-until-payment');
+        if (daysUntilPayment) {
+            daysUntilPayment.textContent = '4';
+        }
+        
+        // Calcula progresso do pagamento (4/7 dias = 57%)
+        const progress = (4 / 7) * 100;
+        const paymentProgress = document.getElementById('payment-progress');
+        if (paymentProgress) {
+            paymentProgress.style.width = `${progress}%`;
+        }
     },
 
     /**
-     * Handler: View Identity
-     * Redirects to the user's identity page
+     * Handler: Ver Identidade
+     * Abre modal com card de identidade completo
      */
-    handleViewIdentity() {
-        console.log('💳 Redirecting to identity page...');
-        window.location.href = '/user/identity.html';
-    },
-
-    /**
-     * Handler: Change Battlefield
-     * Updates the user's main habit
-     * @param {string} newHabit - The new habit selected
-     */
-    async handleChangeField(newHabit) {
+    async handleVerIdentidade() {
         try {
-            const { data, error } = await window.supabase.rpc('change_primary_habit', {
-                p_user_id: this.currentUser.id,
-                p_new_habit_name: newHabit
-            });
+            console.log('👁️ Abrindo Identidade...');
 
-            if (error) throw error;
+            // Fecha widget
+            this.close();
 
-            console.log('✅ Battlefield changed successfully:', data);
-            alert(`Battlefield changed to: ${this.translateHabit(newHabit)}`);
-
-            // Reloads data to reflect the change
-            this.updateUI();
+            // Abre modal de identidade (reutiliza o card do onboarding)
+            if (window.IdentityModal) {
+                await window.IdentityModal.open(this.currentUser);
+            } else {
+                // Fallback: redireciona para página de identidade
+                window.location.href = 'onboarding/habit-tracking.html';
+            }
 
         } catch (error) {
-            console.error('❌ Error changing battlefield:', error);
-            alert('Error changing battlefield. Please try again.');
+            console.error('❌ Erro ao abrir identidade:', error);
+            alert('Erro ao abrir identidade. Tente novamente.');
         }
     },
 
     /**
-     * Handler: Set Up Payment
-     * Redirects to the Stripe customer portal
+     * Handler: Trocar de Campo
+     * Troca o hábito do usuário, salvando progresso do anterior
      */
-    async handleSetupPayment() {
+    async handleTrocarCampo(newHabit) {
         try {
-            console.log('⚙️ Redirecting to payment portal...');
-            const { data, error } = await window.supabase.functions.invoke('create-customer-portal-session', {
-                body: { customerId: this.currentUser.stripe_customer_id }
+            const habitLabels = {
+                'masturbacao': 'Masturbação',
+                'pornografia': 'Pornografia',
+                'bebida': 'Bebida Alcoólica',
+                'fumar': 'Fumar',
+                'outro': 'Outro'
+            };
+
+            const newHabitLabel = habitLabels[newHabit];
+            const currentHabitLabel = habitLabels[this.currentUser.habit];
+
+            // Não faz nada se for o mesmo hábito
+            if (newHabit === this.currentUser.habit) {
+                return;
+            }
+
+            // Confirmação
+            const confirmed = confirm(
+                `Você quer mesmo mudar de campo?\n\n` +
+                `Campo atual: ${currentHabitLabel}\n` +
+                `Novo campo: ${newHabitLabel}\n\n` +
+                `Seu progresso no campo "${currentHabitLabel}" será salvo e você começará do zero no novo campo.\n\n` +
+                `Tem certeza?`
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            console.log(`🔄 Trocando de ${this.currentUser.habit} para ${newHabit}...`);
+
+            // Chama função do Supabase para trocar de campo
+            const { data, error } = await window.supabase.rpc('switch_user_habit', {
+                p_user_id: this.currentUser.id,
+                p_new_habit: newHabit,
+                p_current_habit: this.currentUser.habit,
+                p_current_retention_days: this.currentUser.retention_days,
+                p_current_rank: this.currentUser.rank
             });
 
             if (error) throw error;
 
-            // Redirects user to the portal
+            console.log('✅ Campo trocado com sucesso:', data);
+
+            // Mostra mensagem de sucesso
+            const hadPreviousProgress = data.had_previous_progress;
+            const message = hadPreviousProgress
+                ? `Campo trocado com sucesso!\n\nVocê já tinha ${data.retention_days} dias de progresso em "${newHabitLabel}". Seu progresso foi restaurado!`
+                : `Campo trocado com sucesso!\n\nBem-vindo ao campo "${newHabitLabel}"! Você está começando do zero.`;
+
+            alert(message);
+
+            // Recarrega página para atualizar todos os dados
+            window.location.reload();
+
+        } catch (error) {
+            console.error('❌ Erro ao trocar de campo:', error);
+            alert('Erro ao trocar de campo. Tente novamente.');
+        }
+    },
+
+    /**
+     * Handler: Configurar Pagamento
+     * Abre portal do Stripe para gerenciar assinatura
+     */
+    async handleConfigurarPagamento() {
+        try {
+            console.log('💳 Abrindo portal de pagamento...');
+
+            // Verifica se tem stripe_customer_id
+            if (!this.currentUser.stripe_customer_id) {
+                alert('Você ainda não tem uma assinatura ativa.');
+                return;
+            }
+
+            // Chama Edge Function para criar portal session
+            const { data, error } = await window.supabase.functions.invoke('create-portal-session', {
+                body: {
+                    customerId: this.currentUser.stripe_customer_id,
+                    returnUrl: window.location.origin + '/campo.html'
+                }
+            });
+
+            if (error) throw error;
+
+            // Redireciona para portal do Stripe
             window.location.href = data.url;
 
         } catch (error) {
-            console.error('❌ Error redirecting to portal:', error);
-            alert('Error accessing payment settings. Please contact support.');
+            console.error('❌ Erro ao abrir portal de pagamento:', error);
+            alert('Erro ao abrir portal de pagamento. Tente novamente.');
         }
     },
 
     /**
-     * Handler: Give Up
-     * Starts the account cancellation and deletion process
+     * Handler: Desistir
+     * Cancela assinatura e deleta conta
      */
-    async handleGiveUp() {
+    async handleDesistir() {
         try {
-            const confirmation = confirm(
-                'Are you sure you want to give up?\n\n' +
-                'This action is irreversible and will cancel your subscription and permanently delete your account and all associated data.\n\n' +
-                'We are sad to see you go, warrior. Are you absolutely sure?'
+            // Primeira confirmação
+            const confirmed1 = confirm(
+                '⚠️ ATENÇÃO ⚠️\n\n' +
+                'Você está prestes a CANCELAR sua assinatura e DELETAR sua conta permanentemente.\n\n' +
+                'Isso significa:\n' +
+                '• Seu progresso será PERDIDO\n' +
+                '• Sua assinatura será CANCELADA\n' +
+                '• Seus dados serão DELETADOS\n' +
+                '• Esta ação é IRREVERSÍVEL\n\n' +
+                'Tem certeza que deseja continuar?'
             );
 
-            if (!confirmation) {
-                alert('Cancellation aborted. Your account is safe.');
-                return;
-            }
+            if (!confirmed1) return;
 
+            // Segunda confirmação (mais forte)
+            const confirmed2 = confirm(
+                '🛑 ÚLTIMA CHANCE 🛑\n\n' +
+                'Digite "SIM" no próximo prompt para confirmar que você realmente deseja deletar sua conta.\n\n' +
+                'Clique OK para continuar ou Cancelar para voltar.'
+            );
+
+            if (!confirmed2) return;
+
+            // Pede confirmação final com texto
             const finalConfirmation = prompt(
-                'This is the last step. To confirm the deletion of your account, type "SIM" in the field below.\n\n' +
-                'This is your last chance to turn back.'
+                'Digite "SIM" (em maiúsculas) para confirmar a exclusão da conta:'
             );
 
             if (finalConfirmation !== 'SIM') {
-                alert('Cancellation aborted. Your account is safe.');
+                alert('Cancelamento abortado. Sua conta está segura.');
                 return;
             }
 
-            console.log('🗑️ Deleting account...');
+            console.log('🗑️ Deletando conta...');
 
-            // Calls Edge Function to cancel subscription and delete account
+            // Chama Edge Function para cancelar assinatura e deletar conta
             const { data, error } = await window.supabase.functions.invoke('cancel-subscription-and-delete', {
                 body: {
                     userId: this.currentUser.id,
@@ -429,58 +519,58 @@ const ProfileWidget = {
 
             if (error) throw error;
 
-            console.log('✅ Account deleted successfully');
+            console.log('✅ Conta deletada com sucesso');
 
-            // Shows final message
+            // Mostra mensagem final
             alert(
-                'Your subscription has been canceled and your account has been deleted.\n\n' +
-                'We will miss you, soldier. The door is always open if you want to come back.\n\n' +
-                'You will be redirected to the homepage.'
+                'Sua assinatura foi cancelada e sua conta foi deletada.\n\n' +
+                'Sentiremos sua falta, soldado. A porta está sempre aberta se quiser voltar.\n\n' +
+                'Você será redirecionado para a página inicial.'
             );
 
-            // Logs out
+            // Faz logout
             await window.supabase.auth.signOut();
 
-            // Redirects to home
+            // Redireciona para home
             window.location.href = '/index.html';
 
         } catch (error) {
-            console.error('❌ Error deleting account:', error);
-            alert('Error deleting account. Please contact support.');
+            console.error('❌ Erro ao deletar conta:', error);
+            alert('Erro ao deletar conta. Entre em contato com o suporte.');
         }
     },
 
     /**
      * Handler: Logout
-     * Disconnects the user
+     * Desconecta usuário
      */
     async handleLogout() {
         try {
-            const confirmed = confirm('Are you sure you want to log out?');
+            const confirmed = confirm('Tem certeza que deseja sair?');
             if (!confirmed) return;
 
-            console.log('👋 Logging out...');
+            console.log('👋 Fazendo logout...');
 
-            // Logs out from Supabase
+            // Faz logout no Supabase
             const { error } = await window.supabase.auth.signOut();
             if (error) throw error;
 
-            console.log('✅ Logout successful');
+            console.log('✅ Logout realizado com sucesso');
 
-            // Redirects to the login page
+            // Redireciona para página de login
             window.location.href = '/index.html';
 
         } catch (error) {
-            console.error('❌ Error logging out:', error);
-            alert('Error logging out. Try again.');
+            console.error('❌ Erro ao fazer logout:', error);
+            alert('Erro ao fazer logout. Tente novamente.');
         }
     }
 };
 
-// Exports for global use
+// Exporta para uso global
 window.ProfileWidget = ProfileWidget;
 
-// Initializes when DOM is ready
+// Inicializa quando DOM estiver pronto
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => ProfileWidget.init());
 } else {

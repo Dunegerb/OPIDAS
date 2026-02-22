@@ -1,18 +1,18 @@
-// Main initialization file for the OPIDAS application
-// Contains global initialization logic, user data loading, and UI updates
+// Arquivo principal de inicialização do aplicativo OPIDAS
+// Contém lógica global de inicialização, carregamento de dados do usuário e atualização da UI
 
-console.log("🚀 OPIDAS App initialized.");
+console.log("🚀 App OPIDAS inicializado.");
 
 /**
- * Centralized function to load and update the Top-Bar with real user data
- * Fetches the user profile from Supabase and updates all interface elements
+ * Função centralizada para carregar e atualizar o Top-Bar com dados reais do usuário
+ * Busca o perfil do usuário no Supabase e atualiza todos os elementos da interface
  *
- * @param {Object} options - Configuration options
- * @param {boolean} options.includeProgressBar - Whether to update the progress bar (default: true)
- * @param {boolean} options.includeAvatar - Whether to update the avatar (default: true)
- * @param {boolean} options.includeUsername - Whether to update the username (default: true)
- * @param {boolean} options.skipRetentionSync - Whether to skip the automatic retention_days/rank synchronization (default: false)
- * @returns {Promise<Object>} - Returns the loaded user profile
+ * @param {Object} options - Opções de configuração
+ * @param {boolean} options.includeProgressBar - Se deve atualizar a barra de progresso (padrão: true)
+ * @param {boolean} options.includeAvatar - Se deve atualizar o avatar (padrão: true)
+ * @param {boolean} options.includeUsername - Se deve atualizar o nome de usuário (padrão: true)
+ * @param {boolean} options.skipRetentionSync - Se deve pular a sincronização automática de retention_days/rank (padrão: false)
+ * @returns {Promise<Object>} - Retorna o perfil do usuário carregado
  */
 async function loadTopBar(options = {}) {
   const {
@@ -23,25 +23,25 @@ async function loadTopBar(options = {}) {
   } = options;
 
   try {
-    console.log("📊 Loading Top-Bar data...");
+    console.log("📊 Carregando dados do Top-Bar...");
 
-    // Checks if UserService is available
+    // Verifica se o UserService está disponível
     if (!window.UserService) {
       throw new Error(
-        "UserService is not loaded. Make sure user.js has been included."
+        "UserService não está carregado. Certifique-se de que user.js foi incluído."
       );
     }
 
-    // Fetches the complete user profile from Supabase
+    // Busca o perfil completo do usuário do Supabase
     const userProfile = await window.UserService.getCurrentUserProfile();
 
     if (!userProfile) {
-      throw new Error("Could not load user profile");
+      throw new Error("Não foi possível carregar o perfil do usuário");
     }
 
-    console.log("✅ Profile loaded successfully:", userProfile);
+    console.log("✅ Perfil carregado com sucesso:", userProfile);
 
-    // Selects the DOM elements that need to be updated
+    // Seleciona os elementos do DOM que precisam ser atualizados
     const topBarElements = {
       avatar: document.getElementById("user-avatar"),
       username: document.getElementById("welcome-username"),
@@ -51,24 +51,24 @@ async function loadTopBar(options = {}) {
     };
 
     // ------------------------------------------------------------
-    // ✅ AUTOMATIC RETENTION SYNCHRONIZATION (WITHOUT "CHECK-IN")
+    // ✅ SINCRONIZAÇÃO AUTOMÁTICA DE RETENÇÃO (SEM "CHECK-IN")
     // ------------------------------------------------------------
-    // Rule: If last_habit_date exists, the backend can recalculate:
-    // retention_days = today - last_habit_date (in the correct timezone)
-    // and rank = calculate_rank(retention_days)
+    // Regra: Se last_habit_date existe, o backend pode recalcular:
+    // retention_days = hoje - last_habit_date (no fuso correto)
+    // e rank = calculate_rank(retention_days)
     //
-    // Here we just request this synchronization (without adding +1 on the frontend).
+    // Aqui a gente só pede essa sincronização (sem somar +1 no frontend).
     if (!skipRetentionSync && userProfile.last_habit_date) {
       try {
-        console.log("🧮 Automatically synchronizing retention (backend)...");
+        console.log("🧮 Sincronizando retenção automaticamente (backend)...");
 
-        // We keep the name processDailyCheckin for compatibility,
-        // but it should NOT perform "check-in" logic.
-        // It should only recalculate retention_days based on last_habit_date.
+        // Mantemos o nome processDailyCheckin por compatibilidade,
+        // mas ele NÃO deve fazer lógica de "check-in".
+        // Ele deve apenas recalcular retention_days baseado em last_habit_date.
         const syncResult = await window.UserService.processDailyCheckin();
 
         if (syncResult && syncResult.success) {
-          console.log("✅ Retention synchronized:", syncResult);
+          console.log("✅ Retenção sincronizada:", syncResult);
 
           userProfile.retention_days = syncResult.retention_days;
           userProfile.rank = syncResult.rank;
@@ -77,80 +77,80 @@ async function loadTopBar(options = {}) {
           );
         } else {
           console.log(
-            "ℹ️ Synchronization not necessary:",
+            "ℹ️ Sincronização não necessária:",
             syncResult?.message
           );
         }
       } catch (syncError) {
-        console.warn("⚠️ Error synchronizing retention:", syncError);
-        // Does not block loading if synchronization fails
+        console.warn("⚠️ Erro ao sincronizar retenção:", syncError);
+        // Não trava o carregamento se a sincronização falhar
       }
     } else {
       if (skipRetentionSync) {
-        console.log("⏭️ Retention synchronization skipped (skipRetentionSync=true)");
+        console.log("⏭️ Sincronização de retenção ignorada (skipRetentionSync=true)");
       } else {
         console.log(
-          "ℹ️ Synchronization skipped (last_habit_date is null: no relapse date set)."
+          "ℹ️ Sincronização ignorada (last_habit_date é nulo: sem data de recaída definida)."
         );
       }
     }
 
-    // Ensures rankData even if it doesn't come from the database
+    // Garante rankData mesmo se não vier do banco
     if (!userProfile.rankData) {
       const safeDays = userProfile.retention_days ?? 0;
       userProfile.rankData = window.UserService.calculateRankData(safeDays);
     }
 
     // ------------------------------------------------------------
-    // Updates the user avatar
+    // Atualiza o avatar do usuário
     // ------------------------------------------------------------
     if (includeAvatar && topBarElements.avatar) {
       topBarElements.avatar.src =
         userProfile.avatar_url ||
         "https://github.com/Dunegerb/OPIDAS/raw/ba479afa9718cc1bd2b6a3d4e75d7b1bbe0da0f4/public/assets/styles/images/profile-card.png";
-      console.log("✅ Avatar updated");
+      console.log("✅ Avatar atualizado");
     }
 
     // ------------------------------------------------------------
-    // Updates the username with the rank
+    // Atualiza o nome de usuário com a patente
     // ------------------------------------------------------------
     if (includeUsername && topBarElements.username) {
-      const rankName = userProfile.rankData?.name || "Recruit";
-      const lastName = userProfile.last_name || "User";
+      const rankName = userProfile.rankData?.name || "Recruta";
+      const lastName = userProfile.last_name || "Usuário";
       topBarElements.username.textContent = `${rankName} ${lastName}`;
-      console.log(`✅ Username updated: ${rankName} ${lastName}`);
+      console.log(`✅ Nome de usuário atualizado: ${rankName} ${lastName}`);
     }
 
     // ------------------------------------------------------------
-    // Updates the rank icon
+    // Atualiza o ícone da patente
     // ------------------------------------------------------------
     if (topBarElements.rankIcon && userProfile.rankData) {
       topBarElements.rankIcon.src = userProfile.rankData.icon;
-      console.log(`✅ Rank icon updated: ${userProfile.rankData.name}`);
+      console.log(`✅ Ícone de patente atualizado: ${userProfile.rankData.name}`);
     }
 
     // ------------------------------------------------------------
-    // Updates the progress bar and day count
+    // Atualiza a barra de progresso e contagem de dias
     // ------------------------------------------------------------
     if (includeProgressBar && topBarElements.progressBar && topBarElements.progressDays) {
       let retentionDays = userProfile.retention_days;
 
-      // normalize null/undefined
+      // normaliza null/undefined
       if (retentionDays === null || retentionDays === undefined) {
         retentionDays = 0;
       }
 
-      // If last_habit_date is null, the count should remain at 0
-      // (no relapse date set = nothing to count).
+      // Se last_habit_date for nulo, a contagem deve ficar em 0
+      // (sem data de recaída definida = nada a contar).
       if (!userProfile.last_habit_date && retentionDays === 0) {
         retentionDays = 0;
         userProfile.rankData = window.UserService.calculateRankData(0);
-        console.log("ℹ️ last_habit_date is null. Keeping retention_days at 0.");
+        console.log("ℹ️ last_habit_date é nulo. Mantendo retention_days em 0.");
       }
 
       const rankData = userProfile.rankData || window.UserService.calculateRankData(retentionDays);
 
-      // Goal days for the current rank
+      // Objetivo de dias para a patente atual
       const goalDays = isFinite(rankData.maxDays) ? rankData.maxDays + 1 : retentionDays;
       const progressPercentage = Math.min((retentionDays / goalDays) * 100, 100);
 
@@ -158,19 +158,19 @@ async function loadTopBar(options = {}) {
 
       const currentDaysFormatted = String(retentionDays).padStart(2, "0");
       const totalDaysFormatted = String(goalDays).padStart(2, "0");
-      topBarElements.progressDays.innerHTML = `${currentDaysFormatted}<span>/${totalDaysFormatted} Days</span>`;
+      topBarElements.progressDays.innerHTML = `${currentDaysFormatted}<span>/${totalDaysFormatted} Dias</span>`;
 
       console.log(
-        `✅ Progress bar updated: ${retentionDays}/${goalDays} days (${progressPercentage.toFixed(
+        `✅ Barra de progresso atualizada: ${retentionDays}/${goalDays} dias (${progressPercentage.toFixed(
           1
         )}%)`
       );
     }
 
-    console.log("✅ Top-Bar loaded and updated successfully!");
+    console.log("✅ Top-Bar carregado e atualizado com sucesso!");
     return userProfile;
   } catch (error) {
-    console.error("❌ Error loading Top-Bar:", error);
+    console.error("❌ Erro ao carregar Top-Bar:", error);
 
     // fallback UI
     const topBarElements = {
@@ -179,10 +179,10 @@ async function loadTopBar(options = {}) {
     };
 
     if (topBarElements.username) {
-      topBarElements.username.textContent = "Error loading";
+      topBarElements.username.textContent = "Erro ao carregar";
     }
     if (topBarElements.progressDays) {
-      topBarElements.progressDays.innerHTML = "00<span>/00 Days</span>";
+      topBarElements.progressDays.innerHTML = "00<span>/00 Dias</span>";
     }
 
     throw error;
@@ -190,16 +190,16 @@ async function loadTopBar(options = {}) {
 }
 
 /**
- * Function to reload the Top-Bar when there are changes to the user profile
- * Useful for updating the interface after actions (photo upload, reset, etc)
+ * Função para recarregar o Top-Bar quando há mudanças no perfil do usuário
+ * Útil para atualizar a interface após ações (upload de foto, reset, etc)
  */
 async function refreshTopBar(options = {}) {
-  console.log("🔄 Refreshing Top-Bar...");
+  console.log("🔄 Atualizando Top-Bar...");
   return await loadTopBar(options);
 }
 
-// Exports the functions for global use
+// Exporta as funções para uso global
 window.loadTopBar = loadTopBar;
 window.refreshTopBar = refreshTopBar;
 
-console.log("✅ Top-Bar functions available globally");
+console.log("✅ Funções de Top-Bar disponíveis globalmente");
